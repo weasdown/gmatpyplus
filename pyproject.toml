@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gmat_py_simple"
-version = "0.4.4"
+version = "0.5.1"
 authors = [
   { name="William Easdown Babb", email="weasdown99@gmail.com" },
 ]
@@ -25,7 +25,7 @@ classifiers = [
     "Development Status :: 3 - Alpha",
 
     "Intended Audience :: Developers",
-    "Topic :: Orbital Mechanics :: Astrodynamics",
+#    "Topic :: Orbital Mechanics :: Astrodynamics",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
