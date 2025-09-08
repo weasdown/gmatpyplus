@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GMAT-Python-simple.iml" filepath="$PROJECT_DIR$/.idea/GMAT-Python-simple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gmatpyplus.iml" filepath="$PROJECT_DIR$/.idea/gmatpyplus.iml" />
     </modules>
   </component>
 </project>

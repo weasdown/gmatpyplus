@@ -3,8 +3,8 @@
 from __future__ import annotations
 import os
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat as gmat
+import gmatpyplus as gp
+from gmatpyplus import gmat as gmat
 
 # Set log and script options
 log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log-example.txt')
@@ -30,16 +30,16 @@ sat_params = {
         'TA': 181,
     },
 }
-sat = gpy.Spacecraft.from_dict(sat_params)
+sat = gp.Spacecraft.from_dict(sat_params)
 
 # Build a ForceModel and Propagator that will be used within Propagate commands
-fm = gpy.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gpy.ForceModel.DragForce(),
-                    srp=True, gravity_field=gpy.ForceModel.GravityField(degree=10, order=10))
-prop = gpy.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
-                     gator=gpy.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
+fm = gp.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gp.ForceModel.DragForce(),
+                   srp=True, gravity_field=gp.ForceModel.GravityField(degree=10, order=10))
+prop = gp.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
+                    gator=gp.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
 
 # Build an ImpulsiveBurn that will be used in the Maneuver command
-toi = gpy.ImpulsiveBurn('IB1', sat.GetCoordinateSystem(), [0.2, 0, 0])
+toi = gp.ImpulsiveBurn('IB1', sat.GetCoordinateSystem(), [0.2, 0, 0])
 
 # StopConditions for use in Propagate commands
 secs_60 = (f'{sat.name}.ElapsedSecs', 60)
@@ -52,14 +52,14 @@ print(f'Epoch before running: {sat.GetEpoch()}')
 
 # Mission Command Sequence
 mcs = [
-    gpy.Propagate('Prop One Day', sat, prop, days_1),
-    gpy.Propagate('Prop 60 s', sat, prop, secs_60),
-    gpy.Maneuver('0.2km/s Maneuver', toi, sat),
-    gpy.Propagate('Prop Another One Day', sat, prop, days_1),
-    gpy.Propagate('Prop To Apoapsis', sat, prop, earth_apo),
+    gp.Propagate('Prop One Day', sat, prop, days_1),
+    gp.Propagate('Prop 60 s', sat, prop, secs_60),
+    gp.Maneuver('0.2km/s Maneuver', toi, sat),
+    gp.Propagate('Prop Another One Day', sat, prop, days_1),
+    gp.Propagate('Prop To Apoapsis', sat, prop, earth_apo),
 ]
 
-gpy.RunMission(mcs)  # Run the mission
+gp.RunMission(mcs)  # Run the mission
 
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')

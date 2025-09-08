@@ -1,28 +1,28 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
+import gmatpyplus as gp
 
 
-class Solver(gpy.GmatObject):
+class Solver(gp.GmatObject):
     def __init__(self, obj_type: str, name: str):
         super().__init__(obj_type, name)
 
     def GetParameterID(self, param_name: str) -> int:
-        return gpy.extract_gmat_obj(self).GetParameterID(param_name)
+        return gp.extract_gmat_obj(self).GetParameterID(param_name)
 
     def GetStringArrayParameter(self, param_id: int) -> tuple:
-        return gpy.extract_gmat_obj(self).GetStringArrayParameter(param_id)
+        return gp.extract_gmat_obj(self).GetStringArrayParameter(param_id)
 
     def SetBooleanParameter(self, param: str | int, value: bool) -> bool:
-        return gpy.GmatCommand.SetBooleanParameter(gpy.extract_gmat_obj(self), param, value)
+        return gp.GmatCommand.SetBooleanParameter(gp.extract_gmat_obj(self), param, value)
 
     def SetIntegerParameter(self, param: str | int, value: int) -> bool:
-        return gpy.GmatCommand.SetIntegerParameter(gpy.extract_gmat_obj(self), param, value)
+        return gp.GmatCommand.SetIntegerParameter(gp.extract_gmat_obj(self), param, value)
 
     def SetStringParameter(self, param: str | int, value: str) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).SetStringParameter(param, value)
+        return gp.extract_gmat_obj(self).SetStringParameter(param, value)
 
 
 class DifferentialCorrector(Solver):
@@ -63,10 +63,10 @@ class DifferentialCorrector(Solver):
         # Variables are set later by Vary and Achieve commands
 
     def GetStringParameter(self, param: str | int) -> str:
-        return gpy.GmatCommand.GetStringParameter(gpy.extract_gmat_obj(self), param)
+        return gp.GmatCommand.GetStringParameter(gp.extract_gmat_obj(self), param)
 
     def GetStringArrayParameter(self, param: str | int) -> tuple:
-        return gpy.GmatCommand.GetStringArrayParameter(gpy.extract_gmat_obj(self), param)
+        return gp.GmatCommand.GetStringArrayParameter(gp.extract_gmat_obj(self), param)
 
     def Help(self):
         return self.gmat_obj.Help()
@@ -78,7 +78,7 @@ class DifferentialCorrector(Solver):
         return self.gmat_obj.SetField(field, value)
 
     def SetSolverVariables(self, var_data: list[float | int], var_name: str) -> bool:
-        return gpy.extract_gmat_obj(self).SetSolverVariables(var_data, var_name)
+        return gp.extract_gmat_obj(self).SetSolverVariables(var_data, var_name)
 
     def UpdateSolverGoal(self, goal_id: int, value: int | float) -> bool:
-        return gpy.extract_gmat_obj(self).UpdateSolverGoal(goal_id, value)
+        return gp.extract_gmat_obj(self).UpdateSolverGoal(goal_id, value)

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
+import gmatpyplus as gp
 
-from gmat_py_simple import gmat
+from gmatpyplus import gmat
 
 
 # def CreateParameter(param_type: str, name: str) -> Parameter:
@@ -21,17 +21,17 @@ class Parameter:
         self.name = name
 
         # See if Parameter already exists. If not, create a new one
-        self.gmat_obj = gpy.Moderator().GetParameter(self.name)
+        self.gmat_obj = gp.Moderator().GetParameter(self.name)
         if not self.gmat_obj:
-            self.gmat_obj = gpy.Moderator().CreateParameter(self.param_type, self.name)  # SwigPyObject instance
+            self.gmat_obj = gp.Moderator().CreateParameter(self.param_type, self.name)  # SwigPyObject instance
 
         self.swig_param = self.gmat_obj  # SwigPyObject instance
-        self.gmat_base = gpy.Validator().FindObject(self.name)  # GmatBase instance
+        self.gmat_base = gp.Validator().FindObject(self.name)  # GmatBase instance
 
         self.index: int = 0  # used in self.SetRefObject()
 
-    # def AddRefObject(self, obj: gpy.GmatObject) -> bool:
-    #     obj = gpy.extract_gmat_obj(obj)
+    # def AddRefObject(self, obj: gp.GmatObject) -> bool:
+    #     obj = gp.extract_gmat_obj(obj)
     #     return self.swig_param.AddRefObject(obj)
 
     # TODO: make getters/setters as appropriate for following fields (taken from old Parameter class)
@@ -74,7 +74,7 @@ class Parameter:
         :param type_int:
         :return:
         """
-        obj = gpy.extract_gmat_obj(obj)
+        obj = gp.extract_gmat_obj(obj)
         name = obj.GetName()
         try:
             response: bool = self.gmat_base.SetRefObject(obj, type_int, name)
@@ -86,7 +86,7 @@ class Parameter:
             raise RuntimeError(f'Parameter named "{self.name}" failed to SetRefObject'
                                # f' with arguments:'
                                # f'\n\t- obj:         {obj}'
-                               # f'\n\t- type_int:    {type_int} (gmat.{gpy.GetTypeNameFromID(type_int)})\n'
+                               # f'\n\t- type_int:    {type_int} (gmat.{gp.GetTypeNameFromID(type_int)})\n'
                                # f'\n\tRaised exception: {ex}\n'
                                # f'\tGMAT type: {self.GetTypeName()}\n'
                                # f'\tRef obj type array: {self.gmat_base.GetRefObjectTypeArray()}\n\n'
@@ -110,7 +110,7 @@ class Parameter:
         resp = self.gmat_base.SetRefObjectName(type_int, name)
         if not resp:
             raise RuntimeError(f'Parameter.SetRefObjectName() failed for Parameter {self.name} with arguments:'
-                               f'\n\t- type_int:  {type_int} (gmat.{gpy.get_type_name_from_id(type_int)})'
+                               f'\n\t- type_int:  {type_int} (gmat.{gp.get_type_name_from_id(type_int)})'
                                f'\n\t- name:      {name}')
         return resp
 
@@ -120,7 +120,7 @@ class Parameter:
     def SetStringParameter(self, param: str | int, value: str) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        resp = gpy.extract_gmat_obj(self).SetStringParameter(param, value)
+        resp = gp.extract_gmat_obj(self).SetStringParameter(param, value)
         if not resp:
             raise RuntimeError(f'Parameter.SetStringParameter() failed for parameter "{self.name}" of type '
                                f'{self.GetTypeName()} with arguments:'

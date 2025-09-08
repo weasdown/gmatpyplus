@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="001_Creating_a_Spacecraft" type="PythonConfigurationType" factoryName="Python">
-    <module name="GMAT-Python-simple" />
+    <module name="gmatpyplus" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
