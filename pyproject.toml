@@ -14,7 +14,7 @@ version_scheme = "no-guess-dev"
 version-file = "_version.py"
 [tool.hatch.metadata.hooks.vcs.urls]
 Homepage = "https://github.com/weasdown/gmatpyplus"
-source_archive = "https://github.com/weasdown/gmatpyplus/releases"
+source_archive = "https://github.com/weasdown/gmatpyplus/releases/{commit_hash}.zip"
 Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 
 # Metadata hook
