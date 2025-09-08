@@ -1,10 +1,28 @@
 [build-system]
-requires = ["hatchling >= 1.26"]
+requires = ["hatchling >= 1.26", "hatch-vcs"]
 build-backend = "hatchling.build"
 
+## Hatch config
+# Gets project version from releases on VCS.
+[tool.hatch.version]
+source = "vcs"
+[tool.hatch.version.raw-options]
+version_scheme = "no-guess-dev"
+
+# Build hook
+[tool.hatch.build.hooks.vcs]
+version-file = "_version.py"
+[tool.hatch.metadata.hooks.vcs.urls]
+Homepage = "https://github.com/weasdown/gmatpyplus"
+source_archive = "https://github.com/weasdown/gmatpyplus/releases"
+Issues = "https://github.com/weasdown/gmatpyplus/issues/"
+
+# Metadata hook
+[tool.hatch.metadata.hooks.vcs]
+
+## General project config
 [project]
 name = "gmatpyplus"
-version = "0.7.0"
 authors = [
   { name="William Easdown Babb", email="weasdown99@gmail.com" },
 ]
@@ -29,7 +47,7 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-
-[project.urls]
-Homepage = "https://github.com/weasdown/GMAT-Python-simple/"
-Issues = "https://github.com/weasdown/GMAT-Python-simple/issues/"
+dynamic = [
+  "version",    # Enables dynamic versioning.
+  "urls",       # Enables metadata hook
+]
