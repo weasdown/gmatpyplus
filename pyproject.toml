@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "hatchling.build"
-requires = ["hatch-vcs", "hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 
 ## General project config
 [project]
@@ -39,27 +39,26 @@ dynamic = [
 # Gets project version from releases on VCS.
 [tool.hatch.version]
 source = "vcs"
-#scheme = "standard"
-#[tool.hatch.version.raw-options]
-#version_scheme = "no-guess-dev"
+scheme = "standard"
+[tool.hatch.version.raw-options]
+version_scheme = "no-guess-dev"
 
 # Build hook
 [tool.hatch.build.hooks.vcs]
 version-file = "_version.py"
-[tool.hatch.metadata.hooks.vcs.urls]
-Homepage = "https://github.com/weasdown/gmatpyplus"
-source_archive = "https://github.com/weasdown/gmatpyplus/releases/{commit_hash}.zip"
-Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 
 # Metadata hook
 [tool.hatch.metadata.hooks.vcs]
+[tool.hatch.metadata.hooks.vcs.urls]
+Homepage = "https://github.com/weasdown/gmatpyplus"
+source_archive = "https://github.com/weasdown/gmatpyplus/releases"
+Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 
 # Build targets
 [tool.hatch.build.targets.sdist]
 exclude = [
   "/.github",
   "/docs",
-  "/dist"
 ]
 
 [tool.hatch.build.targets.wheel]
