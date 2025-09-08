@@ -1,8 +1,7 @@
-import gmat_py_simple
+import gmatpyplus
 import hardware
-from gmat_py_simple.spacecraft import Spacecraft
+from gmatpyplus.spacecraft import Spacecraft
 from load_gmat import gmat
-from book import Book
 import unittest
 
 
@@ -14,10 +13,10 @@ class TestSpacecraft(unittest.TestCase):
     def setUp(self):
         self.sat_1 = Spacecraft('TS1',
                                 hardware=Spacecraft.SpacecraftHardware(
-                                    chem_tanks=gmat_py_simple.ChemicalTank('ChemTank1'),
-                                    chem_thrusters=gmat_py_simple.ChemicalThruster('ChemThruster1', 'ChemTank1'),
-                                    elec_tanks=gmat_py_simple.ElectricTank('ElecTank1'),
-                                    elec_thrusters=gmat_py_simple.ElectricThruster('ElecThruster1', 'ElecTank1'),
+                                    chem_tanks=gmatpyplus.ChemicalTank('ChemTank1'),
+                                    chem_thrusters=gmatpyplus.ChemicalThruster('ChemThruster1', 'ChemTank1'),
+                                    elec_tanks=gmatpyplus.ElectricTank('ElecTank1'),
+                                    elec_thrusters=gmatpyplus.ElectricThruster('ElecThruster1', 'ElecTank1'),
                                     solar_power_system=hardware.SolarPowerSystem('SolarPowerSystem1'),
                                     nuclear_power_system=hardware.NuclearPowerSystem('NuclearPowerSystem1'),
                                     imagers=hardware.Imager('Imager1')

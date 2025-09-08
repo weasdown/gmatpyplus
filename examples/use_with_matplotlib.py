@@ -1,10 +1,10 @@
-# Example showing how the gmat_py_simple wrapper can be used with matplotlib
+# Example showing how the gmatpyplus wrapper can be used with matplotlib
 # Written by William Easdown Babb
 
 from __future__ import annotations
 
 from load_gmat import gmat
-import gmat_py_simple as gpy
+import gmatpyplus as gpy
 import os
 
 gmat.Clear()

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-from gmat_py_simple.basics import GmatObject
+import gmatpyplus as gpy
+from gmatpyplus.basics import GmatObject
 
-from gmat_py_simple import gmat
+from gmatpyplus import gmat
 
 
 class Burn(GmatObject):

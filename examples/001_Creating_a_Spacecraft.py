@@ -1,4 +1,4 @@
-import gmat_py_simple as gpy
+import gmatpyplus as gpy
 
 sat_params = {
     'Name': 'DefaultSC',

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
+import gmatpyplus as gpy
 
 
 class Solver(gpy.GmatObject):

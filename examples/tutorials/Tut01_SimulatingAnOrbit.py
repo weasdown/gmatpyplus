@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import os
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat
+import gmatpyplus as gpy
+from gmatpyplus import gmat
 
 log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
 gmat.UseLogFile(log_path)

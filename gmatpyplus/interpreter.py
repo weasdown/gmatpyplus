@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
+import gmatpyplus as gpy
 
-from gmat_py_simple import gmat
+from gmatpyplus import gmat
 
 
 class Validator:

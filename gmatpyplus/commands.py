@@ -1,10 +1,10 @@
 from __future__ import annotations
 from math import pi
 
-from gmat_py_simple import gmat
+from gmatpyplus import gmat
 
-import gmat_py_simple as gpy
-from gmat_py_simple.utils import *
+import gmatpyplus as gpy
+from gmatpyplus.utils import *
 
 
 class GmatCommand:

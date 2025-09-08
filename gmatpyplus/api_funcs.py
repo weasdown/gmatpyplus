@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from gmat_py_simple import gmat
-import gmat_py_simple as gpy
+from gmatpyplus import gmat
+import gmatpyplus as gpy
 
 import os.path
 

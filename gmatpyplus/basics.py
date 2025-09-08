@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-# from gmat_py_simple import gmat
-from gmat_py_simple.load_gmat import gmat
+import gmatpyplus as gpy
+# from gmatpyplus import gmat
+from gmatpyplus.load_gmat import gmat
 
 from datetime import datetime
 

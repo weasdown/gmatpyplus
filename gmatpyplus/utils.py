@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat
+import gmatpyplus as gpy
+from gmatpyplus import gmat
 
 import sys
 from io import StringIO
@@ -100,7 +100,7 @@ def extract_gmat_obj(obj):
     if isinstance(obj, gpy.Parameter):
         return obj.gmat_base
 
-    if 'gmat_py_simple' in obj_type:  # wrapper object
+    if 'gmatpyplus' in obj_type:  # wrapper object
         if 'Parameter' in obj_type:
             return obj.gmat_base
         return obj.gmat_obj
@@ -196,7 +196,7 @@ def generate_script() -> str:
     Return the full GMAT script equivalent of the current file
     :return:
     """
-    script = f'globals from gpy: {[item for item in globals().copy().values() if "gmat_py_simple" in str(type(item))]}'
+    script = f'globals from gpy: {[item for item in globals().copy().values() if "gmatpyplus" in str(type(item))]}'
     # TODO complete function
     return script
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from gmat_py_simple.basics import GmatObject
-from gmat_py_simple.utils import *
+from gmatpyplus.basics import GmatObject
+from gmatpyplus.utils import *
 
 
 class AtmosphereModel(GmatObject):

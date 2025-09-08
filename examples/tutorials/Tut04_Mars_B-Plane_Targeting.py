@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from load_gmat import gmat
-import gmat_py_simple as gpy
+import gmatpyplus as gpy
 import os
 
 log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut04-Log.txt')

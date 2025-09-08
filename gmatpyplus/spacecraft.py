@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat
+import gmatpyplus as gpy
+from gmatpyplus import gmat
 
-from gmat_py_simple.basics import GmatObject
-from gmat_py_simple.orbit import OrbitState
-from gmat_py_simple.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
-                                  list_to_gmat_field_string, rvector6_to_list)
-from gmat_py_simple.hardware import Imager
+from gmatpyplus.basics import GmatObject
+from gmatpyplus.orbit import OrbitState
+from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
+                              list_to_gmat_field_string, rvector6_to_list)
+from gmatpyplus.hardware import Imager
 
 from typing import Union
 import logging
