@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from gmat_py_simple.basics import GmatObject
-from gmat_py_simple.utils import *
+from gmatpyplus.basics import GmatObject
+from gmatpyplus.utils import *
 
 
 class AtmosphereModel(GmatObject):
@@ -181,7 +181,7 @@ class ForceModel(GmatObject):
                     self.gravity: ForceModel.GravityField = gravity_field
                 else:
                     raise TypeError(f'gravity_field type not recognized - {type(gravity_field).__name__}.'
-                                    f' Must be None or a gpy.ForceModel.GravityField')
+                                    f' Must be None or a gp.ForceModel.GravityField')
             else:  # gravity_field and self.primary_body are both None - use default
                 # TODO: are there cases where we wouldn't want a PrimaryBody or GravityField?
                 self.primary_body = 'Earth'
@@ -194,7 +194,7 @@ class ForceModel(GmatObject):
                     f'equal to the gravity_field\'s body. Specified primary_body and gravity_field: '
                     f'{self.primary_body} and {self.gravity.body}')
 
-            allowed_primaries = gpy.utils.CelestialBodies()
+            allowed_primaries = gp.utils.CelestialBodies()
             if self.primary_body not in allowed_primaries:
                 raise AttributeError(f'Specified primary_body "{self.primary_body}" is not recognized. Please use one '
                                      f'of the following:\n{allowed_primaries}')
@@ -245,7 +245,7 @@ class ForceModel(GmatObject):
 
         # check_valid_args(primary_bodies=primary_bodies)
 
-        gpy.Initialize()
+        gp.Initialize()
         self.Initialize()
 
     def __repr__(self):
@@ -253,7 +253,7 @@ class ForceModel(GmatObject):
 
     def AddForce(self, force: PhysicalModel):
         # Nothing returned from GMAT so no return from this method
-        gpy.extract_gmat_obj(self).AddForce(gpy.extract_gmat_obj(force))
+        gp.extract_gmat_obj(self).AddForce(gp.extract_gmat_obj(force))
 
     class PrimaryBody:
         # TODO complete arguments
@@ -380,7 +380,7 @@ class ForceModel(GmatObject):
             self.SetIntegerParameter('Order', self.order)
 
             # self.gmat_obj = gmat.GravityField(self.name, self.body, self.degree, self.order)
-            # self.gpy_obj = gpy.GmatObject.from_gmat_obj(self.gmat_obj)
+            # self.gp_obj = gp.GmatObject.from_gmat_obj(self.gmat_obj)
 
             self.stm_limit = stm_limit
             self.SetIntegerParameter('StmLimit', self.stm_limit)
@@ -462,7 +462,7 @@ class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
 
             super().__init__(integrator, name)
 
-            gpy.Initialize()
+            gp.Initialize()
             # self.Initialize()
 
     def __init__(self, name: str, fm: ForceModel = None, gator: PropSetup.Propagator = None,
@@ -503,11 +503,11 @@ class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
         self.SetReference(self.force_model)
         self.psm = self.GetPropStateManager()
 
-        gpy.Initialize()
+        gp.Initialize()
         self.Initialize()
 
-    def AddPropObject(self, sc: gpy.Spacecraft):
-        obj = gpy.extract_gmat_obj(sc)
+    def AddPropObject(self, sc: gp.Spacecraft):
+        obj = gp.extract_gmat_obj(sc)
         self.gmat_obj.AddPropObject(obj)  # GMAT function does not give a return value
 
     def PrepareInternals(self):
@@ -582,9 +582,9 @@ class OrbitState:
                                            'ConstraintReferenceVectorY': 0,
                                            'ConstraintReferenceVectorZ': 1,
                                            'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
-                                           'ReferenceObject': (gpy.CelestialBodies() + gpy.SpacecraftObjs() +
-                                                               gpy.LibrationPoints() + gpy.Barycenter() +
-                                                               gpy.GroundStations())
+                                           'ReferenceObject': (gp.CelestialBodies() + gp.SpacecraftObjs() +
+                                                               gp.LibrationPoints() + gp.Barycenter() +
+                                                               gp.GroundStations())
                                        }
                                    },
                                    }
@@ -634,7 +634,7 @@ class OrbitState:
             self.axes: OrbitState.CoordinateSystem.Axes = OrbitState.CoordinateSystem.Axes(axes, f'{origin}_{axes}')
             self.SetRefObject(self.axes, gmat.AXIS_SYSTEM, self.axes.name)
 
-            # gpy.Initialize()
+            # gp.Initialize()
             self.Initialize()
 
         def __repr__(self):
@@ -646,7 +646,7 @@ class OrbitState:
             return gmat.Construct('CoordinateSystem', name, central_body, axes)
 
         @classmethod
-        def from_sat(cls, sc: gpy.Spacecraft) -> OrbitState.CoordinateSystem:
+        def from_sat(cls, sc: gp.Spacecraft) -> OrbitState.CoordinateSystem:
             name = sc.gmat_obj.GetRefObjectName(gmat.COORDINATE_SYSTEM)
             sc_cs_gmat_obj = sc.gmat_obj.GetRefObject(150, name)
             origin = sc_cs_gmat_obj.GetField('Origin')
@@ -741,7 +741,7 @@ class OrbitState:
             else:
                 setattr(self, f'_{param}', self._key_param_defaults[param])
 
-    def apply_to_spacecraft(self, sc: gpy.Spacecraft):
+    def apply_to_spacecraft(self, sc: gp.Spacecraft):
         """
         Apply the properties of this OrbitState to a spacecraft.
 
@@ -784,7 +784,7 @@ class OrbitState:
                 pass
 
     @classmethod
-    def from_dict(cls, orbit_dict: dict, sc: gpy.Spacecraft = None) -> OrbitState:
+    def from_dict(cls, orbit_dict: dict, sc: gp.Spacecraft = None) -> OrbitState:
         o_s: OrbitState = cls()  # create OrbitState object, with sc set as None by default
 
         try:

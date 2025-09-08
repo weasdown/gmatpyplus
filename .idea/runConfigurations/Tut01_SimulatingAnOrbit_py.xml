@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Tut01_SimulatingAnOrbit.py" type="PythonConfigurationType" factoryName="Python" folderName="Tutorials">
-    <module name="GMAT-Python-simple" />
+    <module name="gmatpyplus" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />

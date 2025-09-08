@@ -28,7 +28,7 @@ You can install this library with:
 Then in your Python scripts, import the library:
 
 ```python
-import gmat_py_simple as gp
+import gmatpyplus as gp
 ```
 
 `gp` is the recommended abbreviation as is used throughout this

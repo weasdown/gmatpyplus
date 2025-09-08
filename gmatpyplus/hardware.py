@@ -5,9 +5,9 @@ from typing import Union
 
 import numpy as np
 
-from gmat_py_simple import gmat
-import gmat_py_simple as gpy
-from gmat_py_simple import GmatObject
+from gmatpyplus import gmat
+import gmatpyplus as gp
+from gmatpyplus import GmatObject
 
 
 class Antenna(GmatObject):
@@ -42,13 +42,13 @@ class Color(bytearray):
         # return self.colortype.int_color
 
     def ToIntColor(self, color_str: str) -> int:
-        return gpy.extract_gmat_obj(self).ToIntColor(color_str)
+        return gp.extract_gmat_obj(self).ToIntColor(color_str)
 
     def ToRgbString(self, color_uint: int) -> str:
-        return gpy.extract_gmat_obj(self).ToRgbString(color_uint)
+        return gp.extract_gmat_obj(self).ToRgbString(color_uint)
 
     def ToRgbList(self, color_uint: int) -> list[int]:
-        rgb_str: str = gpy.extract_gmat_obj(self).ToRgbString(color_uint)
+        rgb_str: str = gp.extract_gmat_obj(self).ToRgbString(color_uint)
         rgb_list: list = [int(ele) for ele in rgb_str[1:-1].split(' ')]
         return rgb_list
 
@@ -74,7 +74,7 @@ class Color(bytearray):
 
 
 class FieldOfView(GmatObject):
-    def __init__(self, attached_object: gpy.Imager | gpy.Antenna, fov_type: str = None, name: str = 'DefaultFOV'):
+    def __init__(self, attached_object: gp.Imager | gp.Antenna, fov_type: str = None, name: str = 'DefaultFOV'):
         allowed_fov_types = ['ConicalFOV', 'CustomFOV', 'RectangularFOV', None]
         if fov_type not in allowed_fov_types:
             raise TypeError(f'FieldOfView type given in fov_type "{fov_type}" is not recognized. Must be one of:\n'
@@ -89,11 +89,11 @@ class FieldOfView(GmatObject):
         self.attached_obj = attached_object  # e.g. an Imager or Antenna that uses this FieldOfView
 
         # gmat.Construct returns a GmatBase for FOV, so get object in FOV type from Validator
-        # self.gmat_obj = gpy.Moderator().gmat_obj.FindObject(self.name)
-        # self.gmat_obj = gpy.Moderator().gmat_obj.CreateFieldOfView(self.fov_type, self.name)
-        # self.gmat_obj = gpy.Validator().FindObject(self.name)
+        # self.gmat_obj = gp.Moderator().gmat_obj.FindObject(self.name)
+        # self.gmat_obj = gp.Moderator().gmat_obj.CreateFieldOfView(self.fov_type, self.name)
+        # self.gmat_obj = gp.Validator().FindObject(self.name)
         # self.gmat_obj = gmat.Construct('RectangularFOV', 'DefRectFOV')
-        # self.gmat_obj = gpy.Moderator().gmat_obj.GetFieldOfView(self.name)
+        # self.gmat_obj = gp.Moderator().gmat_obj.GetFieldOfView(self.name)
         # print(type(self.gmat_obj))
         # print(self.gmat_obj)
         #
@@ -132,7 +132,7 @@ class FieldOfView(GmatObject):
 
 
 class ConicalFOV(FieldOfView):
-    def __init__(self, attached_object: gpy.Imager | gpy.Antenna, name: str = 'DefaultConicalFOV', color: list = None,
+    def __init__(self, attached_object: gp.Imager | gp.Antenna, name: str = 'DefaultConicalFOV', color: list = None,
                  fov_angle: int | float = 30):
         super().__init__(attached_object, 'ConicalFOV', name)
 
@@ -150,7 +150,7 @@ class ConicalFOV(FieldOfView):
 
 
 class CustomFOV(FieldOfView):
-    def __init__(self, attached_object: gpy.Imager | gpy.Antenna, name: str = 'DefaultCustomFOV'):
+    def __init__(self, attached_object: gp.Imager | gp.Antenna, name: str = 'DefaultCustomFOV'):
         super().__init__(attached_object, 'CustomFOV', name)
 
     def CheckTargetVisibility(self):
@@ -158,7 +158,7 @@ class CustomFOV(FieldOfView):
 
 
 class RectangularFOV(FieldOfView):
-    def __init__(self, attached_object: gpy.Imager | gpy.Antenna, name: str = 'DefaultRectangularFOV',
+    def __init__(self, attached_object: gp.Imager | gp.Antenna, name: str = 'DefaultRectangularFOV',
                  angle_width: int | float = None, angle_height: int | float = None):
         super().__init__(attached_object, 'RectangularFOV', name)
 
@@ -274,7 +274,7 @@ class RectangularFOV(FieldOfView):
                                  ('Y', np.deg2rad(ah2 - 90)))
         normals = []  # empty list to hold normal vectors
         for vec_param in normals_vector_params:  # rotate boresight to find each normal vector, using vec's params
-            normals.append(gpy.rotate_vector(self.boresight, vec_param[0], vec_param[1]))
+            normals.append(gp.rotate_vector(self.boresight, vec_param[0], vec_param[1]))
         normals = np.array(normals)  # convert list of normals to np.ndarray
 
         # If the target is within the FOV, the normal will point more towards the target than away. This means the dot
@@ -300,17 +300,17 @@ class RectangularFOV(FieldOfView):
 # Line below disables false positive "This code is unreachable" warning with np.cross()
 # noinspection PyUnreachableCode
 class Imager(GmatObject):
-    def __init__(self, name: str, fov: gpy.FieldOfView | gmat.FieldOfView | str = None,
+    def __init__(self, name: str, fov: gp.FieldOfView | gmat.FieldOfView | str = None,
                  rotation_matrix: np.ndarray = None, boresight: np.ndarray | list = None,
                  second_vec: np.ndarray | list = None, origin=None):
         super().__init__('Imager', name)
         # print(f'Im g location: {self.gmat_obj.GetLocation()}')
         # print(f'Im g direction: {self.gmat_obj.GetDirection()}')
         # print(f'Im g second direction: {self.gmat_obj.GetSecondDirection()}')
-        # gpy.CustomHelp(self)
+        # gp.CustomHelp(self)
         # self.Initialize()  # must be initialized here so vector/matrix parameters are set correctly
         #
-        # # gpy.CustomHelp(self)
+        # # gp.CustomHelp(self)
         #
         # print(f'Imager coords: {self.GetField("Coordinates")}')
         #
@@ -412,8 +412,8 @@ class Imager(GmatObject):
         else:
             raise AttributeError('Cannot set Imager angle_width as Imager has no fov (fov is None)')
 
-    def attach_to_sat(self, sat: gpy.Spacecraft | gmat.Spacecraft):
-        sat_gmat = gpy.extract_gmat_obj(sat)
+    def attach_to_sat(self, sat: gp.Spacecraft | gmat.Spacecraft):
+        sat_gmat = gp.extract_gmat_obj(sat)
         sat_gmat.SetStringParameter(104, self.GetName())  # 104 for sat's ADD_HARDWARE
 
     @property
@@ -457,14 +457,14 @@ class Imager(GmatObject):
         old_boresight = self.boresight
 
         # Find quaternion for shortest path rotation from old_boresight to new_boresight
-        quat = gpy.quat_between_vecs(old_boresight, new_boresight)
+        quat = gp.quat_between_vecs(old_boresight, new_boresight)
 
         # Assume second_vec will be rotated same as boresight, so apply quat to old_second_vec to get new_second_vec
         old_second_vec = self.second_vec
-        new_second_vec = gpy.transform_vec_quat(old_second_vec, quat)
+        new_second_vec = gp.transform_vec_quat(old_second_vec, quat)
 
         # Check new_boresight and new_second_vec are orthogonal (dot product = 0) as required
-        if not gpy.vectors_orthogonal(new_boresight, new_second_vec):
+        if not gp.vectors_orthogonal(new_boresight, new_second_vec):
             raise AttributeError(f'new_boresight and new_second_vec are not orthogonal.'
                                  f'\n-\tnew_boresight:\t{new_boresight}'
                                  f'\n-\tnew_second_vec:\t{new_second_vec}')
@@ -599,14 +599,14 @@ class Imager(GmatObject):
         old_sv = self.second_vec
 
         # Find quaternion for shortest path rotation from old_sv to new_second_vec
-        quat = gpy.quat_between_vecs(old_sv, new_second_vec)
+        quat = gp.quat_between_vecs(old_sv, new_second_vec)
 
         # Assume boresight will be rotated same as second_vec, so apply quat to old_boresight to get new_boresight
         old_boresight = self.boresight
-        new_boresight = gpy.transform_vec_quat(old_boresight, quat)
+        new_boresight = gp.transform_vec_quat(old_boresight, quat)
 
         # Check new_second_vec and new_boresight are orthogonal (dot product = 0) as required
-        if not gpy.vectors_orthogonal(new_second_vec, new_boresight):
+        if not gp.vectors_orthogonal(new_second_vec, new_boresight):
             raise AttributeError(f'new_second_vec and new_boresight are not orthogonal.'
                                  f'\n-\told_second_vec:\t{old_sv}'
                                  f'\n-\told_boresight:\t{old_boresight}'
@@ -661,7 +661,7 @@ class NuclearPowerSystem(GmatObject):
     def __repr__(self):
         return f'A NuclearPowerSystem named "{self.GetName()}"'
 
-    def attach_to_sat(self, sat: gpy.Spacecraft | gmat.Spacecraft) -> bool:
+    def attach_to_sat(self, sat: gp.Spacecraft | gmat.Spacecraft) -> bool:
         self.spacecraft = sat
         if sat.GetField('PowerSystem') == '':
             self.spacecraft.add_nps(self)
@@ -702,7 +702,7 @@ class SolarPowerSystem(GmatObject):
     def __repr__(self):
         return f'A SolarPowerSystem named "{self.GetName()}"'
 
-    def attach_to_sat(self, sat: gpy.Spacecraft | gmat.Spacecraft):
+    def attach_to_sat(self, sat: gp.Spacecraft | gmat.Spacecraft):
         self.spacecraft = sat
         if sat.GetField('PowerSystem') == '':
             self.spacecraft.add_sps(self)

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-# from gmat_py_simple import gmat
-from gmat_py_simple.load_gmat import gmat
+import gmatpyplus as gp
+# from gmatpyplus import gmat
+from gmatpyplus.load_gmat import gmat
 
 from datetime import datetime
 
@@ -13,7 +13,7 @@ class GmatObject:
     def __init__(self, obj_type: str, name: str):
         self.obj_type = obj_type
         self._name = name
-        self.gmat_obj = gpy.Construct(self.obj_type, self._name)
+        self.gmat_obj = gp.Construct(self.obj_type, self._name)
         self.gmat_obj.SetSolarSystem(gmat.GetSolarSystem())
         self.was_propagated = False
 
@@ -28,10 +28,10 @@ class GmatObject:
     def GetBooleanParameter(self, param: str | int) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetBooleanParameter(param)
+        return gp.extract_gmat_obj(self).GetBooleanParameter(param)
 
     def GetEpoch(self, as_datetime: bool = False) -> str | datetime:
-        if isinstance(self, gpy.Spacecraft):
+        if isinstance(self, gp.Spacecraft):
             self.gmat_obj.TakeAction('UpdateEpoch')
         up_to_date_obj = self.GetObject()
         # FIXME: inaccurate for Mars in Tut04
@@ -63,10 +63,10 @@ class GmatObject:
     def GetIntegerParameter(self, param: str | int) -> int:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetIntegerParameter(param)
+        return gp.extract_gmat_obj(self).GetIntegerParameter(param)
 
     def GetObject(self):
-        return gpy.GetObject(self)
+        return gp.GetObject(self)
 
     def GetName(self):
         return self._name
@@ -80,42 +80,42 @@ class GmatObject:
         return name
 
     def GetParameterID(self, param_name: str) -> int:
-        return gpy.extract_gmat_obj(self).GetParameterID(param_name)
+        return gp.extract_gmat_obj(self).GetParameterID(param_name)
 
     def GetParameterType(self, param: str | int) -> int:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetParameterType(param)
+        return gp.extract_gmat_obj(self).GetParameterType(param)
 
     def GetParameterTypeString(self, param: str | int) -> str:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetParameterTypeString(param)
+        return gp.extract_gmat_obj(self).GetParameterTypeString(param)
 
     def GetRealParameter(self, param: str | int) -> float:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetRealParameter(param)
+        return gp.extract_gmat_obj(self).GetRealParameter(param)
 
     def GetRefObject(self, type_id: int, name: str) -> gmat.GmatBase:
-        return gpy.extract_gmat_obj(self).GetRefObject(type_id, name)
+        return gp.extract_gmat_obj(self).GetRefObject(type_id, name)
 
     def GetRefObjectName(self, type_id: int) -> str:
-        return gpy.extract_gmat_obj(self).GetRefObjectName(type_id)
+        return gp.extract_gmat_obj(self).GetRefObjectName(type_id)
 
     def GetRefObjectNameArray(self, type_id: int) -> tuple[str]:
-        return gpy.extract_gmat_obj(self).GetRefObjectNameArray(type_id)
+        return gp.extract_gmat_obj(self).GetRefObjectNameArray(type_id)
 
     def GetRefObjectTypeArray(self) -> tuple[int]:
-        return gpy.extract_gmat_obj(self).GetRefObjectTypeArray()
+        return gp.extract_gmat_obj(self).GetRefObjectTypeArray()
 
     def GetStringParameter(self, param: str | int) -> str:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).GetStringParameter(param)
+        return gp.extract_gmat_obj(self).GetStringParameter(param)
 
     def GetTypeName(self) -> str:
-        return gpy.extract_gmat_obj(self).GetTypeName()
+        return gp.extract_gmat_obj(self).GetTypeName()
 
     def Help(self):
         # TODO: upgrade to get list of fields with utils.gmat_obj_field_list then print all fields/values
@@ -124,7 +124,7 @@ class GmatObject:
 
     def Initialize(self):
         try:
-            return gpy.extract_gmat_obj(self).Initialize()
+            return gp.extract_gmat_obj(self).Initialize()
         except Exception as ex:
             raise RuntimeError(f'{type(self).__name__} named "{self.name}" failed to Initialize - see exception '
                                f'below:\n\t{ex}') from ex
@@ -138,12 +138,12 @@ class GmatObject:
     def SetBooleanParameter(self, param: str | int, value: bool) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).SetBooleanParameter(param, value)
+        return gp.extract_gmat_obj(self).SetBooleanParameter(param, value)
 
     def SetIntegerParameter(self, param: str | int, value: int) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).SetIntegerParameter(param, value)
+        return gp.extract_gmat_obj(self).SetIntegerParameter(param, value)
 
     def SetField(self, field: str | int, val: str | int | float | bool | list):
         """
@@ -190,7 +190,7 @@ class GmatObject:
         if isinstance(param, str):
             param = self.GetParameterID(param)
         # gmat_obj.SetRealParameter returns the value set if set successfully, not bool
-        value_set: float = gpy.extract_gmat_obj(self).SetRealParameter(param, value)
+        value_set: float = gp.extract_gmat_obj(self).SetRealParameter(param, value)
         set_successfully: bool = value_set == value
         return set_successfully
 
@@ -198,22 +198,22 @@ class GmatObject:
     #     print(self)
     #     self.Help()
     #     try:
-    #         return gpy.extract_gmat_obj(self).SetReference(gpy.extract_gmat_obj(ref_obj))
+    #         return gp.extract_gmat_obj(self).SetReference(gp.extract_gmat_obj(ref_obj))
     #     except Exception as ex:
     #         print('RuhRoh')
-    #         ref_arr = self.GetRefObjectNameArray(gpy.extract_gmat_obj(ref_obj).GetType())
+    #         ref_arr = self.GetRefObjectNameArray(gp.extract_gmat_obj(ref_obj).GetType())
     #         print(ref_arr)
     #         raise
     #         pass
 
     def SetReference(self, ref_obj):
-        gpy.extract_gmat_obj(self).SetReference(gpy.extract_gmat_obj(ref_obj))
+        gp.extract_gmat_obj(self).SetReference(gp.extract_gmat_obj(ref_obj))
 
-    def SetRefObject(self, obj: gpy.GmatObject | gmat.GmatObject, type_id: int, name: str) -> bool:
-        return gpy.extract_gmat_obj(self).SetRefObject(gpy.extract_gmat_obj(obj), type_id, name)
+    def SetRefObject(self, obj: gp.GmatObject | gmat.GmatObject, type_id: int, name: str) -> bool:
+        return gp.extract_gmat_obj(self).SetRefObject(gp.extract_gmat_obj(obj), type_id, name)
 
     def SetRefObjectName(self, type_id: int, name: str) -> bool:
-        return gpy.extract_gmat_obj(self).SetRefObjectName(type_id, name)
+        return gp.extract_gmat_obj(self).SetRefObjectName(type_id, name)
 
     def SetSolarSystem(self, ss: gmat.SolarSystem = gmat.GetSolarSystem()) -> bool:
         return self.gmat_obj.SetSolarSystem(ss)
@@ -221,7 +221,7 @@ class GmatObject:
     def SetStringParameter(self, param: str | int, value: str) -> bool:
         if isinstance(param, str):
             param = self.GetParameterID(param)
-        return gpy.extract_gmat_obj(self).SetStringParameter(param, value)
+        return gp.extract_gmat_obj(self).SetStringParameter(param, value)
 
     def Validate(self) -> bool:
         try:
@@ -238,4 +238,4 @@ class GmatObject:
     @name.setter
     def name(self, new_name: str):
         self._name = new_name
-        gpy.extract_gmat_obj(self).SetName(new_name)
+        gp.extract_gmat_obj(self).SetName(new_name)

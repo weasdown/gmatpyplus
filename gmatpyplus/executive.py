@@ -1,21 +1,21 @@
 from __future__ import annotations
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 
-def RunMission(mcs: list[gpy.GmatCommand]) -> int:
+def RunMission(mcs: list[gp.GmatCommand]) -> int:
     # Shortcut for running missions
-    return gpy.Moderator().RunMission(mcs)
+    return gp.Moderator().RunMission(mcs)
 
 
 class Moderator:
     def __init__(self):
         self.gmat_obj = gmat.Moderator.Instance()
 
-    def AppendCommand(self, command: gpy.GmatCommand) -> bool:
+    def AppendCommand(self, command: gp.GmatCommand) -> bool:
         try:
-            command_gmat_obj = gpy.extract_gmat_obj(command)
+            command_gmat_obj = gp.extract_gmat_obj(command)
             resp: bool = self.gmat_obj.AppendCommand(command_gmat_obj)
             return resp
         except SystemExit as se:  # TODO bugfix: doesn't prevent hang
@@ -31,7 +31,7 @@ class Moderator:
         return self.gmat_obj.CreateCommand(command_type, name, True)
 
     def CreateDefaultCommand(self, command_type: str = 'Propagate', name: str = ''):
-        vdator = gpy.Validator()
+        vdator = gp.Validator()
         vdator.SetSolarSystem(gmat.GetSolarSystem())
         vdator.SetObjectMap(self.GetConfiguredObjectMap())
 
@@ -62,11 +62,11 @@ class Moderator:
         stop_var = f'{sat_name}.ElapsedSecs'  # StopVar is mStopParamName in StopCondition source
 
         if not self.GetParameter(epoch_var):
-            epoch_param = gpy.Parameter('A1ModJulian', epoch_var)
+            epoch_param = gp.Parameter('A1ModJulian', epoch_var)
             epoch_param.SetRefObjectName(gmat.SPACECRAFT, sat_name)
 
         if not self.GetParameter(stop_var):
-            stop_param: gmat.Parameter = gpy.Parameter('ElapsedSecs', stop_var)
+            stop_param: gmat.Parameter = gp.Parameter('ElapsedSecs', stop_var)
             stop_param.SetRefObjectName(gmat.SPACECRAFT, sat_name)
 
         stop_cond_name = f'StopOn{stop_var}'
@@ -75,7 +75,7 @@ class Moderator:
         stop_cond.SetStringParameter('StopVar', stop_var)  # StopVar is mStopParamName in StopCondition source
         stop_cond.SetStringParameter('Goal', '12000.0')  # SetRhsString() called with goal value in source
 
-        gpy.Initialize()
+        gp.Initialize()
 
         return stop_cond
 
@@ -84,7 +84,7 @@ class Moderator:
             new_param = self.gmat_obj.CreateParameter(param_type, name)
         except Exception as ex:
             if type(ex).__name__ == 'APIException':
-                raise gpy.APIException(ex)
+                raise gp.APIException(ex)
             else:
                 raise ex
         if new_param is not None:
@@ -93,7 +93,7 @@ class Moderator:
             raise RuntimeError(f'CreateParameter failed to create a parameter of type {param_type} called {name}')
 
     def CreateSolver(self, solver_type: str, solver_name: str) -> gmat.Solver:
-        gpy.extract_gmat_obj(self).CreateSolver(solver_type, solver_name)  # make a Solver within GMAT
+        gp.extract_gmat_obj(self).CreateSolver(solver_type, solver_name)  # make a Solver within GMAT
         # get Solver as  object specific solver subtype (e.g. gmat.DifferentialCorrector)
         obj: gmat.DifferentialCorrector = gmat.GetObject(solver_name)  # TODO finish obj type list
         return obj
@@ -106,7 +106,7 @@ class Moderator:
         # return self.gmat_obj.FindObject(name)
 
     def GetConfiguredObject(self, name: str) -> gmat.GmatBase:
-        return gpy.extract_gmat_obj(self).GetConfiguredObject(name)
+        return gp.extract_gmat_obj(self).GetConfiguredObject(name)
 
     def GetConfiguredObjectMap(self):
         return self.gmat_obj.GetConfiguredObjectMap()
@@ -137,12 +137,12 @@ class Moderator:
 
     def GetDefaultSpacecraft(self) -> gmat.Spacecraft:
         # Method not exposed to Python API, so have to remake here rather than calling gmat.Moderator().Instance()
-        so_config_list: list[str] = gpy.extract_gmat_obj(self).GetListOfObjects(gmat.SPACECRAFT)
+        so_config_list: list[str] = gp.extract_gmat_obj(self).GetListOfObjects(gmat.SPACECRAFT)
         if so_config_list:  # list length > 0
             # self.GetSpacecraft() as in original would return a SpaceObject (not Spacecraft), so use gmat.GetObject()
-            return gpy.GetObject(so_config_list[0])
+            return gp.GetObject(so_config_list[0])
         else:  # no spacecraft found, so create one
-            return gpy.extract_gmat_obj(self).CreateSpacecraft('Spacecraft', 'DefaultSC')
+            return gp.extract_gmat_obj(self).CreateSpacecraft('Spacecraft', 'DefaultSC')
 
     def GetDetailedRunState(self):
         drs = self.gmat_obj.GetDetailedRunState()
@@ -161,13 +161,13 @@ class Moderator:
 
     @staticmethod
     def GetParameter(name: str) -> gmat.Parameter:
-        vdator = gpy.Validator()
+        vdator = gp.Validator()
 
         obj = vdator.FindObject(name)
         if obj and obj.IsOfType(gmat.PARAMETER):
             if type(obj).__name__ == 'GmatBase':
                 # Convert to Swig Parameter (the type required for a Parameter function argument)
-                obj: gmat.Parameter = gpy.GmatBase_to_Parameter(obj)
+                obj: gmat.Parameter = gp.GmatBase_to_Parameter(obj)
             return obj  # obj is a Swig Parameter
         else:
             return None  # Parameter not found
@@ -188,7 +188,7 @@ class Moderator:
 
     @staticmethod
     def GetSandbox():
-        return gpy.Sandbox()
+        return gp.Sandbox()
 
     def GetFirstCommand(self):
         return self.gmat_obj.GetFirstCommand()
@@ -196,13 +196,13 @@ class Moderator:
     def Initialize(self):
         self.gmat_obj.Initialize()
 
-    def InsertCommand(self, command_to_insert: gpy.GmatCommand, preceding_command: gpy.GmatCommand):
+    def InsertCommand(self, command_to_insert: gp.GmatCommand, preceding_command: gp.GmatCommand):
         return self.gmat_obj.InsertCommand(command_to_insert, preceding_command)
 
     def RemoveObject(self, obj_type: int, name: str, del_only_if_not_used: bool = True) -> bool:
         return self.gmat_obj.RemoveObject(obj_type, name, del_only_if_not_used)
 
-    def RunMission(self, mission_command_sequence: list[gpy.GmatCommand]) -> int:
+    def RunMission(self, mission_command_sequence: list[gp.GmatCommand]) -> int:
         """
         Run the mission command sequence
 
@@ -212,41 +212,41 @@ class Moderator:
         :return:
         """
 
-        def update_command_objs_post_run(command_sequence: list[gpy.GmatCommand | gmat.GmatCommand]):
-            propagate_commands: list[gpy.Propagate] = []  # start a list of Propagates so their sats can be updated
-            target_commands: list[gpy.Target] = []  # start a list of Targets for checking convergence
-            maneuver_commands: list[gpy.Maneuver] = []  # start a list of Maneuvers for updating burns
+        def update_command_objs_post_run(command_sequence: list[gp.GmatCommand | gmat.GmatCommand]):
+            propagate_commands: list[gp.Propagate] = []  # start a list of Propagates so their sats can be updated
+            target_commands: list[gp.Target] = []  # start a list of Targets for checking convergence
+            maneuver_commands: list[gp.Maneuver] = []  # start a list of Maneuvers for updating burns
 
             for com in command_sequence:
                 # add any Propagate commands to their list so their spacecraft can have was_propagated set to True
-                if isinstance(com, gpy.Propagate):
+                if isinstance(com, gp.Propagate):
                     propagate_commands.append(com)
 
                 # add any Maneuver commands to their list so their Burns can have has_fired set to True
-                if isinstance(command, gpy.Maneuver):
+                if isinstance(command, gp.Maneuver):
                     maneuver_commands.append(command)
 
-                if isinstance(com, gpy.BranchCommand | gmat.BranchCommand):
+                if isinstance(com, gp.BranchCommand | gmat.BranchCommand):
                     # add any Target commands to their list so their convergence can be checked
-                    if isinstance(command, gpy.Target):
+                    if isinstance(command, gp.Target):
                         target_commands.append(command)
 
                     # Check for any Propagate or Maneuver sub-commands, which need updating too
                     for sub in com.command_sequence:
-                        if isinstance(sub, gpy.Propagate):
+                        if isinstance(sub, gp.Propagate):
                             propagate_commands.append(sub)
 
-                        if isinstance(sub, gpy.Maneuver):
+                        if isinstance(sub, gp.Maneuver):
                             maneuver_commands.append(sub)
 
             for p in propagate_commands:
                 p.sat.was_propagated = True  # mark sat as propagated so GetState uses runtime values
-                # p.sat.gmat_obj = gpy.GmatObject.GetObject(p.sat)  # update sat gmat_obj post-run
+                # p.sat.gmat_obj = gp.GmatObject.GetObject(p.sat)  # update sat gmat_obj post-run
 
             for t in target_commands:
                 solver = t.solver
                 solver.was_propagated = True
-                solver.gmat_obj = gpy.GmatObject.GetObject(solver)
+                solver.gmat_obj = gp.GmatObject.GetObject(solver)
                 solver_status = solver.GetIntegerParameter('IntegerSolverStatus')
                 if solver_status != 0:  # solver failed
                     raise RuntimeError(f'{solver.gmat_obj.GetTypeName()} "{solver.GetName()}" failed to converge. '
@@ -264,12 +264,12 @@ class Moderator:
                             ' (e.g. BeginMissionSequence, Propagate)')
 
         # if mcs empty, or the first command is not a BeginMissionSequence command, add a BMS to the sequence
-        if not mission_command_sequence or not isinstance(mission_command_sequence[0], gpy.BeginMissionSequence):
+        if not mission_command_sequence or not isinstance(mission_command_sequence[0], gp.BeginMissionSequence):
             mission_command_sequence.insert(0, gmat.BeginMissionSequence())
 
-        gpy.Initialize()
+        gp.Initialize()
 
-        mod = gpy.Moderator()
+        mod = gp.Moderator()
 
         # configure each command in the mission sequence
         for command in mission_command_sequence:
@@ -277,12 +277,12 @@ class Moderator:
             command.SetGlobalObjectMap(gmat.Sandbox().GetGlobalObjectMap())
             command.SetSolarSystem(gmat.GetSolarSystem())
 
-            gpy.Validator().ValidateCommand(command)
+            gp.Validator().ValidateCommand(command)
             command.Initialize()
             mod.AppendCommand(command)
 
         print('\nRunning mission...')
-        run_mission_return = gpy.extract_gmat_obj(self).RunMission()
+        run_mission_return = gp.extract_gmat_obj(self).RunMission()
         if run_mission_return == 1:  # Mission run complete
             # TODO uncomment (inhibited for debugging)
             update_command_objs_post_run(mission_command_sequence)
@@ -310,8 +310,8 @@ class Sandbox:
     def __init__(self):
         self.gmat_obj = gmat.Moderator.Instance().GetSandbox()
 
-    def AddObject(self, obj: gpy.GmatObject) -> bool:
-        return self.gmat_obj.AddObject(gpy.extract_gmat_obj(obj))
+    def AddObject(self, obj: gp.GmatObject) -> bool:
+        return self.gmat_obj.AddObject(gp.extract_gmat_obj(obj))
 
     def AddSolarSystem(self, ss: gmat.SolarSystem) -> bool:
         return self.gmat_obj.AddSolarSystem(ss)
@@ -322,5 +322,5 @@ class Sandbox:
     def GetGlobalObjectMap(self) -> gmat.ObjectMap:
         return self.gmat_obj.GetGlobalObjectMap()
 
-    def SetInternalCoordSystem(self, cs: gpy.OrbitState.CoordinateSystem) -> bool:
-        return self.gmat_obj.SetInternalCoordSystem(gpy.extract_gmat_obj(cs))
+    def SetInternalCoordSystem(self, cs: gp.OrbitState.CoordinateSystem) -> bool:
+        return self.gmat_obj.SetInternalCoordSystem(gp.extract_gmat_obj(cs))

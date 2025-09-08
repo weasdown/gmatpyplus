@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import os
 
-import gmat_py_simple as gpy
-from gmat_py_simple import gmat
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
 gmat.UseLogFile(log_path)
@@ -31,21 +31,21 @@ sat_params = {
     },
 }
 
-sat = gpy.Spacecraft.from_dict(sat_params)
+sat = gp.Spacecraft.from_dict(sat_params)
 
-fm = gpy.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gpy.ForceModel.DragForce(),
-                    srp=True, gravity_field=gpy.ForceModel.GravityField(degree=10, order=10))
-prop = gpy.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
-                     gator=gpy.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
+fm = gp.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gp.ForceModel.DragForce(),
+                   srp=True, gravity_field=gp.ForceModel.GravityField(degree=10, order=10))
+prop = gp.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
+                    gator=gp.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
 
 print(f'\nSat state before running: {sat.GetState()}')
 print(f"Epoch before running: {sat.GetEpoch()}")
 
 # Mission Command Sequence
-mcs = [gpy.BeginMissionSequence(),
-       gpy.Propagate('Prop To Periapsis', sat, prop, f'{sat.name}.Earth.Periapsis')]
+mcs = [gp.BeginMissionSequence(),
+       gp.Propagate('Prop To Periapsis', sat, prop, f'{sat.name}.Earth.Periapsis')]
 
-gpy.RunMission(mcs)  # Run the mission
+gp.RunMission(mcs)  # Run the mission
 
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
