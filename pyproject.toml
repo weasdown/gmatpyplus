@@ -3,8 +3,8 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [project]
-name = "gmat_py_simple"
-version = "0.6.0"
+name = "gmatpyplus"
+version = "0.7.0"
 authors = [
   { name="William Easdown Babb", email="weasdown99@gmail.com" },
 ]
