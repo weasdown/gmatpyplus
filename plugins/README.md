@@ -20,7 +20,7 @@ GMAT R2025a (recommended), this will give you a folder named `gmat-win-2025a`.
 of folders and files (`api`, `bin`, and so on).
 
 3) From the `plugins` folder that you're reading these instructions from, copy the contents of the `gmatpy` folder. 
-Paste the files into `GMAT/bin/gmatpy`. Back in the `plugins` folder, copy the contents of the `plugins`  folder (that 
+Paste the files into `[GMAT]/bin/gmatpy`. Back in the `plugins` folder, copy the contents of the `plugins`  folder (that 
 contains six `.dll` files). Paste the files into `[GMAT]/plugins`.
    
 4) You should now have folders or files with names ending `py36` to `py312` in `[GMAT]/bin/gmatpy` and `[GMAT]/plugins`.
