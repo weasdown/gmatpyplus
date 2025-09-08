@@ -46,13 +46,13 @@ version_scheme = "no-guess-dev"
 # Build hook
 [tool.hatch.build.hooks.vcs]
 version-file = "_version.py"
+
+# Metadata hook
+[tool.hatch.metadata.hooks.vcs]
 [tool.hatch.metadata.hooks.vcs.urls]
 Homepage = "https://github.com/weasdown/gmatpyplus"
 source_archive = "https://github.com/weasdown/gmatpyplus/releases"
 Issues = "https://github.com/weasdown/gmatpyplus/issues/"
-
-# Metadata hook
-[tool.hatch.metadata.hooks.vcs]
 
 # Build targets
 [tool.hatch.build.targets.sdist]
