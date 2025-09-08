@@ -20,6 +20,17 @@ Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 # Metadata hook
 [tool.hatch.metadata.hooks.vcs]
 
+# Build targets
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+  "/dist"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["gmatpyplus"]
+
 ## General project config
 [project]
 name = "gmatpyplus"
