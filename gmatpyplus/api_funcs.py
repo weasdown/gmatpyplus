@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from gmatpyplus import gmat
-import gmatpyplus as gpy
+import gmatpyplus as gp
 
 import os.path
 
@@ -13,12 +13,12 @@ import os.path
 #         return obj
 #     except Exception as ex:
 #         if str(ex) == "'NoneType' object has no attribute 'GetTypeName'":
-#             raise gpy.GMATNameError(name) from ex
+#             raise gp.GMATNameError(name) from ex
 #         else:
 #             raise ex
 
 
-def GetObject(obj: gpy.GmatObject | str):
+def GetObject(obj: gp.GmatObject | str):
     # TODO determine return type. Same for gmat.GetObject and GetRuntimeObject?
     """
     Return the latest version of an object so its state info is up-to-date
@@ -30,7 +30,7 @@ def GetObject(obj: gpy.GmatObject | str):
             return gmat.GetObject(obj)
         except AttributeError as ex:
             if str(ex) == "'NoneType' object has no attribute 'GetTypeName'":
-                raise gpy.GMATNameError(obj) from ex
+                raise gp.GMATNameError(obj) from ex
             else:
                 raise ex
 
@@ -44,7 +44,7 @@ def GetObject(obj: gpy.GmatObject | str):
             # for index, value in enumerate(fields):
             #     obj.SetField(index, value)
 
-            # if isinstance(obj, gpy.Spacecraft):
+            # if isinstance(obj, gp.Spacecraft):
             #     objs_to_update = [obj.hardware.chem_thrusters, obj.hardware.chem_tanks,
             #                       obj.hardware.elec_thrusters, obj.hardware.elec_tanks]
             #     for hw_list in objs_to_update:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import gmatpyplus as gpy
+import gmatpyplus as gp
 from gmatpyplus import gmat
 
 import sys
@@ -97,7 +97,7 @@ def extract_gmat_obj(obj):
     if obj is None:
         raise SyntaxError('A NoneType object was given')
 
-    if isinstance(obj, gpy.Parameter):
+    if isinstance(obj, gp.Parameter):
         return obj.gmat_base
 
     if 'gmatpyplus' in obj_type:  # wrapper object
@@ -196,7 +196,7 @@ def generate_script() -> str:
     Return the full GMAT script equivalent of the current file
     :return:
     """
-    script = f'globals from gpy: {[item for item in globals().copy().values() if "gmatpyplus" in str(type(item))]}'
+    script = f'globals from gp: {[item for item in globals().copy().values() if "gmatpyplus" in str(type(item))]}'
     # TODO complete function
     return script
 
@@ -532,7 +532,7 @@ def gmat_liststr_to_python_liststr(string_list: list[str], is_attr_list: bool = 
 
 
 def gmat_obj_field_list(gmat_obj):
-    gmat_obj = gpy.extract_gmat_obj(gmat_obj)
+    gmat_obj = gp.extract_gmat_obj(gmat_obj)
 
     fields = []
     for i in range(gmat_obj.GetParameterCount()):
@@ -658,11 +658,11 @@ def quat_between_vecs(v1: np.ndarray, v2: np.ndarray) -> np.ndarray:
 
 def rotate_vector(vec: np.ndarray | list, axis: str, angle: int | float) -> np.ndarray:
     if axis == 'X':
-        new_vec = gpy.rotx(vec, angle)
+        new_vec = gp.rotx(vec, angle)
     elif axis == 'Y':
-        new_vec = gpy.roty(vec, angle)
+        new_vec = gp.roty(vec, angle)
     elif axis == 'Z':
-        new_vec = gpy.rotz(vec, angle)
+        new_vec = gp.rotz(vec, angle)
     else:
         raise RuntimeError(f'Rotation axis to get normal vector, "{axis}", is not recognized.')
     return new_vec
@@ -767,8 +767,8 @@ def transform_vec_quat(vec: np.ndarray, quat: np.ndarray) -> np.ndarray:
     q_conj_xyz: np.ndarray = np.array([-e for e in q_norm[0:3]])
     quat_conj: np.ndarray = np.append(q_conj_xyz, q_norm[3])  # negative of vector parts, scalar part same as q_
 
-    new_a = gpy.hamilton_product(quat, vec)
-    final_prod = gpy.hamilton_product(new_a, quat_conj)
+    new_a = gp.hamilton_product(quat, vec)
+    final_prod = gp.hamilton_product(new_a, quat_conj)
     new_vec = np.delete(final_prod / np.linalg.norm(final_prod), 3)
 
     return new_vec

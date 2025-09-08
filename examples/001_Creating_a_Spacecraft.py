@@ -1,4 +1,4 @@
-import gmatpyplus as gpy
+import gmatpyplus as gp
 
 sat_params = {
     'Name': 'DefaultSC',
@@ -16,6 +16,6 @@ sat_params = {
                  }
 }
 
-sat = gpy.Spacecraft.from_dict(sat_params)
+sat = gp.Spacecraft.from_dict(sat_params)
 
 sat.Help()

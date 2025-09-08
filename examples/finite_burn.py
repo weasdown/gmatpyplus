@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 from load_gmat import gmat
-import gmatpyplus as gpy
+import gmatpyplus as gp
 import os
 
 log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut02-Log.txt')
@@ -21,24 +21,24 @@ sat_params = {
                  'SolarPowerSystem': {'Name': 'SolarPowerSystem1'},
                  }
 }
-sat = gpy.Spacecraft.from_dict(sat_params)
+sat = gp.Spacecraft.from_dict(sat_params)
 
-prop = gpy.PropSetup('DefaultProp', gator=gpy.PropSetup.Propagator('RungeKutta89'),
-                     accuracy=9.999999999999999e-12)
+prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
+                    accuracy=9.999999999999999e-12)
 
-fb1 = gpy.FiniteBurn('FiniteBurn1', sat.thrusters.electric[0])
+fb1 = gp.FiniteBurn('FiniteBurn1', sat.thrusters.electric[0])
 
 print(f'Sat state before running: {sat.GetState()}')
 print(f"Epoch before running: {sat.GetEpoch()}")
 
 # Mission Command Sequence
 mcs = [
-    gpy.BeginFiniteBurn(fb1, sat, 'Turn Thruster On'),
-    gpy.Propagate('Prop 10 days', sat, prop, (f'{sat.name}.ElapsedDays', 10)),
-    gpy.EndFiniteBurn(fb1, 'Turn Thruster Off'),
+    gp.BeginFiniteBurn(fb1, sat, 'Turn Thruster On'),
+    gp.Propagate('Prop 10 days', sat, prop, (f'{sat.name}.ElapsedDays', 10)),
+    gp.EndFiniteBurn(fb1, 'Turn Thruster Off'),
 ]
 
-gpy.RunMission(mcs)  # Run the mission
+gp.RunMission(mcs)  # Run the mission
 
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetField("Epoch")}')

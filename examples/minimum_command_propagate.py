@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 from load_gmat import gmat
-import gmatpyplus as gpy
+import gmatpyplus as gp
 import os
 
 # Set log and script options
@@ -78,10 +78,10 @@ gmat.ConfigManager.Instance().AddObject(gmat.STOP_CONDITION, stop_cond)
 # default_pgate_name = 'Propagate'
 pgate_name = 'DefaultPropagateCommand'
 # pgate = mod.CreateDefaultCommand('Propagate')
-pgate = gpy.Propagate(pgate_name, prop, sat)
+pgate = gp.Propagate(pgate_name, prop, sat)
 print(f'\nCM list before creating Propagate: {gmat.ConfigManager.Instance().GetListOfAllItems()}\n')
 # pgate = gmat.Propagate()
-# pgate = gpy.GmatCommand.ClearDefaultObjects(pgate)
+# pgate = gp.GmatCommand.ClearDefaultObjects(pgate)
 # pgate.SetName(pgate_name)
 # pgate = gmat.Propagate()
 # pgate.ClearObject()
