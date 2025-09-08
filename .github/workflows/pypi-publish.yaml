@@ -1,0 +1,8 @@
+name: pypi-publish
+run-name: ${{ github.actor }} is publishing the updated package to PyPI.
+on: [release]
+jobs:
+  pypi-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
