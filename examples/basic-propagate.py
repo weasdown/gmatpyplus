@@ -76,7 +76,7 @@ print(f"Epoch before running: {sat.GetField('Epoch')}")
 # Run the mission
 run_mission_return_code = int(gmat.Moderator.Instance().RunMission())
 if run_mission_return_code == 1:
-    print(f'\nRunMission succeeded!\n')
+    print(f'\nRunMission() succeeded!\n')
 else:
     raise Exception(f'RunMission did not complete successfully - returned code {run_mission_return_code}')
 
