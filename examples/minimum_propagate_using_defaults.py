@@ -2,8 +2,10 @@
 # Note this only works with ElapsedSecs/ElapsedDays. Other stop conditions will be demonstrated in separate examples
 
 from __future__ import annotations
-from load_gmat import gmat
+
 import os
+
+from load_gmat import gmat
 
 # Set log and script options
 log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
