@@ -4,12 +4,12 @@ from load_gmat import gmat
 
 import os
 
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Log-basic-propagate.txt')
 gmat.UseLogFile(log_path)
 
 gmat.Clear()
 
-script_path = os.path.normpath(f'{os.getcwd()}/basic-propagate.script')
+script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/basic-propagate.script')
 
 
 def GetState(sc):
