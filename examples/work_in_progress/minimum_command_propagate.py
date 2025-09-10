@@ -9,7 +9,7 @@ import os
 from gmatpyplus import gmat, logs_dir, Propagate
 
 # Set log and script options
-log_path = os.path.normpath(f'{logs_dir}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{logs_dir}/GMAT-Log-minimum_command_propagate.txt')
 gmat.UseLogFile(log_path)
 
 ss = gmat.GetSolarSystem()
