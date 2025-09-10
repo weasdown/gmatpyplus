@@ -1,4 +1,4 @@
-# Example showing how the gmatpyplus wrapper can be used with matplotlib
+# WORK IN PROGRESS Example showing how the gmatpyplus wrapper can be used with matplotlib
 # Written by William Easdown Babb
 
 from __future__ import annotations
