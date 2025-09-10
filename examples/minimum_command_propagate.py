@@ -2,12 +2,14 @@
 # Note this does not work with apoapsis/periapsis - these will be demonstrated in separate examples
 
 from __future__ import annotations
-from load_gmat import gmat
-import gmatpyplus as gp
+
 import os
 
+# import gmatpyplus as gp
+from gmatpyplus import gmat, logs_dir, Propagate
+
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{logs_dir}/GMAT-Log.txt')
 gmat.UseLogFile(log_path)
 
 ss = gmat.GetSolarSystem()
@@ -78,7 +80,7 @@ gmat.ConfigManager.Instance().AddObject(gmat.STOP_CONDITION, stop_cond)
 # default_pgate_name = 'Propagate'
 pgate_name = 'DefaultPropagateCommand'
 # pgate = mod.CreateDefaultCommand('Propagate')
-pgate = gp.Propagate(pgate_name, prop, sat)
+pgate = Propagate(pgate_name, prop, sat)
 print(f'\nCM list before creating Propagate: {gmat.ConfigManager.Instance().GetListOfAllItems()}\n')
 # pgate = gmat.Propagate()
 # pgate = gp.GmatCommand.ClearDefaultObjects(pgate)
@@ -125,7 +127,7 @@ print(f'prop IsInitialized? {prop.IsInitialized()}')
 # print(f'Command list: {gmat.GetCommands("Propagate")}')
 
 # print(sb.AddCommand(pgate))
-gmat.Initialize()
+# gmat.Initialize()
 
 # Mission Command Sequence
 mcs = [gmat.BeginMissionSequence(),  # BeginMissionSequence command (required at start of sequence)
@@ -136,16 +138,19 @@ for command in mcs:
     command.SetObjectMap(mod.GetConfiguredObjectMap())
     command.SetGlobalObjectMap(gmat.Sandbox().GetGlobalObjectMap())
 
-    valid = gmat.Validator.Instance().ValidateCommand(command)
-    command.Initialize()
+    # if not isinstance(command, gmat.NoOp) and not isinstance(command, gmat.BeginMissionSequence):
+    # valid = gmat.Validator.Instance().ValidateCommand(command.gmat_obj if isinstance(command, Propagate) else command)
+    # command.Initialize()
 
-    mod.AppendCommand(command)
+    mod.AppendCommand(command.gmat_obj if isinstance(command, Propagate) else command)
     command_list = gmat.GetCommands()
     print(command_list)
     # print(f'Command list: {[f"{command.GetTypeName()} named \"{command.GetName()}\"" for command in command_list]}\n')
     print('\nCommand list:')
     print(''.join([f'Name: {command.GetName()}, type: {command.GetTypeName()}\n' for command in command_list]))
 
+
+# FIXME: failing to run mission: "Process finished with exit code -1073741819 (0xC0000005)"
 mod.RunMission()
 sat = gmat.GetRuntimeObject(sat.GetName())  # update Spacecraft object now it's been propagated
 
