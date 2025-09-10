@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-import gmatpyplus as gp
-from gmatpyplus import gmat
-
+import inspect
+import logging
 import sys
 from io import StringIO
-import logging
+
 import numpy as np
+
+import gmatpyplus as gp
+from gmatpyplus import gmat, gmat_bin_path
 
 
 class APIException(Exception):
@@ -783,3 +785,21 @@ def vectors_orthogonal(vec1: np.ndarray, vec2: np.ndarray) -> bool:
     :return: True if the two vectors are orthogonal, False otherwise.
     """
     return True if np.dot(vec1, vec2) == 0 else False
+
+def gmatpy_classes() -> list[str]:
+    """Lists the names of all the available classes in GMAT's built-in gmatpy library."""
+    module_name = 'gmatpy'
+    module = sys.modules[module_name]
+    cls_members: list[tuple] = inspect.getmembers(module, inspect.isclass)
+    print(f'Number of class members: {len(cls_members)}')
+
+    cls_member_names: list[str] = [f'{item[0]}\n' for item in cls_members]
+    # cls_member_classes: list[str] = [item[1] for item in cls_members]
+    #
+    # print(f'{cls_member_names = }')
+    # print(f'{cls_member_classes = }')
+
+    with open('gmatpyplus/gmatpy_classes.txt', 'w') as file:
+        file.writelines(cls_member_names)
+
+    return cls_member_names
