@@ -3,9 +3,10 @@
 
 from __future__ import annotations
 
-from load_gmat import gmat
-import gmatpyplus as gp
 import os
+
+import gmatpyplus as gp
+from load_gmat import gmat
 
 gmat.Clear()
 

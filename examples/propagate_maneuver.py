@@ -1,10 +1,11 @@
 # Example of using multiple Propagate commands and a Maneuver. Written by William Easdown Babb
 
 from __future__ import annotations
+
 import os
 
-from load_gmat import gmat
 import gmatpyplus as gp
+from load_gmat import gmat
 
 # Set log and script options
 log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log-example.txt')
