@@ -71,7 +71,7 @@ for t in range(10, 120, 10):
 
     # Mission Command Sequence
     mcs = [
-        gp.Propagate('Prop 60 s', prop, sat, ('Sat.ElapsedSecs', t)),
+        gp.Propagate(f'Prop {t} s', sat, prop, (f'{sat.name}.ElapsedSecs', t)),
         # gp.Maneuver('Maneuver1', toi, sat),
         # gp.Propagate('Prop One Day', prop, sat, ('Sat.ElapsedDays', 1)),
         # gp.Propagate('Prop To Apoapsis', prop, sat, 'Sat.Earth.Apoapsis'),
