@@ -6,12 +6,11 @@ from __future__ import annotations
 import os
 
 import gmatpyplus as gp
-from load_gmat import gmat
 
-gmat.Clear()
+gp.gmat.Clear()
 
 # Debug options - TODO remove
-gmat_global = gmat.GmatGlobal.Instance()
+gmat_global = gp.gmat.GmatGlobal.Instance()
 # gmat_global.SetMissionTreeDebug(True)
 
 # writes param info to log
@@ -21,12 +20,12 @@ gmat_global.SetWriteFilePathInfo(False)
 gmat_global.SetCommandEchoMode(True)  # enables "CurrentCommand: [command generating string]" print out in log
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
-script_path = os.path.normpath(f'{os.getcwd()}/matplotlib_example.script')
-gmat.UseLogFile(log_path)
+log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-use_with_matplotlib.txt')
+script_path = os.path.normpath(f'{gp.scripts_dir}/use_with_matplotlib.script')
+gp.gmat.UseLogFile(log_path)
 echo_log = False
 if echo_log:
-    gmat.EchoLogFile()
+    gp.gmat.EchoLogFile()
     print('Echoing GMAT log file to terminal\n')
 
 sat_params = {
