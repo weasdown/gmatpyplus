@@ -1,16 +1,15 @@
 from __future__ import annotations
 
+import logging
+from typing import Union
+
 import gmatpyplus as gp
 from gmatpyplus import gmat
-
 from gmatpyplus.basics import GmatObject
+from gmatpyplus.hardware import Imager, NuclearPowerSystem, SolarPowerSystem
 from gmatpyplus.orbit import OrbitState
 from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
                               list_to_gmat_field_string, rvector6_to_list)
-from gmatpyplus.hardware import Imager
-
-from typing import Union
-import logging
 
 
 class Spacecraft(GmatObject):
