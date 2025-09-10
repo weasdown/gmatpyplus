@@ -8,7 +8,7 @@ import os
 import gmatpyplus as gp
 from gmatpyplus import gmat
 
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-Tut01_SimulatingAnOrbit.txt')
 gmat.UseLogFile(log_path)
 echo_log = False
 if echo_log:
@@ -50,5 +50,5 @@ gp.RunMission(mcs)  # Run the mission
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
 
-script_path = os.path.normpath(f'{os.getcwd()}/Tut01.script')
+script_path = os.path.normpath(f'{gp.scripts_dir}/Tut01_SimulatingAnOrbit.script')
 gmat.SaveScript(script_path)

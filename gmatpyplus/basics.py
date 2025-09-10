@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import gmatpyplus as gp
-# from gmatpyplus import gmat
-from gmatpyplus.load_gmat import gmat
-
 from datetime import datetime
+
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 
 class GmatObject:

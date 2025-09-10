@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Tut01_SimulatingAnOrbit.py" type="PythonConfigurationType" factoryName="Python" folderName="Tutorials">
+  <configuration default="false" name="use_with_matplotlib.py" type="PythonConfigurationType" factoryName="Python" folderName="examples">
     <module name="gmatpyplus" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -12,7 +12,7 @@
     <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/tutorials/Tut01_SimulatingAnOrbit.py" />
+    <option name="SCRIPT_NAME" value="C:\Users\weasd\dev\non-OH\GMAT\gmatpyplus\examples\work_in_progress\use_with_matplotlib.py" />
     <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />

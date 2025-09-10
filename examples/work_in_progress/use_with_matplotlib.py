@@ -1,16 +1,16 @@
-# Example showing how the gmatpyplus wrapper can be used with matplotlib
+# WORK IN PROGRESS Example showing how the gmatpyplus wrapper can be used with matplotlib
 # Written by William Easdown Babb
 
 from __future__ import annotations
 
-from load_gmat import gmat
-import gmatpyplus as gp
 import os
 
-gmat.Clear()
+import gmatpyplus as gp
+
+gp.gmat.Clear()
 
 # Debug options - TODO remove
-gmat_global = gmat.GmatGlobal.Instance()
+gmat_global = gp.gmat.GmatGlobal.Instance()
 # gmat_global.SetMissionTreeDebug(True)
 
 # writes param info to log
@@ -20,12 +20,12 @@ gmat_global.SetWriteFilePathInfo(False)
 gmat_global.SetCommandEchoMode(True)  # enables "CurrentCommand: [command generating string]" print out in log
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
-script_path = os.path.normpath(f'{os.getcwd()}/matplotlib_example.script')
-gmat.UseLogFile(log_path)
+log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-use_with_matplotlib.txt')
+script_path = os.path.normpath(f'{gp.scripts_dir}/use_with_matplotlib.script')
+gp.gmat.UseLogFile(log_path)
 echo_log = False
 if echo_log:
-    gmat.EchoLogFile()
+    gp.gmat.EchoLogFile()
     print('Echoing GMAT log file to terminal\n')
 
 sat_params = {
@@ -71,7 +71,7 @@ for t in range(10, 120, 10):
 
     # Mission Command Sequence
     mcs = [
-        gp.Propagate('Prop 60 s', prop, sat, ('Sat.ElapsedSecs', t)),
+        gp.Propagate(f'Prop {t} s', sat, prop, (f'{sat.name}.ElapsedSecs', t)),
         # gp.Maneuver('Maneuver1', toi, sat),
         # gp.Propagate('Prop One Day', prop, sat, ('Sat.ElapsedDays', 1)),
         # gp.Propagate('Prop To Apoapsis', prop, sat, 'Sat.Earth.Apoapsis'),
@@ -89,4 +89,4 @@ for t in range(10, 120, 10):
     print(f'Sat state after running for {t} s: {new_state}')
     print(f'Epoch after running for {t} s: {new_epoch}')
 
-# gmat.SaveScript(script_path)
+gp.gmat.SaveScript(script_path)
