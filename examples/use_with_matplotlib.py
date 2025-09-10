@@ -89,4 +89,4 @@ for t in range(10, 120, 10):
     print(f'Sat state after running for {t} s: {new_state}')
     print(f'Epoch after running for {t} s: {new_epoch}')
 
-# gmat.SaveScript(script_path)
+gp.gmat.SaveScript(script_path)
