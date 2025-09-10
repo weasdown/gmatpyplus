@@ -6,7 +6,7 @@ from load_gmat import gmat
 import gmatpyplus as gp
 import os
 
-log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut02-Log.txt')
+log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-finite_burn.txt')
 gmat.UseLogFile(log_path)
 gmat.EchoLogFile(False)  # set to True to view log output in console (e.g. live iteration results)
 
@@ -26,7 +26,7 @@ sat = gp.Spacecraft.from_dict(sat_params)
 prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
-fb1 = gp.FiniteBurn('FiniteBurn1', sat.thrusters.electric[0])
+fb1 = gp.FiniteBurn('FiniteBurn1', sat.elec_thrusters[0])
 
 print(f'Sat state before running: {sat.GetState()}')
 print(f"Epoch before running: {sat.GetEpoch()}")
@@ -43,5 +43,5 @@ gp.RunMission(mcs)  # Run the mission
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetField("Epoch")}')
 
-script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/Tut02-SimpleOrbitTransfer.script')
+script_path = os.path.normpath(f'{gp.scripts_dir}/finite_burn.script')
 gmat.SaveScript(script_path)
