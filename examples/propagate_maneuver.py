@@ -8,7 +8,7 @@ import gmatpyplus as gp
 from load_gmat import gmat
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log-example.txt')
+log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Log-propagate_maneuver.txt')
 gmat.UseLogFile(log_path)  # tell GMAT to log to the path previously declared
 echo_log = False
 if echo_log:
@@ -65,5 +65,5 @@ gp.RunMission(mcs)  # Run the mission
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
 
-script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/example.script')  # path for saved script
+script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/propagate_maneuver.script')  # path for saved script
 gmat.SaveScript(script_path)
