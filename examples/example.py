@@ -1,6 +1,7 @@
 # General wrapper example. Written by William Easdown Babb
 
 from __future__ import annotations
+
 import os
 
 import gmatpyplus as gp
