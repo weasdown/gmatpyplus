@@ -31,23 +31,23 @@ class Spacecraft(GmatObject):
                         f'\n\t- Electrical:   {self.electric}')
 
         def __init__(self,
-                     chem_tanks: gp.ChemicalTank | list[gp.ChemicalTank] = None,
-                     elec_tanks: gp.ElectricTank | list[gp.ElectricTank] = None,
-                     chem_thrusters: gp.ChemicalThruster | list[gp.ChemicalThruster] = None,
-                     elec_thrusters: gp.ElectricThruster | list[gp.ElectricThruster] = None,
+                     chem_tanks: list[gp.ChemicalTank] = None,
+                     elec_tanks: list[gp.ElectricTank] = None,
+                     chem_thrusters: list[gp.ChemicalThruster] = None,
+                     elec_thrusters: list[gp.ElectricThruster] = None,
                      solar_power_system: gp.SolarPowerSystem = None,
                      nuclear_power_system: gp.NuclearPowerSystem = None,
-                     imagers: gp.Imager | list[gp.Imager] = None):
-            self.chem_tanks = chem_tanks if chem_tanks is not None else []
-            self.elec_tanks = elec_tanks if elec_tanks is not None else []
+                     imagers: list[gp.Imager] = None):
+            self.chem_tanks: list[gp.ChemicalTank] = chem_tanks if chem_tanks is not None else []
+            self.elec_tanks: list[gp.ElectricTank] = elec_tanks if elec_tanks is not None else []
 
-            self.chem_thrusters = chem_thrusters if chem_thrusters is not None else []
-            self.elec_thrusters = elec_thrusters if elec_thrusters is not None else []
+            self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
+            self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
             self.solar_power_system = None if solar_power_system is None else solar_power_system
             self.nuclear_power_system = None if nuclear_power_system is None else nuclear_power_system
 
-            self.imagers = imagers if imagers is not None else []
+            self.imagers: list[Imager] = imagers if imagers is not None else []
 
         def __repr__(self):
             return (f'{type(self).__name__} object with the following parameters:'
