@@ -2,13 +2,14 @@
 # Written by William Easdown Babb
 
 from __future__ import annotations
-from load_gmat import gmat
-import gmatpyplus as gp
+
 import os
 
+import gmatpyplus as gp
+
 log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-finite_burn.txt')
-gmat.UseLogFile(log_path)
-gmat.EchoLogFile(False)  # set to True to view log output in console (e.g. live iteration results)
+gp.gmat.UseLogFile(log_path)
+gp.gmat.EchoLogFile(False)  # set to True to view log output in console (e.g. live iteration results)
 
 sat_params = {
     'Name': 'DefaultSC',
@@ -44,4 +45,4 @@ print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetField("Epoch")}')
 
 script_path = os.path.normpath(f'{gp.scripts_dir}/finite_burn.script')
-gmat.SaveScript(script_path)
+gp.gmat.SaveScript(script_path)
