@@ -44,8 +44,10 @@ class Spacecraft(GmatObject):
             self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
             self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
-            self.solar_power_system = None if solar_power_system is None else solar_power_system
-            self.nuclear_power_system = None if nuclear_power_system is None else nuclear_power_system
+            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None\
+                else solar_power_system
+            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None\
+                else nuclear_power_system
 
             self.imagers: list[Imager] = imagers if imagers is not None else []
 
