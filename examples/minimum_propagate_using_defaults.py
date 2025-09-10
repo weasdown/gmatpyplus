@@ -8,7 +8,7 @@ import os
 from load_gmat import gmat
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Log-minimum_command_propagate_using_defaults.txt')
 gmat.UseLogFile(log_path)
 gmat.GmatGlobal.Instance().SetCommandEchoMode(
     True)  # enables "CurrentCommand: [command generating string]" print out in log
