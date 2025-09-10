@@ -5,14 +5,13 @@ from __future__ import annotations
 import os
 
 import gmatpyplus as gp
-from load_gmat import gmat
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Log-propagate_maneuver.txt')
-gmat.UseLogFile(log_path)  # tell GMAT to log to the path previously declared
+log_path = os.path.normpath(f'{gp.logs_dir}/GMAT-Log-propagate_maneuver.txt')
+gp.gmat.UseLogFile(log_path)  # tell GMAT to log to the path previously declared
 echo_log = False
 if echo_log:
-    gmat.EchoLogFile()
+    gp.gmat.EchoLogFile()
     print('Echoing GMAT log file to terminal\n')
 
 # Build a Spacecraft from a dictionary of parameters
@@ -65,5 +64,5 @@ gp.RunMission(mcs)  # Run the mission
 print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
 
-script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/propagate_maneuver.script')  # path for saved script
-gmat.SaveScript(script_path)
+script_path = os.path.normpath(f'{gp.scripts_dir}/propagate_maneuver.script')  # path for saved script
+gp.gmat.SaveScript(script_path)
