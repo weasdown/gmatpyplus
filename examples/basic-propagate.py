@@ -12,10 +12,11 @@ gmat.Clear()
 script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/basic-propagate.script')
 
 
-def GetState(sc):
+def GetState(sc: gmat.Spacecraft) -> list[float]:
+    """Gets the correct values for a Spacecraft's state."""
     state: list[None | float] = [None] * 6
     for i in range(13, 19):
-        state[i - 13] = float(sat.GetField(i))
+        state[i - 13] = float(sc.GetField(i))
     return state
 
 
