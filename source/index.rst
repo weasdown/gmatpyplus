@@ -15,6 +15,14 @@ To get started, see `README.md`_.
    gmatpyplus
    examples
 
+.. seealso::
+
+   README.md
+      Package top-level `README.md`_.
+
+   plugins/README.md
+      `Instructions`_ for installing GMAT plugins.
+
 
 .. _README.md: https://github.com/weasdown/gmatpyplus/blob/main/README.md
 .. _Instructions: https://github.com/weasdown/gmatpyplus/blob/main/plugins/README.md
