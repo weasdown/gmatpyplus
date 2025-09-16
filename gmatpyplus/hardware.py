@@ -5,9 +5,9 @@ from typing import Union
 
 import numpy as np
 
-from gmatpyplus import gmat
 import gmatpyplus as gp
 from gmatpyplus import GmatObject
+from gmatpyplus import gmat
 
 
 class Antenna(GmatObject):
