@@ -1,8 +1,7 @@
-# GMAT-Python-simple
+# gmatpyplus
 
 An extra wrapper library for the GMAT Python API to simplify setting up mission simulations. The wrapper aims to align
-Python
-commands with GMAT script ones, greatly reducing the number of lines required to model a mission. To do this, it
+Python commands with GMAT script ones, greatly reducing the number of lines required to model a mission. To do this, it
 automatically creates relevant subclasses and sets default values, while still allowing the user full control over
 parameters if they need something specific. The aim is to reduce the time that the user needs to spend thinking about
 how the API works, so they can instead focus on the orbital mechanics and broader design of their particular mission.
@@ -23,7 +22,7 @@ with Python 3.9 to 3.12.** You can find the required plugins and instructions on
 [//]: # (TODO: remove TestPyPI specifying)
 You can install this library with:
 
-`pip install -i https://test.pypi.org/simple/ gmat-py-simple`
+`pip install gmatpyplus`
 
 Then in your Python scripts, import the library:
 
