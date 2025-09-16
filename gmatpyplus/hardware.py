@@ -5,9 +5,9 @@ from typing import Union
 
 import numpy as np
 
-from gmatpyplus import gmat
 import gmatpyplus as gp
 from gmatpyplus import GmatObject
+from gmatpyplus import gmat
 
 
 class Antenna(GmatObject):
@@ -225,13 +225,11 @@ class RectangularFOV(FieldOfView):
             return True
 
     def CustomCheckTargetVisibility(self, target: np.ndarray | list) -> bool:
-        """
-        Determine whether a point is within the Imager's field of view.
+        """Determine whether a point is within the Imager's field of view.
 
         Note: this currently assumes that the Y-axis is the boresight, the X-axis is towards the right of the FOV, and
         the Z-axis is pointing up in the FOV. The origin is taken to be the center of the Imager's sensor/FOV.
-        # TODO: change this to match GMAT, which uses z for boresight, v for second_vec, x for normalized version of
-           normal to z and v (N), y as z cross x.
+        # TODO: change this to match GMAT, which uses z for boresight, v for second_vec, x for normalized version of normal to z and v (N), y as z cross x.
 
         Overall process:
         1) Find the vectors that give the edges of the FOV
@@ -239,9 +237,9 @@ class RectangularFOV(FieldOfView):
         3) The target is in the FOV if the dot product of the target's position vector and the normal vector is
         positive, for all four of the normal vectors.
 
-        :param target: np array or list representation of a 3D position vector for the target point, in the spacecraft
-        body frame.
-        :return in_fov: bool - True if target is in field of view, False if not
+        :param target: np array or list representation of a 3D position vector for the target point, in the spacecraft body frame.
+        :return in_fov: bool - True if target is in field of view, False if not.
+        :rtype: bool
         """
 
         # Note: GMAT handles Imagers as having no sensor width/height, so FOV edge vectors start at origin rather than

@@ -14,6 +14,8 @@ import logging
 
 
 class Spacecraft(GmatObject):
+    """A spacecraft object."""
+
     class SpacecraftHardware:
         """
         Container for a Spacecraft's hardware objects.
