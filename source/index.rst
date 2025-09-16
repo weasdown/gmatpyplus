@@ -10,8 +10,19 @@ To get started, see `README.md`_.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    gmatpyplus
+   examples
+
 
 .. _README.md: https://github.com/weasdown/gmatpyplus/blob/main/README.md
+.. _Instructions: https://github.com/weasdown/gmatpyplus/blob/main/plugins/README.md
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
