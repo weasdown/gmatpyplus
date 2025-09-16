@@ -8,7 +8,12 @@ import gmatpyplus as gp
 from gmatpyplus import gmat as gmat
 
 # Set log and script options
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log-example.txt')
+examples_dir = f'{os.getcwd()}/examples'
+logs_dir = os.path.normpath(f'{examples_dir}/logs')
+if not os.path.exists(logs_dir):
+    os.mkdir(logs_dir)
+log_filename = 'GMAT-Log-example.txt'
+log_path = f'{logs_dir}/{log_filename}'
 gmat.UseLogFile(log_path)  # tell GMAT to log to the path previously declared
 echo_log = False
 if echo_log:
