@@ -19,10 +19,7 @@ with Python 3.9 to 3.12.** You can find the required plugins and instructions on
 
 ## Getting Started
 
-[//]: # (TODO: remove TestPyPI specifying)
-You can install this library with:
-
-`pip install gmatpyplus`
+You can install this library with `pip install gmatpyplus`.
 
 Then in your Python scripts, import the library:
 
