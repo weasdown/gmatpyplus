@@ -9,7 +9,7 @@ These have been compiled and tested with GMAT R2025a. You can also compile the p
 compilation tutorial](https://gmat.atlassian.net/wiki/spaces/GW/pages/380273355/Compiling+GMAT+CMake+Build+System).
 
 Throughout these instructions, `[GMAT]` refers to the root directory of your GMAT installation, e.g. 
-`.../gmat-win-2025a`.
+`.../gmat-win-2025a`, and `[plugins]` refers to the directory that this instructions file is within.
 
 ## Installation steps
 
@@ -19,18 +19,19 @@ GMAT R2025a (recommended), this will give you a folder named `gmat-win-2025a`.
 2) Open `gmat-win-2025a`. Inside will be a folder called GMAT - this is your GMAT root folder. Inside this will be a set
 of folders and files (`api`, `bin`, and so on).
 
-3) From the `plugins` folder that you're reading these instructions from, copy the contents of the `gmatpy` folder. 
-Paste the files into `[GMAT]/bin/gmatpy`. Back in the `plugins` folder, copy the contents of the `plugins`  folder (that 
-contains six `.dll` files). Paste the files into `[GMAT]/plugins`.
-   
-4) You should now have folders or files with names ending `py36` to `py312` in `[GMAT]/bin/gmatpy` and `[GMAT]/plugins`.
+3) Copy the contents of the `[plugins]/gmatpy` folder into `[GMAT]/bin/gmatpy`. Then copy the contents of the 
+`[plugins]/plugins` folder (that contains `.dll` files) into `[GMAT]/plugins`.
 
-5) To get GMAT to use a non-default version of Python, you need to modify two files in `[GMAT]/bin`: 
+4) OPTIONAL. If you also want to install debug plugins, copy the `[plugins]/debug` folder into `[GMAT]`.
+   
+5) You should now have folders or files with names ending `py36` to `py312` in `[GMAT]/bin/gmatpy` and `[GMAT]/plugins`.
+
+6) To get GMAT to use a non-default version of Python, you need to modify two files in `[GMAT]/bin`: 
 `api_startup_file.txt` and `gmat_startup_file.txt`. In each of these, within the `Plugins` section, replace the endings 
 for library files `libPythonInterface_py3xx` and `libExternalForceModel_py3xx` with the Python version you want to use. 
 For example, if GMAT is currently setup for Python 3.9, but you want to use Python 3.12, `libPythonInterface_py39` would
 become `libPythonInterface_py312`. Four lines will need modifying in total, one for each of the library files, in each 
 of the `.txt` files.
 
-6) To set up the Python API for the first time, follow the instructions in [`API_setup.txt`](API_setup.txt). If you've 
+7) To set up the Python API for the first time, follow the instructions in [`API_setup.txt`](API_setup.txt). If you've 
 already done that, you're good to go!
