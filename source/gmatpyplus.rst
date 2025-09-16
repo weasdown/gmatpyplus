@@ -1,5 +1,5 @@
-gmatpyplus package
-==================
+gmatpyplus
+==========
 
 Submodules
 ----------
