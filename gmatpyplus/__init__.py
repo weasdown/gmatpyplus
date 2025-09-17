@@ -58,3 +58,9 @@ from .solver import *
 from .spacecraft import *
 from .orbit import *
 from .utils import *
+
+_library_dir = os.path.dirname(os.path.realpath(__file__))
+examples_dir = f'{_library_dir}/../examples/'
+logs_dir = f'{examples_dir}/logs'
+scripts_dir = f'{examples_dir}/scripts'
+tutorials_dir = f'{examples_dir}/tutorials'

@@ -1,16 +1,15 @@
 from __future__ import annotations
 
+import logging
+from typing import Union
+
 import gmatpyplus as gp
 from gmatpyplus import gmat
-
 from gmatpyplus.basics import GmatObject
+from gmatpyplus.hardware import Imager, NuclearPowerSystem, SolarPowerSystem
 from gmatpyplus.orbit import OrbitState
 from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
                               list_to_gmat_field_string, rvector6_to_list)
-from gmatpyplus.hardware import Imager
-
-from typing import Union
-import logging
 
 
 class Spacecraft(GmatObject):
@@ -33,23 +32,25 @@ class Spacecraft(GmatObject):
                         f'\n\t- Electrical:   {self.electric}')
 
         def __init__(self,
-                     chem_tanks: gp.ChemicalTank | list[gp.ChemicalTank] = None,
-                     elec_tanks: gp.ElectricTank | list[gp.ElectricTank] = None,
-                     chem_thrusters: gp.ChemicalThruster | list[gp.ChemicalThruster] = None,
-                     elec_thrusters: gp.ElectricThruster | list[gp.ElectricThruster] = None,
+                     chem_tanks: list[gp.ChemicalTank] = None,
+                     elec_tanks: list[gp.ElectricTank] = None,
+                     chem_thrusters: list[gp.ChemicalThruster] = None,
+                     elec_thrusters: list[gp.ElectricThruster] = None,
                      solar_power_system: gp.SolarPowerSystem = None,
                      nuclear_power_system: gp.NuclearPowerSystem = None,
-                     imagers: gp.Imager | list[gp.Imager] = None):
-            self.chem_tanks = chem_tanks if chem_tanks is not None else []
-            self.elec_tanks = elec_tanks if elec_tanks is not None else []
+                     imagers: list[gp.Imager] = None):
+            self.chem_tanks: list[gp.ChemicalTank] = chem_tanks if chem_tanks is not None else []
+            self.elec_tanks: list[gp.ElectricTank] = elec_tanks if elec_tanks is not None else []
 
-            self.chem_thrusters = chem_thrusters if chem_thrusters is not None else []
-            self.elec_thrusters = elec_thrusters if elec_thrusters is not None else []
+            self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
+            self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
-            self.solar_power_system = None if solar_power_system is None else solar_power_system
-            self.nuclear_power_system = None if nuclear_power_system is None else nuclear_power_system
+            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None\
+                else solar_power_system
+            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None\
+                else nuclear_power_system
 
-            self.imagers = imagers if imagers is not None else []
+            self.imagers: list[Imager] = imagers if imagers is not None else []
 
         def __repr__(self):
             return (f'{type(self).__name__} object with the following parameters:'
@@ -152,73 +153,83 @@ class Spacecraft(GmatObject):
 
         # TODO confirm fixed - FIXME - not being updated by from_dict()
         # Setup tanks
-        self.chem_tanks = None
+        self.chem_tanks: list[ChemicalTank] = []
         if self.hardware.chem_tanks:
-            if isinstance(self.chem_tanks, list):
-                self.chem_tanks = self.hardware.chem_tanks
-                for tank in self.chem_tanks:
+            if isinstance(self.hardware.chem_tanks, list):
+                for tank in self.hardware.chem_tanks:
+                    self.chem_tanks.append(tank)
                     tank.attach_to_sat(self)
             else:
-                self.chem_tanks = [self.hardware.chem_tanks]
-                self.chem_tanks[0].attach_to_sat(self)
+                # self.hardware.chem_tanks is of an inappropriate type.
+                raise TypeError(f'self.hardware.chem_tanks should be a list[ChemicalTank] but was '
+                                f'{type(self.hardware.chem_tanks).__name__}')
 
-        self.elec_tanks = None
+        self.elec_tanks: list[ElectricTank] = []
         if self.hardware.elec_tanks:
-            if isinstance(self.elec_tanks, list):
-                self.elec_tanks = self.hardware.elec_tanks
-                for tank in self.elec_tanks:
+            if isinstance(self.hardware.elec_tanks, list):
+                for tank in self.hardware.elec_tanks:
+                    self.elec_tanks.append(tank)
                     tank.attach_to_sat(self)
             else:
-                self.elec_tanks = [self.hardware.elec_tanks]
-                self.elec_tanks[0].attach_to_sat(self)
+                # self.hardware.elec_tanks is of an inappropriate type.
+                raise TypeError(f'self.hardware.elec_tanks should be a list[ElectricTank] but was '
+                                f'{type(self.hardware.elec_tanks).__name__}')
 
         # Setup thrusters
-        self.chem_thrusters = None
+        self.chem_thrusters: list[ChemicalThruster] = []
         if self.hardware.chem_thrusters:
-            self.chem_thrusters: ChemicalThruster | list[ChemicalThruster] = self.hardware.chem_thrusters
-            if isinstance(self.chem_thrusters, list):
-                self.chem_thrusters: list[ChemicalThruster] = self.hardware.chem_thrusters
-                for thruster in self.chem_thrusters:
+            if isinstance(self.hardware.chem_thrusters, list):
+                for thruster in self.hardware.chem_thrusters:
+                    self.chem_thrusters.append(thruster)
                     thruster.attach_to_sat(self)
-                    thruster.attach_to_tanks(thruster.tanks)
-            else:  # self.chem_thrusters is a single ChemicalThruster object
-                self.chem_thrusters = [self.hardware.chem_thrusters]
-                self.chem_thrusters[0].attach_to_sat(self)
-                self.chem_thrusters[0].attach_to_tanks(self.chem_thrusters[0].tanks)
+            else:
+                # self.hardware.chem_thrusters is of an inappropriate type.
+                raise TypeError(f'self.hardware.chem_thrusters should be a list[ChemicalThruster] but was '
+                                f'{type(self.hardware.chem_thrusters).__name__}')
 
-        self.elec_thrusters = None
+        self.elec_thrusters: list[ElectricThruster] = []
         if self.hardware.elec_thrusters:
-            self.elec_thrusters: ElectricThruster | list[ElectricThruster] = self.hardware.elec_thrusters
-            if isinstance(self.elec_thrusters, list):
-                self.elec_thrusters: list[ElectricThruster] = self.hardware.elec_thrusters
-                for thruster in self.elec_thrusters:
+            if isinstance(self.hardware.elec_thrusters, list):
+                for thruster in self.hardware.elec_thrusters:
+                    self.elec_thrusters.append(thruster)
                     thruster.attach_to_sat(self)
-                    thruster.attach_to_tanks(thruster.tanks)
-            else:  # self.elec_thrusters is a single ElectricThruster object
-                self.elec_thrusters = [self.hardware.elec_thrusters]
-                self.elec_thrusters[0].attach_to_sat(self)
-                self.elec_thrusters[0].attach_to_tanks(self.elec_thrusters[0].tanks)
+            else:
+                # self.hardware.elec_thrusters is of an inappropriate type.
+                raise TypeError(f'self.hardware.elec_thrusters should be a list[ElectricThruster] but was '
+                                f'{type(self.hardware.elec_thrusters).__name__}')
 
         # Setup power systems
-        self.solar_power_system = None
+        self.solar_power_system: SolarPowerSystem | None = None
         if self.hardware.solar_power_system is not None:
-            self.solar_power_system = self.hardware.solar_power_system
-            self.solar_power_system.attach_to_sat(self)
+            if isinstance(self.hardware.solar_power_system, SolarPowerSystem):
+                self.solar_power_system = self.hardware.solar_power_system
+                self.solar_power_system.attach_to_sat(self)
+            else:
+                # self.hardware.solar_power_system is of an inappropriate type.
+                raise TypeError(f'self.hardware.solar_power_system should be a SolarPowerSystem but was '
+                                f'{type(self.hardware.solar_power_system).__name__}')
 
-        self.nuclear_power_system = None
+        self.nuclear_power_system: NuclearPowerSystem | None = None
         if self.hardware.nuclear_power_system is not None:
-            self.nuclear_power_system = self.hardware.nuclear_power_system
-            self.nuclear_power_system.attach_to_sat(self)
+            if isinstance(self.hardware.nuclear_power_system, NuclearPowerSystem):
+                self.nuclear_power_system = self.hardware.nuclear_power_system
+                self.nuclear_power_system.attach_to_sat(self)
+            else:
+                # self.hardware.nuclear_power_system is of an inappropriate type.
+                raise TypeError(f'self.hardware.nuclear_power_system should be a NuclearPowerSystem but was '
+                                f'{type(self.hardware.nuclear_power_system).__name__}')
 
         # Setup imagers
-        self.imagers = None
+        self.imagers: list[Imager] = []
         if self.hardware.imagers is not None:
-            self.imagers: Imager | list[Imager] = self.hardware.imagers
-            if isinstance(self.imagers, list):
-                for imager in self.imagers:
+            if isinstance(self.hardware.imagers, list):
+                for imager in self.hardware.imagers:
+                    self.imagers.append(imager)
                     imager.attach_to_sat(self)
             else:
-                self.imagers.attach_to_sat(self)
+                # self.hardware.imagers is of an inappropriate type.
+                raise TypeError(f'self.hardware.imagers should be a list[Imager] but was '
+                                f'{type(self.hardware.imagers).__name__}')
 
         self.orbit = None
         self.dry_mass = self.GetField('DryMass')

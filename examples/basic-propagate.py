@@ -4,18 +4,19 @@ from load_gmat import gmat
 
 import os
 
-log_path = os.path.normpath(f'{os.getcwd()}/GMAT-Log.txt')
+log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Log-basic-propagate.txt')
 gmat.UseLogFile(log_path)
 
 gmat.Clear()
 
-script_path = os.path.normpath(f'{os.getcwd()}/basic-propagate.script')
+script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/basic-propagate.script')
 
 
-def GetState(sc):
+def GetState(sc: gmat.Spacecraft) -> list[float]:
+    """Gets the correct values for a Spacecraft's state."""
     state: list[None | float] = [None] * 6
     for i in range(13, 19):
-        state[i - 13] = float(sat.GetField(i))
+        state[i - 13] = float(sc.GetField(i))
     return state
 
 
@@ -75,7 +76,7 @@ print(f"Epoch before running: {sat.GetField('Epoch')}")
 # Run the mission
 run_mission_return_code = int(gmat.Moderator.Instance().RunMission())
 if run_mission_return_code == 1:
-    print(f'\nRunMission succeeded!\n')
+    print(f'\nRunMission() succeeded!\n')
 else:
     raise Exception(f'RunMission did not complete successfully - returned code {run_mission_return_code}')
 
