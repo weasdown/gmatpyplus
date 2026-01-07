@@ -9,6 +9,7 @@ class SolverIterations(Enum):
     none = 'none'
 
 
+# TODO add Report class in command.py that triggers writing to a ReportFile
 class ReportFile(GmatObject):
     # TODO complete documentation of ReportFile.__init__() parameters.
     def __init__(self, name: str, parameters: list, file: str, write_report: bool = True, write_headers: bool = True,
