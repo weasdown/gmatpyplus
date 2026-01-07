@@ -574,7 +574,7 @@ def GroundStations() -> list[str]:
     return get_gmat_objects_of_type('GroundStation')
 
 
-def hamilton_product(p: np.ndarray, q: np.ndarray) -> np.array:
+def hamilton_product(p: np.ndarray, q: np.ndarray) -> np.ndarray:
     """
     Multiply two quaternions, assuming each has scalar part as final element.
     :param p:
