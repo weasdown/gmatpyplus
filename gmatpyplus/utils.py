@@ -102,7 +102,7 @@ def extract_gmat_obj(obj):
     if isinstance(obj, gp.Parameter):
         return obj.gmat_base
 
-    if 'gmatpyplus' in obj_type:  # wrapper object
+    if 'gmatpyplus' in obj_type or 'output' in obj_type:  # wrapper object
         if 'Parameter' in obj_type:
             return obj.gmat_base
         return obj.gmat_obj
@@ -785,6 +785,7 @@ def vectors_orthogonal(vec1: np.ndarray, vec2: np.ndarray) -> bool:
     :return: True if the two vectors are orthogonal, False otherwise.
     """
     return True if np.dot(vec1, vec2) == 0 else False
+
 
 def gmatpy_classes() -> list[str]:
     """Lists the names of all the available classes in GMAT's built-in gmatpy library."""
