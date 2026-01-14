@@ -1,6 +1,6 @@
 from enum import Enum
 
-from gmatpyplus import GmatObject
+from output.subscriber import Subscriber
 
 
 class SolverIterations(Enum):
@@ -10,7 +10,7 @@ class SolverIterations(Enum):
 
 
 # TODO add Report class in command.py that triggers writing to a ReportFile
-class ReportFile(GmatObject):
+class ReportFile(Subscriber):
     # TODO complete documentation of ReportFile.__init__() parameters.
     def __init__(self, name: str, parameters: list, file: str, write_report: bool = True, write_headers: bool = True,
                  left_justify: bool = True, zero_fill: bool = False, fixed_width: bool = True,
