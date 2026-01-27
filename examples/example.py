@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 import os
+# import sys
 
 import gmatpyplus as gp
 from gmatpyplus import gmat as gmat
+from output.report_file import ReportFile
+
+# print(f'CWD:{os.getcwd()}\n')
+# print(f'{sys.path = }\n')
 
 # Set log and script options
 examples_dir = f'{os.getcwd()}/examples'
@@ -55,6 +60,18 @@ earth_peri = f'{sat.name}.Earth.Periapsis'
 
 print(f'Sat state before running: {sat.GetState()}')
 print(f'Epoch before running: {sat.GetEpoch()}')
+
+# Add report file
+rf1: ReportFile = ReportFile('RF1', [], 'rf1.txt')
+# gmat.ShowObjects()
+gmat.Help('RF1')
+rf1.gmat_obj.AddParameter('ExampleSat.Mass', 0)
+rf1.gmat_obj.AddParameter('ExampleSat.Apoapsis', 1)
+rf1.Initialize()
+rf1.Help()
+rf1.gmat_obj.WriteData(gmat.WrapperArray([]))
+print(f'Full path filename: {rf1.gmat_obj.GetFullPathFileName()}')
+print(f'\nRF1 generated string: {rf1.gmat_obj.GetGeneratingString()}')
 
 # Mission Command Sequence
 mcs = [
