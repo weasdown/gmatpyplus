@@ -42,6 +42,7 @@ source = "vcs"
 scheme = "standard"
 [tool.hatch.version.raw-options]
 version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"
 
 # Build hook
 [tool.hatch.build.hooks.vcs]
