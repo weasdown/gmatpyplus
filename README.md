@@ -15,7 +15,7 @@ The library itself should be compatible with Python 3.9 to 3.14. If you find any
 [issue](https://github.com/weasdown/GMAT-Python-simple/issues). However, out of the box, GMAT R2025a supports only
 Python 3.9 to 3.12. This means that **without adding extra plugins to your GMAT install, this library can only be used
 with Python 3.9 to 3.12.** You can find the required plugins and instructions on how to install them in the
-[plugins](plugins) directory.
+[plugins](plugins) directory. **Only plugins for Windows are currently provided, so for use on Linux/Mac with non-default Python versions, you will have to compile the plugins yourself.** Plugins for Linux/Mac will be added in a future release.
 
 ## Getting Started
 
