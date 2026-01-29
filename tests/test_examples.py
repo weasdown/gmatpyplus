@@ -30,12 +30,32 @@ class TestExample(unittest.TestCase):
                                         f'"{stderr_text}"') from None
 
     def test_all_examples(self):
-        print(f'{TestExample.examples_dir = }')
         example_files: list[Path] = list(TestExample.examples_dir.rglob('*.py'))
+
+        cwd = os.getcwd()
+
+        # Change directory to gmatpyplus library root.
+        os.chdir(TestExample.gmatpyplus_dir)
 
         # Run each example and check it returns a return code of 0, denoting a successful run.
         for example in example_files:
-            self.test_example(example)
+            # Get a short form of the path to the example file, removing the leading '.../.../gmatpyplus/'.
+            parts: tuple[str, ...] = PurePath(example).parts
+            index_of_examples_dir: int = parts.index('examples')
+            parts = parts[index_of_examples_dir:]
+            example_path_relative: str = '/'.join(parts)
+            print(f'Testing {example_path_relative}')
+
+            with self.subTest(example_path_relative):
+                try:
+                    self.run_file(example)
+                except AssertionError as e:
+                    print('\t- Fail!')
+                    raise e
+                else:
+                    print('\t- Pass\n')
+
+        os.chdir(cwd)  # Return to original working directory.
 
 
 if __name__ == '__main__':
