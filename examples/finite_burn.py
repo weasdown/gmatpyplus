@@ -14,19 +14,20 @@ sat_params = {
     'Name': 'DefaultSC',
     'DisplayStateType': 'Keplerian',
     'DateFormat': 'UTCGregorian',
-    'Hardware': {'Tanks': {'chemical': [{'Name': 'ChemicalTank1'}],
-                           'electric': [{'Name': 'ElectricTank1'}]},
-                 'Thrusters': {'chemical': [{'Name': 'ChemicalThruster1', 'Tanks': 'ChemicalTank1'}],
-                               'electric': [{'Name': 'ElectricThruster1', 'Tanks': 'ElectricTank1'}]},
-                 'SolarPowerSystem': {'Name': 'SolarPowerSystem1'},
-                 }
+    'Hardware': {
+        'ChemicalTanks': [{'Name': 'ChemicalTank1'}],
+        'ChemicalThrusters': [{'Name': 'ChemicalThruster1', 'Tanks': 'ChemicalTank1'}],
+        'ElectricTanks': [{'Name': 'ElectricTank1'}],
+        'ElectricThrusters': [{'Name': 'ElectricThruster1', 'Tanks': 'ElectricTank1'}],
+        'SolarPowerSystem': {'Name': 'SolarPowerSystem1'},
+    }
 }
 sat = gp.Spacecraft.from_dict(sat_params)
 
 prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
-fb1 = gp.FiniteBurn('FiniteBurn1', sat.thrusters.electric[0])
+fb1 = gp.FiniteBurn('FiniteBurn1', sat.elec_thrusters[0])
 
 print(f'Sat state before running: {sat.GetState()}')
 print(f"Epoch before running: {sat.GetEpoch()}")
