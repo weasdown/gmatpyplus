@@ -105,7 +105,7 @@ mcs = [
 
 gp.RunMission(mcs)  # Run the mission
 
-print(f'Sat state after running: {sat.GetState(coord_sys=mars_inertial.name)}')
+print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
 
 script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/Tut04_Mars_B-Plane_Targeting.script')
