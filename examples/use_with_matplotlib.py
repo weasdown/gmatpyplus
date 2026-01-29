@@ -1,4 +1,4 @@
-# Example showing how the gmatpyplus wrapper can be used with matplotlib
+# WORK IN PROGRESS Example showing how the gmatpyplus wrapper can be used with matplotlib
 # Written by William Easdown Babb
 
 from __future__ import annotations
@@ -89,4 +89,6 @@ for t in range(10, 120, 10):
     print(f'Sat state after running for {t} s: {new_state}')
     print(f'Epoch after running for {t} s: {new_epoch}')
 
-# gmat.SaveScript(script_path)
+# gmat.SaveScript(script_path)  # TODO confirm this line works
+
+# FIXME add code that takes the calculated values and plots a graph with matplotlib
