@@ -29,61 +29,6 @@ class TestExample(unittest.TestCase):
             raise self.failureException(f'Failed with return code {return_code} and the stderr below:\n\n'
                                         f'"{stderr_text}"') from None
 
-            # try:
-            #     # process: sp.CompletedProcess = sp.run(['python', example], stdout=sp.PIPE, stderr=sp.PIPE)
-            #     # # process.check_returncode()
-            #     # err = process.stderr
-            #
-            #     p: sp.Popen = sp.Popen(command, stdout=sp.PIPE, stderr=sp.PIPE)
-            #     # output = sp.check_call(command)
-            #     results = p.communicate()
-            #     out = results[0]
-            #     err = results[1]
-            #     code = p.returncode
-            #     print('\nResults:\n'
-            #           f'\t- stdout: {out}\n'
-            #           f'\t- stderr: {err}\n'
-            #           f'\t- return code: {code}')
-            #
-            #     return out, err, code
-            #
-            # except CalledProcessError as cpe:
-            #     print('Got CPE!')
-            #     print(f'output: {cpe.output}')
-            #     print(f'cpe.stderr: {cpe.stderr}')
-            #     print(f'cause: {cpe.__cause__}')
-            #     raise cpe
-            #
-            # except Exception:
-            #     print('Got an exception!')
-            #     raise
-
-        with self.subTest(example_path_relative):
-            # try:
-            # stdout, stderr, return_code = run_file(example)
-            run_file(example)
-            # stdout = process.stdout
-            # stderr = process.stderr
-            # return_code = process.returncode
-
-            # if stderr:
-            #     print(type(stderr))
-            #     # raise stderr
-            #     sys.exit(1)
-            #     # self.fail(f'{example_path_relative} failed raised an exception!\n{e}')
-
-            #     self.assertEqual(return_code, 0,
-            #                      f'Example {example_path_relative} failed with:\n'
-            #                      f'\t- return code {return_code},\n'
-            #                      f'\t- stdout {stdout},\n'
-            #                      f'\t- stderr {stderr}.')
-
-            # except Exception as ex:
-            #     self.fail(f'{example_path_relative} raised an exception!\n{ex}')
-
-            pass
-        print(f'\n### Completed testing of example {example_path_relative} ###\n')
-
     def test_all_examples(self):
         print(f'{TestExample.examples_dir = }')
         example_files: list[Path] = list(TestExample.examples_dir.rglob('*.py'))
