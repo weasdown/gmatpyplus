@@ -1,4 +1,4 @@
-# Example showing how the gmatpyplus wrapper can be used with matplotlib
+# WORK IN PROGRESS Example showing how the gmatpyplus wrapper can be used with matplotlib
 # Written by William Easdown Babb
 
 from __future__ import annotations
@@ -71,7 +71,7 @@ for t in range(10, 120, 10):
 
     # Mission Command Sequence
     mcs = [
-        gp.Propagate('Prop 60 s', prop, sat, ('Sat.ElapsedSecs', t)),
+        gp.Propagate('Prop 60 s', sat, prop, ('Sat.ElapsedSecs', t)),
         # gp.Maneuver('Maneuver1', toi, sat),
         # gp.Propagate('Prop One Day', prop, sat, ('Sat.ElapsedDays', 1)),
         # gp.Propagate('Prop To Apoapsis', prop, sat, 'Sat.Earth.Apoapsis'),
@@ -89,4 +89,6 @@ for t in range(10, 120, 10):
     print(f'Sat state after running for {t} s: {new_state}')
     print(f'Epoch after running for {t} s: {new_epoch}')
 
-# gmat.SaveScript(script_path)
+# gmat.SaveScript(script_path)  # TODO confirm this line works
+
+# FIXME add code that takes the calculated values and plots a graph with matplotlib

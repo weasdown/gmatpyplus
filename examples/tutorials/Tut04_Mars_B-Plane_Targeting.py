@@ -105,7 +105,8 @@ mcs = [
 
 gp.RunMission(mcs)  # Run the mission
 
-print(f'Sat state after running: {sat.GetState(coord_sys=mars_inertial.name)}')
+# TODO approximately the correct state is given for in the EarthMJ2000Eq coordinate system, but we'd like to be able to get it in the MarsInertial system.
+print(f'Sat state after running: {sat.GetState()}')
 print(f'Epoch after running: {sat.GetEpoch()}')
 
 script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/Tut04_Mars_B-Plane_Targeting.script')

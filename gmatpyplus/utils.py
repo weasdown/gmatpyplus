@@ -8,7 +8,7 @@ from io import StringIO
 import numpy as np
 
 import gmatpyplus as gp
-from gmatpyplus import gmat, gmat_bin_path
+from gmatpyplus import gmat
 
 
 class APIException(Exception):
@@ -511,16 +511,17 @@ def get_type_name_from_id(type_id: int) -> str:
 
 
 def gmat_field_string_to_list(string: str) -> list[str]:
-    if string == '{}':  # GMAT list is empty
+    # GMAT list is empty.
+    if string == '{}':
         string_list = []
 
-    elif ',' not in string:  # GMAT list contains exactly one item
-        string_list = [string[1:-1]]  # remove GMAT's curly braces and replace with Python square brackets
+    # GMAT list contains exactly one item.
+    elif ',' not in string:
+        string_list = [string[1:-1]]  # Remove GMAT's curly braces and replace with Python square brackets.
 
-    else:  # GMAT list contains more than one item
+    else:  # GMAT list contains more than one item.
         string_no_curly_braces = f'{string[1:-1]}'
-        string_list = list(string_no_curly_braces.split(', '))  # convert to list using comma as separator
-        string_list = [substring[1:-1] for substring in string_list]  # remove extra quotes from each item
+        string_list = list(string_no_curly_braces.split(', '))  # Convert to list using commas to separate items.
 
     return string_list
 
@@ -785,6 +786,7 @@ def vectors_orthogonal(vec1: np.ndarray, vec2: np.ndarray) -> bool:
     :return: True if the two vectors are orthogonal, False otherwise.
     """
     return True if np.dot(vec1, vec2) == 0 else False
+
 
 def gmatpy_classes() -> list[str]:
     """Lists the names of all the available classes in GMAT's built-in gmatpy library."""
