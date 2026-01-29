@@ -6,31 +6,28 @@ from pathlib import Path, PurePath
 
 class TestExample(unittest.TestCase):
     """Tests all the example programs in the examples directory."""
-
     tests_dir: Path = Path(os.path.abspath(__file__)).parent
     gmatpyplus_dir: Path = tests_dir.parent
     examples_folder_name: str = 'examples'
     examples_dir: Path = gmatpyplus_dir / examples_folder_name
 
-    def test_example(self, example: Path):
-        # Get a short form of the path to the example file, removing the leading '.../.../gmatpyplus/'.
-        parts: tuple[str, ...] = PurePath(example).parts
-        index_of_examples_dir: int = parts.index('examples')
-        parts = parts[index_of_examples_dir:]
-        example_path_relative: str = '/'.join(parts)
+    def run_file(self, file: Path):
+        command: list[str] = ['python', file, 'PYTHONUNBUFFERED=1']
 
-        print(f'\n### Testing example {example_path_relative} ###\n')
+        try:
+            # Returns a sp.CompletedProcess or raises a sp.CalledProcessError.
+            sp.run(command,
+                   capture_output=True,
+                   check=True
+                   )
 
-        def run_file(file: Path) -> bytes:
-            command: list[str] = ['python', file]
+        except sp.CalledProcessError as e:
+            return_code = e.returncode
+            stderr_text = e.stderr.decode('utf-8').rstrip()
 
-            try:
-                output = sp.check_output(command)
-                return output
-
-            except sp.CalledProcessError as e:
-                print(e.output)
-                raise
+            print(f'stderr_text: "{stderr_text}"')
+            raise self.failureException(f'Failed with return code {return_code} and the stderr below:\n\n'
+                                        f'"{stderr_text}"') from None
 
             # try:
             #     # process: sp.CompletedProcess = sp.run(['python', example], stdout=sp.PIPE, stderr=sp.PIPE)
