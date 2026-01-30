@@ -503,8 +503,17 @@ class FuelTank(GmatObject):
         self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
 
-        self.spacecraft = None
-        self.fuel_mass = self.GetField('FuelMass')
+        self.fuel_mass: float = self.GetRealParameter('FuelMass')  # kg
+        if fuel_mass is not None:
+            self.fuel_mass = fuel_mass
+            self.SetRealParameter('FuelMass', self.fuel_mass)
+
+        self.allow_negative_fuel_mass: bool = self.GetBooleanParameter('AllowNegativeFuelMass')  # Boolean
+        if allow_negative_fuel_mass is not None:
+            self.allow_negative_fuel_mass = allow_negative_fuel_mass
+            self.SetBooleanParameter('AllowNegativeFuelMass', self.allow_negative_fuel_mass)
+
+        self.spacecraft: gp.Spacecraft | None = None
 
         self.Initialize()
 
@@ -573,16 +582,6 @@ class ChemicalTank(FuelTank):
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])):
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
-
-        self.fuel_mass = self.GetRealParameter('FuelMass')  # kg
-        if fuel_mass is not None:
-            self.fuel_mass = fuel_mass
-            self.SetRealParameter('FuelMass', self.fuel_mass)
-
-        self.allow_negative_fuel_mass = self.GetBooleanParameter('AllowNegativeFuelMass')  # Boolean
-        if allow_negative_fuel_mass is not None:
-            self.allow_negative_fuel_mass = allow_negative_fuel_mass
-            self.SetBooleanParameter('AllowNegativeFuelMass', self.allow_negative_fuel_mass)
 
         self.pressure = self.GetRealParameter('Pressure')  # kPa
         if pressure is not None:
