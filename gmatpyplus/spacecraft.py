@@ -503,6 +503,7 @@ class FuelTank(GmatObject):
         self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
 
+        # TODO convert fuel mass and allow_negative_fuel_mass if ... is not None items to remove direct setting of parameters, as for fuel COM/MOI.
         self.fuel_mass: float = self.GetRealParameter('FuelMass')  # kg
         if fuel_mass is not None:
             self.fuel_mass = fuel_mass
@@ -635,6 +636,7 @@ class ChemicalTank(FuelTank):
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
+        # TODO convert if ... is not None items to remove direct setting of parameters - create getters and setters instead, like in FuelTank.
         self.pressure = self.GetRealParameter('Pressure')  # kPa
         if pressure is not None:
             self.pressure = pressure
