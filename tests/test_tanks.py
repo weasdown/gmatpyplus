@@ -14,6 +14,21 @@ class TestTanks(unittest.TestCase):
         self.second_direction: np.ndarray = np.array([0, 1, 0])
         self.hw_origin_in_bcs: np.ndarray = np.array([0.2, 0.4, 0.6])
 
+    def _test_tank(self, tank: gp.FuelTank):
+        # Test the gp.FuelTank's direction matches the direction argument.
+        self.assertTrue((self.direction == tank.direction).all(),
+                        f'gp.FuelTank direction attribute ({tank.direction}) is not equal to direction argument '
+                        f'({self.direction}).')
+
+        # Test the gp.FuelTank's direction matches GMAT's internal direction values.
+        direction_x_field = float(tank.GetField('DirectionX'))
+        direction_y_field = float(tank.GetField('DirectionY'))
+        direction_z_field = float(tank.GetField('DirectionZ'))
+        direction_field = np.array([direction_x_field, direction_y_field, direction_z_field])
+        self.assertTrue((direction_field == tank.direction).all(), f'direction_field from GMAT object '
+                                                                   f'({direction_field}) is not equal to direction argument '
+                                                                   f'({tank.direction}).')
+
     def test_chemical_tank(self):
         fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
         fuel_moi: np.ndarray = np.array([0.2, 0.1, 0])
