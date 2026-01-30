@@ -456,9 +456,11 @@ class PressureModel(Enum):
 
 
 class FuelTank(GmatObject):
-    def __init__(self, tank_type: str, name: str, fuel_mass: float, allow_negative_fuel_mass: bool,
-                 fuel_centre_of_mass: np.ndarray, fuel_moment_of_inertia: np.ndarray, direction: np.ndarray,
-                 second_direction: np.ndarray, hw_origin_in_bcs: np.ndarray) -> None:
+    def __init__(self, tank_type: str, name: str, fuel_mass: float = 756, allow_negative_fuel_mass: bool = False,
+                 fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
+                 fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
+                 direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
+                 hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])) -> None:
         """
         Superclass of ``ChemicalTank`` and ``ElectricTank``.
 
@@ -566,8 +568,9 @@ class ChemicalTank(FuelTank):
                  volume: int | float = 0.75, fuel_density: int | float = 1260,
                  pressure_model: PressureModel = PressureModel.PressureRegulated,
                  fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
-                 fuel_moment_of_inertia: np.ndarray = None, direction: np.ndarray = None,
-                 second_direction: np.ndarray = None, hw_origin_in_bcs: np.ndarray = None):
+                 fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
+                 direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
+                 hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])):
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
@@ -640,8 +643,10 @@ class ElectricTank(FuelTank):
     #     # self.GmatObj.SetField('FuelMass', self.fuel_mass)
 
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
-                 fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]), fuel_moment_of_inertia: np.ndarray = None,
-                 direction: np.ndarray = None, second_direction: np.ndarray = None, hw_origin_in_bcs: np.ndarray = None
+                 fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
+                 fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
+                 direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
+                 hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])
                  ) -> None:
         """
         Tank that stores fuel for ``ElectricThruster``s.
