@@ -459,6 +459,44 @@ class FuelTank(GmatObject):
     def __init__(self, tank_type: str, name: str, fuel_mass: float, allow_negative_fuel_mass: bool,
                  fuel_centre_of_mass: np.ndarray, fuel_moment_of_inertia: np.ndarray, direction: np.ndarray,
                  second_direction: np.ndarray, hw_origin_in_bcs: np.ndarray) -> None:
+        """
+        Superclass of ``ChemicalTank`` and ``ElectricTank``.
+
+        """
+        """
+        Attributes for Chemical Tank:
+        
+                   Field                                   Type   Value
+           --------------------------------------------------------
+        
+           DirectionX                              Real   0
+           DirectionY                              Real   0
+           DirectionZ                              Real   1
+           SecondDirectionX                        Real   0
+           SecondDirectionY                        Real   -1
+           SecondDirectionZ                        Real   0
+           HWOriginInBCSX                          Real   0
+           HWOriginInBCSY                          Real   0
+           HWOriginInBCSZ                          Real   0
+           AllowNegativeFuelMass                Boolean   false
+           FuelMass                                Real   756
+           FuelCenterOfMassX                       Real   0
+           FuelCenterOfMassY                       Real   0
+           FuelCenterOfMassZ                       Real   0
+           FuelMomentOfInertiaXX                   Real   99
+           FuelMomentOfInertiaXY                   Real   0
+           FuelMomentOfInertiaXZ                   Real   0
+           FuelMomentOfInertiaYY                   Real   99
+           FuelMomentOfInertiaYZ                   Real   0
+           FuelMomentOfInertiaZZ                   Real   99
+           Pressure                                Real   1500
+           Temperature                             Real   20
+           RefTemperature                          Real   20
+           Volume                                  Real   0.75
+           FuelDensity                             Real   1260
+           PressureModel                           List   PressureRegulated
+        """
+        assert (tank_type == 'ChemicalTank') or (tank_type == 'ElectricTank')  # Confirm tank_type is valid.
         super().__init__(tank_type, name)
         self.tank_type = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
@@ -549,15 +587,10 @@ class ChemicalTank(FuelTank):
             self.SetRealParameter('FuelDensity', self.fuel_density)
 
         # Pressure Model
-        self.pressure_model = self.GetStringParameter('PressureModel')  # string
-        allowed_pressure_models = ['PressureRegulated', 'BlowDown']
+        self.pressure_model: PressureModel = PressureModel[self.GetStringParameter('PressureModel')]  # string
         if pressure_model is not None:
-            if pressure_model not in allowed_pressure_models:
-                raise AttributeError(
-                    f'Invalid pressure model specified for {self.GetTypeName()} {self.name}. Must be one of: '
-                    f'{allowed_pressure_models}')
-            self.pressure_model = pressure_model
-            self.SetStringParameter('PressureModel', self.pressure_model)
+            self.pressure_model: PressureModel = pressure_model
+            self.SetStringParameter('PressureModel', self.pressure_model.name)
 
             self.Initialize()
 
