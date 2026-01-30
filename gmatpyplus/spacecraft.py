@@ -500,7 +500,7 @@ class FuelTank(GmatObject):
         """
         assert (tank_type == 'ChemicalTank') or (tank_type == 'ElectricTank')  # Confirm tank_type is valid.
         super().__init__(tank_type, name)
-        self.tank_type = tank_type  # 'ChemicalTank' or 'ElectricTank'
+        self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
 
         self.spacecraft = None
@@ -509,7 +509,7 @@ class FuelTank(GmatObject):
         self.Initialize()
 
     def __repr__(self):
-        return f'{self.tank_type} with name {self.name}'
+        return f'{self._tank_type} with name {self.name}'
 
     @staticmethod
     def from_dict(fuel_type: str, tank_dict: dict[str, Union[str, int, float]]):
