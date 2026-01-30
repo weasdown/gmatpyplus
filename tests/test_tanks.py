@@ -46,6 +46,21 @@ class TestTanks(unittest.TestCase):
                             f'second_direction_field from GMAT object ({second_direction_field}) is not equal to '
                             f'gp.FuelTank second_direction attribute ({tank.second_direction}).')
 
+        with self.subTest('fuel centre of mass'):
+            # Test the gp.FuelTank's fuel centre of mass matches the fuel centre of mass argument.
+            self.assertTrue((self.fuel_com == tank.fuel_centre_of_mass).all(),
+                            f'gp.FuelTank fuel centre of mass attribute ({tank.direction}) is not equal to fuel '
+                            f'centre of mass argument ({self.fuel_com}).')
+
+            # Test the gp.FuelTank's direction matches GMAT's internal direction values.
+            fuel_com_x_field = float(tank.GetField('FuelCenterOfMassX'))
+            fuel_com_y_field = float(tank.GetField('FuelCenterOfMassY'))
+            fuel_com_z_field = float(tank.GetField('FuelCenterOfMassZ'))
+            fuel_com_field = np.array([fuel_com_x_field, fuel_com_y_field, fuel_com_z_field])
+            self.assertTrue((fuel_com_field == tank.fuel_centre_of_mass).all(),
+                            f'fuel_com_field from GMAT object ({fuel_com_field}) is not equal to gp.FuelTank '
+                            f'fuel_centre_of_mass attribute ({tank.fuel_centre_of_mass}).')
+
     def test_chemical_tank(self):
         ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
                                                self.fuel_com, self.fuel_moi, self.direction, self.second_direction,
