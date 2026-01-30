@@ -527,6 +527,14 @@ class FuelTank(GmatObject):
             self.SetRealParameter('FuelCenterOfMassY', fuel_centre_of_mass[1])
             self.SetRealParameter('FuelCenterOfMassZ', fuel_centre_of_mass[2])
 
+        # Get fuel moment of inertia from GMAT object.
+        self._fuel_moment_of_inertia: np.ndarray = self.fuel_moment_of_inertia
+        # TODO consider whether to remove equality check - not used elsewhere but does save re-setting the parameters in GMAT.
+        # Set new fuel moment of inertia if provided.
+        if (fuel_moment_of_inertia is not None) and not (
+                (fuel_moment_of_inertia == self._fuel_moment_of_inertia).all()):
+            self.fuel_moment_of_inertia = fuel_moment_of_inertia
+
         self.spacecraft: gp.Spacecraft | None = None
 
         self.Initialize()
