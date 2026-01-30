@@ -26,9 +26,9 @@ class TestTanks(unittest.TestCase):
             direction_y_field = float(tank.GetField('DirectionY'))
             direction_z_field = float(tank.GetField('DirectionZ'))
             direction_field = np.array([direction_x_field, direction_y_field, direction_z_field])
-            self.assertTrue((direction_field == tank.direction).all(), f'direction_field from GMAT object '
-                                                                       f'({direction_field}) is not equal to direction argument '
-                                                                       f'({tank.direction}).')
+            self.assertTrue((direction_field == tank.direction).all(),
+                            f'direction_field from GMAT object ({direction_field}) is not equal to direction '
+                            f'argument ({tank.direction}).')
 
         with self.subTest('second direction'):
             # Test the gp.FuelTank's second direction matches the second direction argument.
@@ -44,7 +44,7 @@ class TestTanks(unittest.TestCase):
                 [second_direction_x_field, second_direction_y_field, second_direction_z_field])
             self.assertTrue((second_direction_field == tank.second_direction).all(),
                             f'second_direction_field from GMAT object ({second_direction_field}) is not equal to '
-                            f'second_direction argument ({tank.second_direction}).')
+                            f'gp.FuelTank second_direction attribute ({tank.second_direction}).')
 
     def test_chemical_tank(self):
         ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
