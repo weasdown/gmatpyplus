@@ -78,7 +78,23 @@ class TestTanks(unittest.TestCase):
                                        fuel_moi_yy_field, fuel_moi_yz_field, fuel_moi_zz_field])
             self.assertTrue((fuel_moi_field == tank.fuel_moment_of_inertia).all(),
                             f'fuel_moi_field from GMAT object ({fuel_moi_field}) is not equal to gp.FuelTank '
-                            f'fuel_moment_of_inertia attribute ({tank.fuel_centre_of_mass}).')
+                            f'fuel_moment_of_inertia attribute ({tank.fuel_moment_of_inertia}).')
+
+        with self.subTest('hardware origin in BCS'):
+            # Test the gp.FuelTank's hardware origin in BCS matches the hardware origin in BCS argument.
+            self.assertTrue((self.hw_origin_in_bcs == tank.hw_origin_in_bcs).all(),
+                            f'gp.FuelTank hardware origin in BCS attribute ({tank.hw_origin_in_bcs}) is not equal '
+                            f'to hardware origin in BCS argument ({self.hw_origin_in_bcs}).')
+
+            # Test the gp.FuelTank's hardware origin in BCS matches GMAT's internal hardware origin in BCS values.
+            hw_origin_in_bcs_x_field = float(tank.GetField('HWOriginInBCSX'))
+            hw_origin_in_bcs_y_field = float(tank.GetField('HWOriginInBCSY'))
+            hw_origin_in_bcs_z_field = float(tank.GetField('HWOriginInBCSZ'))
+            hw_origin_in_bcs_field = np.array(
+                [hw_origin_in_bcs_x_field, hw_origin_in_bcs_y_field, hw_origin_in_bcs_z_field])
+            self.assertTrue((hw_origin_in_bcs_field == tank.hw_origin_in_bcs).all(),
+                            f'hw_origin_in_bcs_field from GMAT object ({hw_origin_in_bcs_field}) is not equal to '
+                            f'gp.FuelTank hw_origin_in_bcs attribute ({tank.hw_origin_in_bcs}).')
 
     def test_chemical_tank(self):
         ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
