@@ -514,18 +514,11 @@ class FuelTank(GmatObject):
             self.SetBooleanParameter('AllowNegativeFuelMass', self.allow_negative_fuel_mass)
 
         # Get fuel centre of mass from GMAT object.
-        fuel_com_x: float = self.GetRealParameter('FuelCenterOfMassX')
-        fuel_com_y: float = self.GetRealParameter('FuelCenterOfMassY')
-        fuel_com_z: float = self.GetRealParameter('FuelCenterOfMassZ')
-        self._fuel_centre_of_mass: np.ndarray = np.array([fuel_com_x, fuel_com_y, fuel_com_z])
-
+        self._fuel_centre_of_mass: np.ndarray = self.fuel_centre_of_mass
         # TODO consider whether to remove equality check - not used elsewhere but does save re-setting the parameters in GMAT.
         # Set new fuel centre of mass if provided.
         if (fuel_centre_of_mass is not None) and not ((fuel_centre_of_mass == self._fuel_centre_of_mass).all()):
-            self._fuel_centre_of_mass = fuel_centre_of_mass
-            self.SetRealParameter('FuelCenterOfMassX', fuel_centre_of_mass[0])
-            self.SetRealParameter('FuelCenterOfMassY', fuel_centre_of_mass[1])
-            self.SetRealParameter('FuelCenterOfMassZ', fuel_centre_of_mass[2])
+            self.fuel_centre_of_mass = fuel_centre_of_mass
 
         # Get fuel moment of inertia from GMAT object.
         self._fuel_moment_of_inertia: np.ndarray = self.fuel_moment_of_inertia
@@ -580,6 +573,21 @@ class FuelTank(GmatObject):
         axes: list[str] = ['X', 'Y', 'Z']
         direction: dict = {axis: float(self.gmat_obj.GetField(f'Direction{axis}')) for axis in axes}
         return np.array(list(direction.values()))
+
+    @property
+    def fuel_centre_of_mass(self) -> np.ndarray:
+        fuel_com_x: float = self.GetRealParameter('FuelCenterOfMassX')
+        fuel_com_y: float = self.GetRealParameter('FuelCenterOfMassY')
+        fuel_com_z: float = self.GetRealParameter('FuelCenterOfMassZ')
+        self._fuel_centre_of_mass: np.ndarray = np.array([fuel_com_x, fuel_com_y, fuel_com_z])
+        return self._fuel_centre_of_mass
+
+    @fuel_centre_of_mass.setter
+    def fuel_centre_of_mass(self, fuel_centre_of_mass: np.ndarray) -> None:
+        self._fuel_centre_of_mass = fuel_centre_of_mass
+        self.SetRealParameter('FuelCenterOfMassX', fuel_centre_of_mass[0])
+        self.SetRealParameter('FuelCenterOfMassY', fuel_centre_of_mass[1])
+        self.SetRealParameter('FuelCenterOfMassZ', fuel_centre_of_mass[2])
 
     @property
     def fuel_moment_of_inertia(self) -> np.ndarray:
