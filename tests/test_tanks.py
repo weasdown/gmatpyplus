@@ -52,7 +52,7 @@ class TestTanks(unittest.TestCase):
                             f'gp.FuelTank fuel centre of mass attribute ({tank.direction}) is not equal to fuel '
                             f'centre of mass argument ({self.fuel_com}).')
 
-            # Test the gp.FuelTank's direction matches GMAT's internal direction values.
+            # Test the gp.FuelTank's fuel centre of mass matches GMAT's internal fuel centre of mass values.
             fuel_com_x_field = float(tank.GetField('FuelCenterOfMassX'))
             fuel_com_y_field = float(tank.GetField('FuelCenterOfMassY'))
             fuel_com_z_field = float(tank.GetField('FuelCenterOfMassZ'))
@@ -60,6 +60,25 @@ class TestTanks(unittest.TestCase):
             self.assertTrue((fuel_com_field == tank.fuel_centre_of_mass).all(),
                             f'fuel_com_field from GMAT object ({fuel_com_field}) is not equal to gp.FuelTank '
                             f'fuel_centre_of_mass attribute ({tank.fuel_centre_of_mass}).')
+
+        with self.subTest('fuel moment of inertia'):
+            # Test the gp.FuelTank's fuel moment of inertia matches the fuel moment of inertia argument.
+            self.assertTrue((self.fuel_com == tank.fuel_centre_of_mass).all(),
+                            f'gp.FuelTank fuel moment of inertia attribute ({tank.direction}) is not equal to fuel'
+                            f' moment of inertia argument ({self.fuel_com}).')
+
+            # Test the gp.FuelTank's fuel moment of inertia matches GMAT's internal fuel moment of inertia values.
+            fuel_moi_xx_field = float(tank.GetField('FuelMomentOfInertiaXX'))
+            fuel_moi_xy_field = float(tank.GetField('FuelMomentOfInertiaXY'))
+            fuel_moi_xz_field = float(tank.GetField('FuelMomentOfInertiaXZ'))
+            fuel_moi_yy_field = float(tank.GetField('FuelMomentOfInertiaYY'))
+            fuel_moi_yz_field = float(tank.GetField('FuelMomentOfInertiaYZ'))
+            fuel_moi_zz_field = float(tank.GetField('FuelMomentOfInertiaZZ'))
+            fuel_moi_field = np.array([fuel_moi_xx_field, fuel_moi_xy_field, fuel_moi_xz_field,
+                                       fuel_moi_yy_field, fuel_moi_yz_field, fuel_moi_zz_field])
+            self.assertTrue((fuel_moi_field == tank.fuel_moment_of_inertia).all(),
+                            f'fuel_moi_field from GMAT object ({fuel_moi_field}) is not equal to gp.FuelTank '
+                            f'fuel_moment_of_inertia attribute ({tank.fuel_centre_of_mass}).')
 
     def test_chemical_tank(self):
         ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
