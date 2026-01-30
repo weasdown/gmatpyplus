@@ -35,3 +35,9 @@ class TestTanks(unittest.TestCase):
                                                self.hw_origin_in_bcs)
 
         self._test_tank(ct1)
+
+    def test_electric_tank(self):
+        et1: gp.ElectricTank = gp.ElectricTank('ET1', 500, True, self.fuel_com, self.fuel_moi, self.direction,
+                                               self.second_direction, self.hw_origin_in_bcs)
+
+        self._test_tank(et1)
