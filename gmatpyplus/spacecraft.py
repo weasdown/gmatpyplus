@@ -646,10 +646,10 @@ class Thruster(GmatObject):
                                                          list[gmat.FuelTank],
                  mix_ratio: int | float | list[int | float] = None):
         self.fuel_type = fuel_type
-        self.thruster_type = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
+        self.thruster_type: str = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
         super().__init__(self.thruster_type, name)
 
-        self.spacecraft = None
+        self.spacecraft: gp.Spacecraft | None = None
 
         self.tanks: list[ChemicalTank | ElectricTank] | None = tanks
         self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
