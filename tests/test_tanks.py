@@ -58,3 +58,7 @@ class TestTanks(unittest.TestCase):
                                                self.second_direction, self.hw_origin_in_bcs)
 
         self._test_tank(et1)
+
+
+if __name__ == '__main__':
+    unittest.main()
