@@ -529,6 +529,12 @@ class FuelTank(GmatObject):
                 (fuel_moment_of_inertia == self._fuel_moment_of_inertia).all()):
             self.fuel_moment_of_inertia = fuel_moment_of_inertia
 
+        # Get direction from GMAT object.
+        self._direction: np.ndarray = self.direction
+        # Set new direction if provided.
+        if (direction is not None) and not ((direction == self._direction).all()):
+            self.direction = direction
+
         self.spacecraft: gp.Spacecraft | None = None
 
         self.Initialize()
@@ -574,6 +580,13 @@ class FuelTank(GmatObject):
         axes: list[str] = ['X', 'Y', 'Z']
         direction: dict = {axis: float(self.gmat_obj.GetField(f'Direction{axis}')) for axis in axes}
         return np.array(list(direction.values()))
+
+    @direction.setter
+    def direction(self, direction: np.ndarray) -> None:
+        self._direction = direction
+        self.SetRealParameter('DirectionX', direction[0])
+        self.SetRealParameter('DirectionY', direction[1])
+        self.SetRealParameter('DirectionZ', direction[2])
 
     @property
     def fuel_centre_of_mass(self) -> np.ndarray:
