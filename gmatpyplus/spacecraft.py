@@ -540,6 +540,12 @@ class FuelTank(GmatObject):
         if (second_direction is not None) and not ((second_direction == self._second_direction).all()):
             self.second_direction = second_direction
 
+        # Get hardware origin in BCS from GMAT object.
+        self._hw_origin_in_bcs: np.ndarray = self.hw_origin_in_bcs
+        # Set new hardware origin in BCS if provided.
+        if (hw_origin_in_bcs is not None) and not ((hw_origin_in_bcs == self._hw_origin_in_bcs).all()):
+            self.hw_origin_in_bcs = hw_origin_in_bcs
+
         self.spacecraft: gp.Spacecraft | None = None
 
         self.Initialize()
@@ -629,6 +635,21 @@ class FuelTank(GmatObject):
         self.SetRealParameter('FuelMomentOfInertiaYY', fuel_moment_of_inertia[3])
         self.SetRealParameter('FuelMomentOfInertiaYZ', fuel_moment_of_inertia[4])
         self.SetRealParameter('FuelMomentOfInertiaZZ', fuel_moment_of_inertia[5])
+
+    @property
+    def hw_origin_in_bcs(self) -> np.ndarray:
+        hw_origin_in_bcs_x: float = self.GetRealParameter('HWOriginInBCSX')
+        hw_origin_in_bcs_y: float = self.GetRealParameter('HWOriginInBCSY')
+        hw_origin_in_bcs_z: float = self.GetRealParameter('HWOriginInBCSZ')
+        self._hw_origin_in_bcs: np.ndarray = np.array([hw_origin_in_bcs_x, hw_origin_in_bcs_y, hw_origin_in_bcs_z])
+        return self._hw_origin_in_bcs
+
+    @hw_origin_in_bcs.setter
+    def hw_origin_in_bcs(self, hw_origin_in_bcs: np.ndarray) -> None:
+        self._hw_origin_in_bcs = hw_origin_in_bcs
+        self.SetRealParameter('HWOriginInBCSX', hw_origin_in_bcs[0])
+        self.SetRealParameter('HWOriginInBCSY', hw_origin_in_bcs[1])
+        self.SetRealParameter('HWOriginInBCSZ', hw_origin_in_bcs[2])
 
     @property
     def second_direction(self) -> np.ndarray:
