@@ -537,6 +537,28 @@ class FuelTank(GmatObject):
         self.spacecraft = sat
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
 
+    @property
+    def direction(self) -> np.ndarray:
+        """
+        Gets the ``direction`` vector set on this ``Tank``'s GMAT object.
+
+        Returns a ``numpy.ndarray`` by combining the elements of the internal vector (``DirectionX``, ``DirectionY``, ``DirectionZ``).
+        """
+        axes: list[str] = ['X', 'Y', 'Z']
+        direction: dict = {axis: float(self.gmat_obj.GetField(f'Direction{axis}')) for axis in axes}
+        return np.array(list(direction.values()))
+
+    @property
+    def second_direction(self) -> np.ndarray:
+        """
+        Gets the ``second_direction`` vector set on this ``Tank``'s GMAT object.
+
+        Returns a ``numpy.ndarray`` by combining the elements of the internal vector (``SecondDirectionX``, ``SecondDirectionY``, ``SecondDirectionZ``).
+        """
+        axes: list[str] = ['X', 'Y', 'Z']
+        second_direction: dict = {axis: float(self.gmat_obj.GetField(f'SecondDirection{axis}')) for axis in axes}
+        return np.array(list(second_direction.values()))
+
 
 class ChemicalTank(FuelTank):
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
