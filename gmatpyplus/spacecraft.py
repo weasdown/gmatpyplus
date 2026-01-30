@@ -447,7 +447,12 @@ class Spacecraft(GmatObject):
             return False
 
 
-    def __init__(self, tank_type: str, name: str):
+class PressureModel(Enum):
+    """Describes the pressure model for a ``ChemicalTank``."""
+    PressureRegulated = 'PressureRegulated',
+    BlowDown = 'BlowDown'
+
+
 class FuelTank(GmatObject):
         super().__init__(tank_type, name)
         self.tank_type = tank_type  # 'ChemicalTank' or 'ElectricTank'
