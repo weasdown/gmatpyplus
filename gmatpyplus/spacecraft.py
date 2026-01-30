@@ -152,7 +152,7 @@ class Spacecraft(GmatObject):
 
         # TODO confirm fixed - FIXME - not being updated by from_dict()
         # Setup tanks
-        self.chem_tanks = None
+        self.chem_tanks: list[ChemicalTank] | None = None
         if self.hardware.chem_tanks:
             if isinstance(self.chem_tanks, list):
                 self.chem_tanks = self.hardware.chem_tanks
@@ -162,7 +162,7 @@ class Spacecraft(GmatObject):
                 self.chem_tanks = [self.hardware.chem_tanks]
                 self.chem_tanks[0].attach_to_sat(self)
 
-        self.elec_tanks = None
+        self.elec_tanks: list[ElectricTank] | None = None
         if self.hardware.elec_tanks:
             if isinstance(self.elec_tanks, list):
                 self.elec_tanks = self.hardware.elec_tanks
@@ -173,7 +173,7 @@ class Spacecraft(GmatObject):
                 self.elec_tanks[0].attach_to_sat(self)
 
         # Setup thrusters
-        self.chem_thrusters = None
+        self.chem_thrusters: list[ChemicalThruster] | None = None
         if self.hardware.chem_thrusters:
             self.chem_thrusters: ChemicalThruster | list[ChemicalThruster] = self.hardware.chem_thrusters
             if isinstance(self.chem_thrusters, list):
@@ -186,7 +186,7 @@ class Spacecraft(GmatObject):
                 self.chem_thrusters[0].attach_to_sat(self)
                 self.chem_thrusters[0].attach_to_tanks(self.chem_thrusters[0].tanks)
 
-        self.elec_thrusters = None
+        self.elec_thrusters: list[ElectricThruster] | None = None
         if self.hardware.elec_thrusters:
             self.elec_thrusters: ElectricThruster | list[ElectricThruster] = self.hardware.elec_thrusters
             if isinstance(self.elec_thrusters, list):
