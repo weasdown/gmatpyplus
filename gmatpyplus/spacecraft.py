@@ -1,16 +1,18 @@
 from __future__ import annotations
 
+import logging
+from enum import Enum
+from typing import Union
+
+import numpy as np
+
 import gmatpyplus as gp
 from gmatpyplus import gmat
-
 from gmatpyplus.basics import GmatObject
+from gmatpyplus.hardware import Imager
 from gmatpyplus.orbit import OrbitState
 from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
                               list_to_gmat_field_string, rvector6_to_list)
-from gmatpyplus.hardware import Imager
-
-from typing import Union
-import logging
 
 
 class Spacecraft(GmatObject):
@@ -454,6 +456,9 @@ class PressureModel(Enum):
 
 
 class FuelTank(GmatObject):
+    def __init__(self, tank_type: str, name: str, fuel_mass: float, allow_negative_fuel_mass: bool,
+                 fuel_centre_of_mass: np.ndarray, fuel_moment_of_inertia: np.ndarray, direction: np.ndarray,
+                 second_direction: np.ndarray, hw_origin_in_bcs: np.ndarray) -> None:
         super().__init__(tank_type, name)
         self.tank_type = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
@@ -499,8 +504,12 @@ class ChemicalTank(FuelTank):
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
                  pressure: int | float = 1500, temperature: int | float = 20, ref_temp: int | float = 20,
                  volume: int | float = 0.75, fuel_density: int | float = 1260,
-                 pressure_model: str = 'PressureRegulated'):
-        super().__init__('ChemicalTank', name)
+                 pressure_model: PressureModel = PressureModel.PressureRegulated,
+                 fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
+                 fuel_moment_of_inertia: np.ndarray = None, direction: np.ndarray = None,
+                 second_direction: np.ndarray = None, hw_origin_in_bcs: np.ndarray = None):
+        super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
+                         fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
         self.fuel_mass = self.GetRealParameter('FuelMass')  # kg
         if fuel_mass is not None:
@@ -575,8 +584,15 @@ class ElectricTank(FuelTank):
     #     # self.fuel_mass = fuel_mass
     #     # self.GmatObj.SetField('FuelMass', self.fuel_mass)
 
-    def __init__(self, name: str):
-        super().__init__('ElectricTank', name)
+    def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
+                 fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]), fuel_moment_of_inertia: np.ndarray = None,
+                 direction: np.ndarray = None, second_direction: np.ndarray = None, hw_origin_in_bcs: np.ndarray = None
+                 ) -> None:
+        """
+        Tank that stores fuel for ``ElectricThruster``s.
+        """
+        super().__init__('ElectricTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
+                         fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
         # TODO take and parse arguments like in ChemicalTank
 
