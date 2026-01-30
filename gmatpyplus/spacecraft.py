@@ -574,6 +574,28 @@ class FuelTank(GmatObject):
         return np.array(list(direction.values()))
 
     @property
+    def fuel_moment_of_inertia(self) -> np.ndarray:
+        fuel_moi_xx: float = self.GetRealParameter('FuelMomentOfInertiaXX')
+        fuel_moi_xy: float = self.GetRealParameter('FuelMomentOfInertiaXY')
+        fuel_moi_xz: float = self.GetRealParameter('FuelMomentOfInertiaXZ')
+        fuel_moi_yy: float = self.GetRealParameter('FuelMomentOfInertiaYY')
+        fuel_moi_yz: float = self.GetRealParameter('FuelMomentOfInertiaYZ')
+        fuel_moi_zz: float = self.GetRealParameter('FuelMomentOfInertiaZZ')
+        self._fuel_moment_of_inertia: np.ndarray = np.array(
+            [fuel_moi_xx, fuel_moi_xy, fuel_moi_xz, fuel_moi_yy, fuel_moi_yz, fuel_moi_zz])
+        return self._fuel_moment_of_inertia
+
+    @fuel_moment_of_inertia.setter
+    def fuel_moment_of_inertia(self, fuel_moment_of_inertia: np.ndarray) -> None:
+        self._fuel_moment_of_inertia = fuel_moment_of_inertia
+        self.SetRealParameter('FuelMomentOfInertiaXX', fuel_moment_of_inertia[0])
+        self.SetRealParameter('FuelMomentOfInertiaXY', fuel_moment_of_inertia[1])
+        self.SetRealParameter('FuelMomentOfInertiaXZ', fuel_moment_of_inertia[2])
+        self.SetRealParameter('FuelMomentOfInertiaYY', fuel_moment_of_inertia[3])
+        self.SetRealParameter('FuelMomentOfInertiaYZ', fuel_moment_of_inertia[4])
+        self.SetRealParameter('FuelMomentOfInertiaZZ', fuel_moment_of_inertia[5])
+
+    @property
     def second_direction(self) -> np.ndarray:
         """
         Gets the ``second_direction`` vector set on this ``Tank``'s GMAT object.
