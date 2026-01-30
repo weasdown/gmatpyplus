@@ -375,7 +375,7 @@ class Spacecraft(GmatObject):
     def ElectricTanks(self):
         return self.hardware.ElectricTanks
 
-    def add_tanks(self, tanks: gp.Tank | list[gp.Tank] | str) -> bool:
+    def add_tanks(self, tanks: gp.FuelTank | list[gp.FuelTank] | str) -> bool:
         """
         Add a tank object to a Spacecraft's list of Tanks.
 
@@ -395,7 +395,7 @@ class Spacecraft(GmatObject):
             tank = gmat.GetObject(tanks)
             self.SetStringParameter(104, tank.GetName())  # 104 for sat's ADD_HARDWARE
             current_tanks_list.extend(tank.GetName())
-        elif isinstance(tanks, gp.Tank):
+        elif isinstance(tanks, gp.FuelTank):
             self.SetStringParameter(104, tanks.GetName())  # 104 for sat's ADD_HARDWARE
             current_tanks_list.append(tanks.GetName())
         else:  # tanks is a list of Tanks
@@ -447,8 +447,8 @@ class Spacecraft(GmatObject):
             return False
 
 
-class Tank(GmatObject):
     def __init__(self, tank_type: str, name: str):
+class FuelTank(GmatObject):
         super().__init__(tank_type, name)
         self.tank_type = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
@@ -490,7 +490,7 @@ class Tank(GmatObject):
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
 
 
-class ChemicalTank(Tank):
+class ChemicalTank(FuelTank):
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
                  pressure: int | float = 1500, temperature: int | float = 20, ref_temp: int | float = 20,
                  volume: int | float = 0.75, fuel_density: int | float = 1260,
@@ -565,7 +565,7 @@ class ChemicalTank(Tank):
     #     return tank
 
 
-class ElectricTank(Tank):
+class ElectricTank(FuelTank):
     #     # TODO add FuelMass and other fields
     #     # self.fuel_mass = fuel_mass
     #     # self.GmatObj.SetField('FuelMass', self.fuel_mass)
@@ -580,7 +580,7 @@ class ElectricTank(Tank):
     @classmethod
     def from_dict(cls, ep_tank_dict: dict) -> gp.ElectricTank | None:
         if ep_tank_dict != {}:
-            ep_tank = Tank.from_dict('Electric', ep_tank_dict)
+            ep_tank = FuelTank.from_dict('Electric', ep_tank_dict)
             ep_tank.Validate()
             return ep_tank
         else:
@@ -588,7 +588,7 @@ class ElectricTank(Tank):
 
 
 class Thruster(GmatObject):
-    def __init__(self, fuel_type: str, name: str, tanks: str | gp.Tank | gmat.Tank | list[gp.Tank] |
+    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.Tank | list[gp.FuelTank] |
                                                          list[gmat.FuelTank],
                  mix_ratio: int | float | list[int | float] = None):
         self.fuel_type = fuel_type
@@ -599,14 +599,14 @@ class Thruster(GmatObject):
 
         self.tanks: list[ChemicalTank | ElectricTank] | None = tanks
         self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
-        if isinstance(self.tanks, str | gp.Tank | gmat.FuelTank):
+        if isinstance(self.tanks, str | gp.FuelTank | gmat.FuelTank):
             if mix_ratio is not None and self.mix_ratio != 1:
                 raise AttributeError(f'Invalid mix_ratio {self.mix_ratio} given for a single tank')
             self.mix_ratio = [1]
             self.SetField('MixRatio', self.mix_ratio)
             if isinstance(self.tanks, str):
                 self.SetField('Tank', self.tanks)
-            elif isinstance(self.tanks, gp.Tank | gmat.Tank):
+            elif isinstance(self.tanks, gp.FuelTank | gmat.Tank):
                 self.SetField('Tank', self.tanks.GetName())
         elif isinstance(self.tanks, list):
             if mix_ratio is None:

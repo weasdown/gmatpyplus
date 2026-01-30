@@ -95,7 +95,8 @@ class FiniteThrust(GmatObject):  # TODO tidy: consider making subclass of Finite
 class ImpulsiveBurn(Burn):
     def __init__(self, name, coord_sys: gp.OrbitState.CoordinateSystem | dict | str = None,
                  delta_v: list[int | float] = None,
-                 decrement_mass: bool = False, tanks: gp.Tank | list[gp.Tank] | str = None, isp: int | float = 300,
+                 decrement_mass: bool = False, tanks: gp.FuelTank | list[gp.FuelTank] | str = None,
+                 isp: int | float = 300,
                  gravitational_accel: float = 9.81):
         super().__init__('ImpulsiveBurn', name)
 
@@ -180,7 +181,7 @@ class ImpulsiveBurn(Burn):
         self.SetBooleanParameter('DecrementMass', self.decrement_mass)
 
         if tanks is not None:
-            if isinstance(tanks, gp.Tank):
+            if isinstance(tanks, gp.FuelTank):
                 self.tanks = tanks.GetName()
             elif isinstance(tanks, list):
                 self.tanks: list[str] = [tank.GetName() for tank in tanks]
