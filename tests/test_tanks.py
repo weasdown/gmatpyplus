@@ -7,6 +7,13 @@ import gmatpyplus as gp
 
 
 class TestTanks(unittest.TestCase):
+    def setUp(self):
+        self.fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
+        self.fuel_moi: np.ndarray = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+        self.direction: np.ndarray = np.array([1, 0, 0])
+        self.second_direction: np.ndarray = np.array([0, 1, 0])
+        self.hw_origin_in_bcs: np.ndarray = np.array([0.2, 0.4, 0.6])
+
     def test_chemical_tank(self):
         fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
         fuel_moi: np.ndarray = np.array([0.2, 0.1, 0])
