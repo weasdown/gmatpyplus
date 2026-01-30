@@ -190,7 +190,7 @@ class GmatObject:
         if isinstance(param, str):
             param = self.GetParameterID(param)
         # gmat_obj.SetRealParameter returns the value set if set successfully, not bool
-        value_set: float = gp.extract_gmat_obj(self).SetRealParameter(param, value)
+        value_set: float = gp.extract_gmat_obj(self).SetRealParameter(param, float(value))
         set_successfully: bool = value_set == value
         return set_successfully
 
