@@ -635,6 +635,13 @@ class FuelTank(GmatObject):
         second_direction: dict = {axis: float(self.gmat_obj.GetField(f'SecondDirection{axis}')) for axis in axes}
         return np.array(list(second_direction.values()))
 
+    @second_direction.setter
+    def second_direction(self, second_direction: np.ndarray) -> None:
+        self._direction = second_direction
+        self.SetRealParameter('SecondDirectionX', second_direction[0])
+        self.SetRealParameter('SecondDirectionY', second_direction[1])
+        self.SetRealParameter('SecondDirectionZ', second_direction[2])
+
 
 class ChemicalTank(FuelTank):
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
