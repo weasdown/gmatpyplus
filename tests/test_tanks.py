@@ -49,7 +49,7 @@ class TestTanks(unittest.TestCase):
         with self.subTest('fuel centre of mass'):
             # Test the gp.FuelTank's fuel centre of mass matches the fuel centre of mass argument.
             self.assertTrue((self.fuel_com == tank.fuel_centre_of_mass).all(),
-                            f'gp.FuelTank fuel centre of mass attribute ({tank.direction}) is not equal to fuel '
+                            f'gp.FuelTank fuel centre of mass attribute ({tank.fuel_centre_of_mass}) is not equal to fuel '
                             f'centre of mass argument ({self.fuel_com}).')
 
             # Test the gp.FuelTank's fuel centre of mass matches GMAT's internal fuel centre of mass values.
@@ -64,8 +64,8 @@ class TestTanks(unittest.TestCase):
         with self.subTest('fuel moment of inertia'):
             # Test the gp.FuelTank's fuel moment of inertia matches the fuel moment of inertia argument.
             self.assertTrue((self.fuel_com == tank.fuel_centre_of_mass).all(),
-                            f'gp.FuelTank fuel moment of inertia attribute ({tank.direction}) is not equal to fuel'
-                            f' moment of inertia argument ({self.fuel_com}).')
+                            f'gp.FuelTank fuel moment of inertia attribute ({tank.fuel_moment_of_inertia}) is not '
+                            f'equal to fuel moment of inertia argument ({self.fuel_moi}).')
 
             # Test the gp.FuelTank's fuel moment of inertia matches GMAT's internal fuel moment of inertia values.
             fuel_moi_xx_field = float(tank.GetField('FuelMomentOfInertiaXX'))
