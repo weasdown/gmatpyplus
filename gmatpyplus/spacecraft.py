@@ -516,14 +516,13 @@ class FuelTank(GmatObject):
 
         # Get fuel centre of mass from GMAT object.
         self._fuel_centre_of_mass: np.ndarray = self.fuel_centre_of_mass
-        # TODO consider whether to remove equality check - not used elsewhere but does save re-setting the parameters in GMAT.
+        # TODO consider whether to remove equality checks - not used elsewhere but does save re-setting the parameters in GMAT.
         # Set new fuel centre of mass if provided.
         if (fuel_centre_of_mass is not None) and not ((fuel_centre_of_mass == self._fuel_centre_of_mass).all()):
             self.fuel_centre_of_mass = fuel_centre_of_mass
 
         # Get fuel moment of inertia from GMAT object.
         self._fuel_moment_of_inertia: np.ndarray = self.fuel_moment_of_inertia
-        # TODO consider whether to remove equality check - not used elsewhere but does save re-setting the parameters in GMAT.
         # Set new fuel moment of inertia if provided.
         if (fuel_moment_of_inertia is not None) and not (
                 (fuel_moment_of_inertia == self._fuel_moment_of_inertia).all()):
