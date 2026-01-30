@@ -29,7 +29,8 @@ sat_params = {
 sat = gp.Spacecraft.from_dict(sat_params)
 # Create tank separately, so we can refer to it later
 main_tank = gp.ChemicalTank('MainTank', fuel_mass=1718, allow_negative_fuel_mass=False, fuel_density=1000,
-                            temperature=20, ref_temp=20, pressure=5000, volume=2, pressure_model='PressureRegulated')
+                            temperature=20, ref_temp=20, pressure=5000, volume=2,
+                            pressure_model=gp.PressureModel.PressureRegulated)
 sat.add_tanks(main_tank)
 
 # Setup ForceModels and Propagators
