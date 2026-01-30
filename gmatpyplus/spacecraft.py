@@ -534,6 +534,12 @@ class FuelTank(GmatObject):
         if (direction is not None) and not ((direction == self._direction).all()):
             self.direction = direction
 
+        # Get second direction from GMAT object.
+        self._second_direction: np.ndarray = self.second_direction
+        # Set new second direction if provided.
+        if (second_direction is not None) and not ((second_direction == self._second_direction).all()):
+            self.second_direction = second_direction
+
         self.spacecraft: gp.Spacecraft | None = None
 
         self.Initialize()
