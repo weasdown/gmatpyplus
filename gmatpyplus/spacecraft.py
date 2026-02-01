@@ -9,7 +9,7 @@ import numpy as np
 import gmatpyplus as gp
 from gmatpyplus import gmat
 from gmatpyplus.basics import GmatObject
-from gmatpyplus.hardware import Imager
+from gmatpyplus.hardware import Imager, HardwareException
 from gmatpyplus.orbit import OrbitState
 from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
                               list_to_gmat_field_string, rvector6_to_list)
@@ -580,6 +580,18 @@ class FuelTank(GmatObject):
     def attach_to_sat(self, sat: Spacecraft):
         self.spacecraft = sat
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
+
+    def DepleteFuel(self, delta_m: float) -> None:
+        """Depletes fuel from the tank and updates the tank's ``fuel_mass``."""
+        # ElectricTank::DepleteFuel() in ElectricTank.cpp in GMAT's source code has its body commented out, so return None.
+        if isinstance(self, ElectricTank):
+            return None
+
+        self.fuel_mass -= delta_m
+        if self.fuel_mass < 0:
+            raise HardwareException(f'Fuel in tank {self.name} completely exhausted.')
+
+        return None
 
     @property
     def direction(self) -> np.ndarray:
