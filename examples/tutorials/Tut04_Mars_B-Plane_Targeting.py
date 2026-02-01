@@ -25,6 +25,7 @@ sat_params = {
         'AOP': 240.9696529532762,  # degrees
         'TA': 359.946553377841  # degrees
     },
+    # ChemicalTank created separately below so we can refer to it later.
 }
 sat = gp.Spacecraft.from_dict(sat_params)
 # Create tank separately, so we can refer to it later
