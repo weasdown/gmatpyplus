@@ -669,6 +669,34 @@ class FuelTank(GmatObject):
         self.SetRealParameter('SecondDirectionY', second_direction[1])
         self.SetRealParameter('SecondDirectionZ', second_direction[2])
 
+    # TODO implement FuelTank.UpdateTank() method
+    def UpdateTank(self):
+        """
+        Updates pressure and volume data using the ideal gas law.
+
+        GMAT fuel tanks can operate in a pressure-regulated mode (constant pressure, constant temperature) or in a blow-down mode.
+        When the tank runs in blow-down mode, the pressure is calculated using the ideal gas law:
+
+        ``PV=nRT``
+
+        The right side of this equation is held constant.  Given an initial pressure ``P_i`` and an initial volume
+        ``V_i``, the new pressure is given by
+
+        ``P_f = ``(P_i V_i) / V_f``
+
+        The pressurant volume ``V_G`` is calculated from the tank volume ``V_T``, the fuel mass ``M_F``, and the fuel
+        density ``rho`` using
+
+        ``V_G = V_T - M_F / rho``
+
+        Mass is depleted from the tank by integrating the mass flow over time, as is described in the ``Thruster`` documentation.
+        """
+        # ElectricTank::UpdateTank() in ElectricTank.cpp in GMAT's source code has its body commented out, so return None.
+        if isinstance(self, ElectricTank):
+            return None
+
+        raise NotImplementedError('FuelTank.UpdateTank is not yet implemented.')
+
 
 class ChemicalTank(FuelTank):
     def __init__(self, name: str, fuel_mass: int | float = 756, allow_negative_fuel_mass: bool = False,
