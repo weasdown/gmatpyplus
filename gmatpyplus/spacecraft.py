@@ -581,7 +581,7 @@ class FuelTank(GmatObject):
         self.spacecraft = sat
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
 
-    def DepleteFuel(self, delta_m: float) -> None:
+    def _DepleteFuel(self, delta_m: float) -> None:
         """Depletes fuel from the tank and updates the tank's ``fuel_mass``."""
         # ElectricTank::DepleteFuel() in ElectricTank.cpp in GMAT's source code has its body commented out, so return None.
         if isinstance(self, ElectricTank):
