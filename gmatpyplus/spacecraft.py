@@ -548,7 +548,19 @@ class FuelTank(GmatObject):
 
         self.spacecraft: gp.Spacecraft | None = None
 
-        self.Initialize()
+        try:
+            self.Initialize()
+        except RuntimeError as re:
+            if "Fuel volume exceeds tank capacity" in str(re):
+                volume: float = self.GetRealParameter('Volume')
+                tank_fuel_mass: float = self.GetRealParameter('FuelMass')
+                fuel_density: float = self.GetRealParameter('FuelDensity')
+                volume_remaining: float = volume - tank_fuel_mass / fuel_density
+                raise RuntimeError(
+                    f'{str(re).rstrip()}: (volume - fuelMass / density) = {volume} - {tank_fuel_mass} / {fuel_density}'
+                    f' = {volume_remaining} < 0.0') from re
+            else:
+                raise
 
     def __repr__(self):
         return f'{self._tank_type} with name {self.name}'
