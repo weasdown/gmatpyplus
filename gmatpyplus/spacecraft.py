@@ -809,7 +809,7 @@ class ElectricTank(FuelTank):
 
 
 class Thruster(GmatObject):
-    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.Tank | list[gp.FuelTank] |
+    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] |
                                                          list[gmat.FuelTank],
                  mix_ratio: int | float | list[int | float] = None):
         self.fuel_type = fuel_type
