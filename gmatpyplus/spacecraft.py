@@ -548,19 +548,7 @@ class FuelTank(GmatObject):
 
         self.spacecraft: gp.Spacecraft | None = None
 
-        try:
-            self.Initialize()
-        except RuntimeError as re:
-            if "Fuel volume exceeds tank capacity" in str(re):
-                volume: float = self.GetRealParameter('Volume')
-                tank_fuel_mass: float = self.GetRealParameter('FuelMass')
-                fuel_density: float = self.GetRealParameter('FuelDensity')
-                volume_remaining: float = volume - tank_fuel_mass / fuel_density
-                raise RuntimeError(
-                    f'{str(re).rstrip()}: (volume - fuelMass / density) = {volume} - {tank_fuel_mass} / {fuel_density}'
-                    f' = {volume_remaining} < 0.0') from re
-            else:
-                raise
+        # Delegate calling self.Initialize() to subclasses, to ensure they can do subclass-specific field updates first.
 
     def __repr__(self):
         return f'{self._tank_type} with name {self.name}'
@@ -768,7 +756,7 @@ class ChemicalTank(FuelTank):
             self.pressure_model: PressureModel = pressure_model
             self.SetStringParameter('PressureModel', self.pressure_model.name)
 
-            self.Initialize()
+        self.Initialize()
 
     @classmethod
     def from_dict(cls, cp_tank_dict: dict) -> gp.ChemicalTank | None:
