@@ -719,6 +719,7 @@ class ChemicalTank(FuelTank):
                  fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
                  direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])):
+        """A ``FuelTank`` that stores fuel used by one or more ``ChemicalThruster``s."""
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
@@ -788,7 +789,7 @@ class ElectricTank(FuelTank):
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])
                  ) -> None:
         """
-        Tank that stores fuel for ``ElectricThruster``s.
+        A ``FuelTank`` that stores fuel used by one or more ``ElectricThruster``s.
         """
         super().__init__('ElectricTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
