@@ -730,6 +730,7 @@ class ChemicalTank(FuelTank):
                  fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
                  direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])):
+        """A ``FuelTank`` that stores fuel used by one or more ``ChemicalThruster``s."""
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 
@@ -767,7 +768,7 @@ class ChemicalTank(FuelTank):
             self.pressure_model: PressureModel = pressure_model
             self.SetStringParameter('PressureModel', self.pressure_model.name)
 
-            self.Initialize()
+        self.Initialize()
 
     @classmethod
     def from_dict(cls, cp_tank_dict: dict) -> gp.ChemicalTank | None:
@@ -799,7 +800,7 @@ class ElectricTank(FuelTank):
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])
                  ) -> None:
         """
-        Tank that stores fuel for ``ElectricThruster``s.
+        A ``FuelTank`` that stores fuel used by one or more ``ElectricThruster``s.
         """
         super().__init__('ElectricTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
@@ -819,7 +820,7 @@ class ElectricTank(FuelTank):
 
 
 class Thruster(GmatObject):
-    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.Tank | list[gp.FuelTank] |
+    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] |
                                                          list[gmat.FuelTank],
                  mix_ratio: int | float | list[int | float] = None):
         self.fuel_type = fuel_type
