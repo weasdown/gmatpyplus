@@ -89,4 +89,6 @@ for t in range(10, 120, 10):
     print(f'Sat state after running for {t} s: {new_state}')
     print(f'Epoch after running for {t} s: {new_epoch}')
 
-gp.gmat.SaveScript(script_path)
+# gmat.SaveScript(script_path)  # TODO confirm this line works
+
+# FIXME add code that takes the calculated values and plots a graph with matplotlib

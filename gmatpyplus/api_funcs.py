@@ -18,11 +18,12 @@ import os.path
 #             raise ex
 
 
-def GetObject(obj: gp.GmatObject | str):
+def GetObject(obj: gp.GmatObject | str) -> gmat.GmatBase:
     # TODO determine return type. Same for gmat.GetObject and GetRuntimeObject?
     """
-    Return the latest version of an object so its state info is up-to-date
-    :return:
+    Return the latest version of an object so its state info is up-to-date.
+
+    :return: gmat_py.GmatBase
     """
 
     if isinstance(obj, str):

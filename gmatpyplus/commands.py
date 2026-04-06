@@ -481,6 +481,11 @@ class Propagate(GmatCommand):
         def GetStringParameter(self, param_name: str) -> str:
             return self.gmat_obj.GetStringParameter(param_name)
 
+        def _name_mismatch_error(self, _stop_cond, _sat_name: str):
+            return RuntimeError(
+                f'Name of satellite given in StopCondition "{_stop_cond}" ({_sat_name}) does'
+                f' not match name for Propagate\'s satellite ({self.sat_name})')
+
         def parse_user_stop_cond(self, stop_cond: str | tuple):
             # TODO feature: convert tuple to 2 or 3 element.
             #  Examples: 2: (sat.name, 'Earth.Periapsis'), 3: (sat.name, 'ElapsedSecs', 12000.0)
@@ -504,12 +509,11 @@ class Propagate(GmatCommand):
 
             stop_var_elements = stop_var.split('.')
             num_stop_var_elements = len(stop_var_elements)
+
             if num_stop_var_elements == 2:
                 sat_name, parameter = stop_var.split('.')
                 if sat_name != self.sat.name:
-                    raise RuntimeError(
-                        f'Name of satellite given in StopCondition "{stop_cond}" ({sat_name}) does'
-                        f' not match name for Propagate\'s satellite ({self.sat_name})')
+                    raise self._name_mismatch_error(stop_cond, sat_name)
                 stop_var = '.'.join([sat_name, parameter])
 
                 # Get body from satellite's coordinate system
@@ -520,9 +524,7 @@ class Propagate(GmatCommand):
             elif num_stop_var_elements == 3:
                 sat_name, body, parameter = stop_var.split('.')
                 if sat_name != self.sat.name:
-                    raise RuntimeError(
-                        f'Name of satellite given in StopCondition "{stop_cond}" ({sat_name}) does'
-                        f' not match name for Propagate\'s satellite ({self.sat_name})')
+                    raise self._name_mismatch_error(stop_cond, sat_name)
 
             else:
                 raise SyntaxError('Invalid number of parts for stop_cond. Must be two (e.g. "Sat.ElapsedSecs") or three'

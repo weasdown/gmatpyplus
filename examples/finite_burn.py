@@ -15,12 +15,13 @@ sat_params = {
     'Name': 'DefaultSC',
     'DisplayStateType': 'Keplerian',
     'DateFormat': 'UTCGregorian',
-    'Hardware': {'ChemicalTanks': [{'Name': 'ChemicalTank1'}],
-                 'ElectricTanks': [{'Name': 'ElectricTank1'}],
-                 'ChemicalThrusters': [{'Name': 'ChemicalThruster1', 'Tanks': 'ChemicalTank1'}],
-                 'ElectricThrusters': [{'Name': 'ElectricThruster1', 'Tanks': 'ElectricTank1'}],
-                 'SolarPowerSystem': {'Name': 'SolarPowerSystem1'},
-                 }
+    'Hardware': {
+        'ChemicalTanks': [{'Name': 'ChemicalTank1'}],
+        'ChemicalThrusters': [{'Name': 'ChemicalThruster1', 'Tanks': 'ChemicalTank1'}],
+        'ElectricTanks': [{'Name': 'ElectricTank1'}],
+        'ElectricThrusters': [{'Name': 'ElectricThruster1', 'Tanks': 'ElectricTank1'}],
+        'SolarPowerSystem': {'Name': 'SolarPowerSystem1'},
+    }
 }
 sat = gp.Spacecraft.from_dict(sat_params)
 

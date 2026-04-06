@@ -242,3 +242,6 @@ fabric.properties
 
 # Hatch versioning file
 _version.py
+
+# Ignore build-archive that contains old compiled package files that are too large for GitHub.
+build-archive

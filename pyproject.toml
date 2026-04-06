@@ -6,7 +6,7 @@ requires = ["hatchling", "hatch-vcs"]
 [project]
 name = "gmatpyplus"
 authors = [
-  { name="William Easdown Babb", email="weasdown99@gmail.com" },
+    { name = "William Easdown Babb", email = "weasdown99@gmail.com" },
 ]
 description = "An extra wrapper for the GMAT Python API to simplify setting up mission simulations."
 readme = "README.md"
@@ -21,17 +21,15 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
-
     "Development Status :: 3 - Alpha",
-
     "Intended Audience :: Developers",
-#    "Topic :: Orbital Mechanics :: Astrodynamics",
+    #    "Topic :: Orbital Mechanics :: Astrodynamics",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 dynamic = [
-  "version",    # Enables dynamic versioning.
-  "urls",       # Enables getting of URLs from metadata hook.
+    "version", # Enables dynamic versioning.
+    "urls", # Enables getting of URLs from metadata hook.
 ]
 
 
@@ -57,8 +55,9 @@ Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 # Build targets
 [tool.hatch.build.targets.sdist]
 exclude = [
-  "/.github",
-  "/docs",
+    "/.github",
+    "/docs",
+    "/plugins"
 ]
 
 [tool.hatch.build.targets.wheel]
