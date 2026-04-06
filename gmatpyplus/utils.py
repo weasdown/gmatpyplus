@@ -250,7 +250,7 @@ def get_gmat_objects_of_type(obj_type: str) -> list[str]:
         row = row[3:]  # remove indent
         coord_syses[index] = row
 
-    coord_syses = list(filter(None, coord_syses))  # filter out any empty strings
+    coord_syses: list[str] = list(filter(None, coord_syses))  # filter out any empty strings
     return coord_syses
 
 
