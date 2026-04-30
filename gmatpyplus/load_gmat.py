@@ -10,7 +10,7 @@ gmat_bin_path = gmat_path + "/bin"
 startup = gmat_bin_path + "/" + api_startup
 
 if os.path.exists(startup):
-    print(f'Running GMAT in {gmat_path}')
+    print(f'Running GMAT in {gmat_path}\n')
 
     sys.path.insert(1, gmat_bin_path)
 
