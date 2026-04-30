@@ -22,8 +22,13 @@ class Moderator:
             print('SystemExit detected in Moderator.AppendCommand()!!')
             raise RuntimeError('Moderator.AppendCommand() attempted to raise a SystemExit:\nse') from se
 
+        # FIXME: APIException not being caught, because only a **proxy** of the SwigObject is available
+        except gmat.APIException:
+            raise
+
         except Exception as ex:
-            raise RuntimeError(f'\tModerator.AppendCommand() attempted to raise an Exception:\n\t\t{ex}') from ex
+            raise RuntimeError(f'\tModerator.AppendCommand() attempted to raise an Exception of type {type(ex)}:'
+                               f'\n\t\t{ex}') from ex
 
     def CreateCommand(self, command_type: str, name: str) -> gmat.GmatCommand:
         # True (retFlag) isn't actually used in source, but still required

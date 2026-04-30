@@ -1,0 +1,107 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2025-09-10 14:32:22
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft Sat;
+Sat.DateFormat = UTCGregorian;
+Sat.Epoch = '22 Jul 2014 11:29:10.811';
+Sat.CoordinateSystem = EarthMJ2000Eq;
+Sat.DisplayStateType = Keplerian;
+Sat.SMA = 83474.317999999;
+Sat.ECC = 0.8965199999999992;
+Sat.INC = 12.46060000000003;
+Sat.RAAN = 292.8362;
+Sat.AOP = 218.9805000000001;
+Sat.TA = 180;
+Sat.DryMass = 850;
+Sat.Cd = 2.2;
+Sat.Cr = 1.8;
+Sat.DragArea = 15;
+Sat.SRPArea = 1;
+Sat.SPADDragScaleFactor = 1;
+Sat.SPADSRPScaleFactor = 1;
+Sat.AtmosDensityScaleFactor = 1;
+Sat.ExtendedMassPropertiesModel = 'None';
+Sat.NAIFId = -10000001;
+Sat.NAIFIdReferenceFrame = -9000001;
+Sat.OrbitColor = Red;
+Sat.TargetColor = Teal;
+Sat.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+Sat.CdSigma = 1e+70;
+Sat.CrSigma = 1e+70;
+Sat.Id = 'SatId';
+Sat.Attitude = CoordinateSystemFixed;
+Sat.SPADSRPInterpolationMethod = Bilinear;
+Sat.SPADSRPScaleFactorSigma = 1e+70;
+Sat.SPADDragInterpolationMethod = Bilinear;
+Sat.SPADDragScaleFactorSigma = 1e+70;
+Sat.AtmosDensityScaleFactorSigma = 1e+70;
+Sat.ModelFile = 'aura.3ds';
+Sat.ModelOffsetX = 0;
+Sat.ModelOffsetY = 0;
+Sat.ModelOffsetZ = 0;
+Sat.ModelRotationX = 0;
+Sat.ModelRotationY = 0;
+Sat.ModelRotationZ = 0;
+Sat.ModelScale = 1;
+Sat.AttitudeDisplayStateType = 'Quaternion';
+Sat.AttitudeRateDisplayStateType = 'AngularVelocity';
+Sat.AttitudeCoordinateSystem = EarthMJ2000Eq;
+Sat.EulerAngleSequence = '321';
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel LowEarthProp_ForceModel;
+LowEarthProp_ForceModel.CentralBody = Earth;
+LowEarthProp_ForceModel.PrimaryBodies = {Earth};
+LowEarthProp_ForceModel.PointMasses = {Luna, Sun};
+LowEarthProp_ForceModel.SRP = On;
+LowEarthProp_ForceModel.RelativisticCorrection = Off;
+LowEarthProp_ForceModel.ErrorControl = RSSStep;
+LowEarthProp_ForceModel.GravityField.Earth.Degree = 10;
+LowEarthProp_ForceModel.GravityField.Earth.Order = 10;
+LowEarthProp_ForceModel.GravityField.Earth.StmLimit = 100;
+LowEarthProp_ForceModel.GravityField.Earth.PotentialFile = 'JGM2.cof';
+LowEarthProp_ForceModel.GravityField.Earth.TideModel = 'None';
+LowEarthProp_ForceModel.SRP.Flux = 1367;
+LowEarthProp_ForceModel.SRP.SRPModel = Spherical;
+LowEarthProp_ForceModel.SRP.Nominal_Sun = 149597870.691;
+LowEarthProp_ForceModel.Drag.AtmosphereModel = JacchiaRoberts;
+LowEarthProp_ForceModel.Drag.HistoricWeatherSource = 'ConstantFluxAndGeoMag';
+LowEarthProp_ForceModel.Drag.PredictedWeatherSource = 'ConstantFluxAndGeoMag';
+LowEarthProp_ForceModel.Drag.CSSISpaceWeatherFile = 'SpaceWeather-All-v1.2.txt';
+LowEarthProp_ForceModel.Drag.SchattenFile = 'SchattenPredict.txt';
+LowEarthProp_ForceModel.Drag.F107 = 150;
+LowEarthProp_ForceModel.Drag.F107A = 150;
+LowEarthProp_ForceModel.Drag.MagneticIndex = 3;
+LowEarthProp_ForceModel.Drag.SchattenErrorModel = 'Nominal';
+LowEarthProp_ForceModel.Drag.SchattenTimingModel = 'NominalCycle';
+LowEarthProp_ForceModel.Drag.DragModel = 'Spherical';
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator LowEarthProp;
+LowEarthProp.FM = LowEarthProp_ForceModel;
+LowEarthProp.Type = RungeKutta89;
+LowEarthProp.InitialStepSize = 60;
+LowEarthProp.Accuracy = 9.999999999999999e-12;
+LowEarthProp.MinStep = 0;
+LowEarthProp.MaxStep = 2700;
+LowEarthProp.MaxStepAttempts = 50;
+LowEarthProp.StopIfAccuracyIsViolated = true;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence 'BeginMissionSequenceCommand';
+Propagate 'Prop To Periapsis' LowEarthProp(Sat) {Sat.Earth.Periapsis};
