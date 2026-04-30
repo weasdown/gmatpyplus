@@ -63,11 +63,22 @@ defaults: dict[type, dict[str, dict[str, Any]]] = {
 
 class TestTanks(unittest.TestCase):
     def setUp(self):
+        # For ChemicalTank and ElectricTank.
+        self.allow_negative_fuel_mass: bool = True
+        self.fuel_mass: float = 500
         self.fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
         self.fuel_moi: np.ndarray = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
         self.direction: np.ndarray = np.array([1, 0, 0])
         self.second_direction: np.ndarray = np.array([0, 1, 0])
         self.hw_origin_in_bcs: np.ndarray = np.array([0.2, 0.4, 0.6])
+        self.temperature: float = 10
+
+        # For ChemicalTank only.
+        self.fuel_density: float = 1000
+        self.pressure: float = 1000
+        self.pressure_model: gp.PressureModel = gp.PressureModel.BlowDown
+        self.ref_temp: float = 10
+        self.volume: float = 0.5
 
     def _test_defaults(self, tank: gp.FuelTank):
         default_values: dict[str, dict[str, Any]] = defaults[type(tank)]
@@ -182,9 +193,10 @@ class TestTanks(unittest.TestCase):
         with self.subTest('default values'):
             self._test_defaults(default_ct)
 
-        ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
-                                               self.fuel_com, self.fuel_moi, self.direction, self.second_direction,
-                                               self.hw_origin_in_bcs)
+        ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', self.fuel_mass, self.allow_negative_fuel_mass, self.pressure,
+                                               self.temperature, self.ref_temp, self.volume, self.fuel_density,
+                                               self.pressure_model, self.fuel_com, self.fuel_moi, self.direction,
+                                               self.second_direction, self.hw_origin_in_bcs)
 
         self._test_tank(ct1)
 
@@ -194,8 +206,9 @@ class TestTanks(unittest.TestCase):
         with self.subTest('default values'):
             self._test_defaults(default_et)
 
-        et1: gp.ElectricTank = gp.ElectricTank('ET1', 500, True, self.fuel_com, self.fuel_moi, self.direction,
-                                               self.second_direction, self.hw_origin_in_bcs)
+        et1: gp.ElectricTank = gp.ElectricTank('ET1', self.fuel_mass, self.allow_negative_fuel_mass, self.fuel_com,
+                                               self.fuel_moi, self.direction, self.second_direction,
+                                               self.hw_origin_in_bcs)
 
         self._test_tank(et1)
 
