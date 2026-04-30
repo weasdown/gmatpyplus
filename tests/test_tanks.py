@@ -65,12 +65,12 @@ class TestTanks(unittest.TestCase):
     def setUp(self):
         # For ChemicalTank and ElectricTank.
         self.allow_negative_fuel_mass: bool = True
-        self.fuel_mass: float = 500
-        self.fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
-        self.fuel_moi: np.ndarray = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
         self.direction: np.ndarray = np.array([1, 0, 0])
-        self.second_direction: np.ndarray = np.array([0, 1, 0])
+        self.fuel_com: np.ndarray = np.array([0, 0.1, 0.2])
+        self.fuel_mass: float = 500
+        self.fuel_moi: np.ndarray = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
         self.hw_origin_in_bcs: np.ndarray = np.array([0.2, 0.4, 0.6])
+        self.second_direction: np.ndarray = np.array([0, 1, 0])
         self.temperature: float = 10
 
         # For ChemicalTank only.
