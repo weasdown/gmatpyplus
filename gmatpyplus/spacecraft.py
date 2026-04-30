@@ -565,7 +565,7 @@ class FuelTank(GmatObject):
         return f'{self._tank_type} with name {self.name}'
 
     @staticmethod
-    def from_dict(fuel_type: str, tank_dict: dict[str, Union[str, int, float]]):
+    def _from_dict(fuel_type: str, tank_dict: dict[str, Union[str, int, float]]) -> FuelTank:
         if fuel_type == 'Chemical':
             tank = ChemicalTank(tank_dict['Name'])
         elif fuel_type == 'Electric':
@@ -773,7 +773,7 @@ class ChemicalTank(FuelTank):
     @classmethod
     def from_dict(cls, cp_tank_dict: dict) -> gp.ChemicalTank | None:
         if cp_tank_dict != {}:
-            cp_tank = super().from_dict('Chemical', cp_tank_dict)
+            cp_tank: ChemicalTank = FuelTank._from_dict('Chemical', cp_tank_dict)
             cp_tank.Validate()
             return cp_tank
         else:
@@ -812,7 +812,7 @@ class ElectricTank(FuelTank):
     @classmethod
     def from_dict(cls, ep_tank_dict: dict) -> gp.ElectricTank | None:
         if ep_tank_dict != {}:
-            ep_tank = FuelTank.from_dict('Electric', ep_tank_dict)
+            ep_tank: ElectricTank = FuelTank._from_dict('Electric', ep_tank_dict)
             ep_tank.Validate()
             return ep_tank
         else:
