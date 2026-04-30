@@ -5,6 +5,59 @@ import numpy as np
 
 import gmatpyplus as gp
 
+defaults: dict[str, dict[str, dict[str, Any]]] = {
+    'ChemicalTank': {
+        'AllowNegativeFuelMass': {'type': bool, 'default': False},
+        'DirectionX': {'type': float, 'default': int(0)},
+        'DirectionY': {'type': float, 'default': int(0)},
+        'DirectionZ': {'type': float, 'default': int(1)},
+        'FuelCenterOfMassX': {'type': float, 'default': 0},
+        'FuelCenterOfMassY': {'type': float, 'default': 0},
+        'FuelCenterOfMassZ': {'type': float, 'default': 0},
+        'FuelDensity': {'type': float, 'default': int(1260)},
+        'FuelMass': {'type': float, 'default': 756},
+        'FuelMomentOfInertiaXX': {'type': float, 'default': int(99)},
+        'FuelMomentOfInertiaXY': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaXZ': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaYY': {'type': float, 'default': int(99)},
+        'FuelMomentOfInertiaYZ': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaZZ': {'type': float, 'default': int(99)},
+        'HWOriginInBCSX': {'type': float, 'default': int(0)},
+        'HWOriginInBCSY': {'type': float, 'default': int(0)},
+        'HWOriginInBCSZ': {'type': float, 'default': int(0)},
+        'Pressure': {'type': float, 'default': int(1500)},
+        'PressureModel': {'type': str, 'default': gp.PressureModel.PressureRegulated._name_},
+        'RefTemperature': {'type': float, 'default': int(20)},
+        'SecondDirectionX': {'type': float, 'default': int(0)},
+        'SecondDirectionY': {'type': float, 'default': int(-1)},
+        'SecondDirectionZ': {'type': float, 'default': int(0)},
+        'Temperature': {'type': float, 'default': int(20)},
+        'Volume': {'type': float, 'default': 0.75},
+    },
+    'ElectricTank': {
+        'AllowNegativeFuelMass': {'type': bool, 'default': False},
+        'DirectionX': {'type': float, 'default': int(0)},
+        'DirectionY': {'type': float, 'default': int(0)},
+        'DirectionZ': {'type': float, 'default': int(1)},
+        'FuelCenterOfMassX': {'type': float, 'default': 0},
+        'FuelCenterOfMassY': {'type': float, 'default': 0},
+        'FuelCenterOfMassZ': {'type': float, 'default': 0},
+        'FuelMass': {'type': float, 'default': 756},
+        'FuelMomentOfInertiaXX': {'type': float, 'default': int(99)},
+        'FuelMomentOfInertiaXY': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaXZ': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaYY': {'type': float, 'default': int(99)},
+        'FuelMomentOfInertiaYZ': {'type': float, 'default': int(0)},
+        'FuelMomentOfInertiaZZ': {'type': float, 'default': int(99)},
+        'HWOriginInBCSX': {'type': float, 'default': int(0)},
+        'HWOriginInBCSY': {'type': float, 'default': int(0)},
+        'HWOriginInBCSZ': {'type': float, 'default': int(0)},
+        'SecondDirectionX': {'type': float, 'default': int(0)},
+        'SecondDirectionY': {'type': float, 'default': int(-1)},
+        'SecondDirectionZ': {'type': float, 'default': int(0)},
+    },
+}
+
 
 class TestTanks(unittest.TestCase):
     def setUp(self):
