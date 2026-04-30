@@ -1,12 +1,14 @@
 # Tests setting complex properties on chemical and electric tanks.
+import builtins
 import unittest
+from typing import Any
 
 import numpy as np
 
 import gmatpyplus as gp
 
-defaults: dict[str, dict[str, dict[str, Any]]] = {
-    'ChemicalTank': {
+defaults: dict[type, dict[str, dict[str, Any]]] = {
+    gp.ChemicalTank: {
         'AllowNegativeFuelMass': {'type': bool, 'default': False},
         'DirectionX': {'type': float, 'default': int(0)},
         'DirectionY': {'type': float, 'default': int(0)},
@@ -34,7 +36,7 @@ defaults: dict[str, dict[str, dict[str, Any]]] = {
         'Temperature': {'type': float, 'default': int(20)},
         'Volume': {'type': float, 'default': 0.75},
     },
-    'ElectricTank': {
+    gp.ElectricTank: {
         'AllowNegativeFuelMass': {'type': bool, 'default': False},
         'DirectionX': {'type': float, 'default': int(0)},
         'DirectionY': {'type': float, 'default': int(0)},
@@ -66,6 +68,31 @@ class TestTanks(unittest.TestCase):
         self.direction: np.ndarray = np.array([1, 0, 0])
         self.second_direction: np.ndarray = np.array([0, 1, 0])
         self.hw_origin_in_bcs: np.ndarray = np.array([0.2, 0.4, 0.6])
+
+    def _test_defaults(self, tank: gp.FuelTank):
+        default_values: dict[str, dict[str, Any]] = defaults[type(tank)]
+
+        default_type: type
+        for attribute_name in default_values:
+            default_value = default_values[attribute_name]['default']
+            default_type: type = default_values[attribute_name]['type']
+
+            match default_type:
+                case builtins.bool:
+                    value = tank.GetBooleanParameter(attribute_name)
+                case builtins.int:
+                    value = tank.GetIntegerParameter(attribute_name)
+                case builtins.float:
+                    value = tank.GetRealParameter(attribute_name)
+                case builtins.str:
+                    value = tank.GetStringParameter(attribute_name)
+                case _:
+                    value = tank.GetField(attribute_name)
+
+            self.assertEqual(value, default_value,
+                             f'Attribute "{attribute_name}" must have a value of {default_value}')
+            self.assertIsInstance(value, default_type,
+                                  f'Attribute "{attribute_name}" must be a {default_type.__name__}')
 
     def _test_tank(self, tank: gp.FuelTank):
         with self.subTest('direction'):
@@ -150,6 +177,11 @@ class TestTanks(unittest.TestCase):
                             f'gp.FuelTank hw_origin_in_bcs attribute ({tank.hw_origin_in_bcs}).')
 
     def test_chemical_tank(self):
+        default_ct: gp.ChemicalTank = gp.ChemicalTank('Default_CT')
+
+        with self.subTest('default values'):
+            self._test_defaults(default_ct)
+
         ct1: gp.ChemicalTank = gp.ChemicalTank('CT1', 500, True, 1000, 10, 10, 0.5, 1000, gp.PressureModel.BlowDown,
                                                self.fuel_com, self.fuel_moi, self.direction, self.second_direction,
                                                self.hw_origin_in_bcs)
@@ -157,6 +189,11 @@ class TestTanks(unittest.TestCase):
         self._test_tank(ct1)
 
     def test_electric_tank(self):
+        default_et: gp.ElectricTank = gp.ElectricTank('Default_ET')
+
+        with self.subTest('default values'):
+            self._test_defaults(default_et)
+
         et1: gp.ElectricTank = gp.ElectricTank('ET1', 500, True, self.fuel_com, self.fuel_moi, self.direction,
                                                self.second_direction, self.hw_origin_in_bcs)
 
