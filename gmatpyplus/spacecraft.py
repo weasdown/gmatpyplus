@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import TypeVar, Generic
 import logging
 from enum import Enum
 from typing import Union
@@ -13,6 +14,8 @@ from gmatpyplus.hardware import Imager, HardwareException
 from gmatpyplus.orbit import OrbitState
 from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
                               list_to_gmat_field_string, rvector6_to_list)
+
+T = TypeVar('T')
 
 
 class Spacecraft(GmatObject):
@@ -455,7 +458,7 @@ class PressureModel(Enum):
     BlowDown = 'BlowDown'
 
 
-class FuelTank(GmatObject):
+class FuelTank(GmatObject, Generic[T]):
     def __init__(self, tank_type: str, name: str, fuel_mass: float = 756, allow_negative_fuel_mass: bool = False,
                  fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
                  fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
@@ -565,13 +568,13 @@ class FuelTank(GmatObject):
         return f'{self._tank_type} with name {self.name}'
 
     @staticmethod
-    def _from_dict(fuel_type: str, tank_dict: dict[str, Union[str, int, float]]) -> FuelTank:
-        if fuel_type == 'Chemical':
-            tank = ChemicalTank(tank_dict['Name'])
-        elif fuel_type == 'Electric':
-            tank = ElectricTank(tank_dict['Name'])
+    def _from_dict(tank_type: type, tank_dict: dict[str, Union[str, int, float]]) -> T:
+        if tank_type == gp.ChemicalTank:
+            tank = ChemicalTank(str(tank_dict['Name']))
+        elif tank_type == gp.ElectricTank:
+            tank = ElectricTank(str(tank_dict['Name']))
         else:
-            raise SyntaxError(f'Invalid thr_type found in Tank.from_dict: {fuel_type}'
+            raise SyntaxError(f'Invalid thr_type found in Tank.from_dict: {tank_type}'
                               f"\nMust be 'Chemical' or 'Electric'")
 
         fields: list[str] = list(tank_dict.keys())
@@ -773,7 +776,7 @@ class ChemicalTank(FuelTank):
     @classmethod
     def from_dict(cls, cp_tank_dict: dict) -> gp.ChemicalTank | None:
         if cp_tank_dict != {}:
-            cp_tank: ChemicalTank = FuelTank._from_dict('Chemical', cp_tank_dict)
+            cp_tank: ChemicalTank = FuelTank[ChemicalTank]._from_dict(gp.ChemicalTank, cp_tank_dict)
             cp_tank.Validate()
             return cp_tank
         else:
@@ -812,7 +815,7 @@ class ElectricTank(FuelTank):
     @classmethod
     def from_dict(cls, ep_tank_dict: dict) -> gp.ElectricTank | None:
         if ep_tank_dict != {}:
-            ep_tank: ElectricTank = FuelTank._from_dict('Electric', ep_tank_dict)
+            ep_tank: ElectricTank = FuelTank[ElectricTank]._from_dict(gp.ElectricTank, ep_tank_dict)
             ep_tank.Validate()
             return ep_tank
         else:
