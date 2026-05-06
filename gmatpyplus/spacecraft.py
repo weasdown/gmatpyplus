@@ -475,8 +475,16 @@ class FuelType(Enum):
         return f'{self.value}Tank'
 
     @property
+    def tank_builder(self) -> Callable:
+        return ChemicalTank if self == FuelType.chemical else ElectricTank
+
+    @property
     def thruster(self) -> str:
         return f'{self.value}Thruster'
+
+    @property
+    def thruster_builder(self) -> Callable:
+        return ChemicalThruster if self == FuelType.chemical else ElectricThruster
 
 
 class FuelTank(GmatObject, Generic[T]):
