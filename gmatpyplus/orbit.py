@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+from gmatpyplus import gmat
 from gmatpyplus.basics import GmatObject
 from gmatpyplus.utils import *
 
@@ -173,7 +176,7 @@ class ForceModel(GmatObject):
         #     self.Help()
 
         # TODO don't setup gravity field if none specified - breaks interplanetary where grav field irrelevant
-        self.primary_body: str = primary_body
+        self.primary_body: str | None = primary_body
         if self.primary_body is None:  # self.primary_body is None
             self.gravity = gravity_field
             if gravity_field is not None:
@@ -274,12 +277,15 @@ class ForceModel(GmatObject):
                      cssi_space_weather_file: str = 'SpaceWeather-All-v1.2.txt',
                      schatten_file: str = 'SchattenPredict.txt', schatten_error_model: str = 'Nominal',
                      schatten_timing_model: str = 'NominalCycle',
-                     density_model='Only used if atmo_model is MarsGRAM2005', input_file=None):
+                     density_model='Only used if atmo_model is MarsGRAM2005', input_file: Path = None):
             # TODO remove unused args once moved to AtmosphereModel()
 
             super().__init__('DragForce', name)
 
             self.primary_body: str = fm.central_body if fm else 'Earth'
+
+            self.input_file: Path | None = input_file
+
             # TODO: move to AtmosphereModel as appropriate
             self.allowed_values = {'models': {'Earth': ['JacchiaRoberts', 'MSISE86', 'MSISE90', 'NRLMSISE00'],
                                               'Mars': 'MarsGRAM2005'},
@@ -307,8 +313,9 @@ class ForceModel(GmatObject):
                     self.density_model = 'Mean'  # default density model
                 self.SetField('DensityModel', self.density_model)
 
-                self.input_file = input_file
-                self.SetField('InputFile', self.input_file)
+                self.input_file: Path = input_file
+                assert self.input_file is not None
+                self.SetField('InputFile', str(self.input_file.resolve()))
             elif self.atmosphere_model:
                 self.density_model = None
                 self.input_file = None
