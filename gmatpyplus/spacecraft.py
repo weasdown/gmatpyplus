@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic
 import logging
 from enum import Enum
-from typing import Union
+from typing import TypeVar, Generic, Union, Callable
 
 import numpy as np
 
