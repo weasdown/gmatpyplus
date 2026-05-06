@@ -886,16 +886,26 @@ class Thruster(GmatObject):
         return f'A {self.thruster_type} with name {self.name}'
 
     @staticmethod
-    def from_dict(fuel_type: str, thr_dict: dict[str, Union[str, int, float]]):
-        name = thr_dict.get('Name')
-        tanks = thr_dict.get('Tanks')
-        if fuel_type == FuelType.chemical:
-            thr = ChemicalThruster(name, tanks)
-        elif fuel_type == FuelType.electric:
-            thr = ElectricThruster(name, tanks)
+    def from_dict(fuel_type: FuelType, thr_dict: dict) -> ChemicalThruster | ElectricThruster:
+        name: str = str(thr_dict['Name'])
+        tanks: str | list = thr_dict['Tanks']
+
+        # One tank specified.
+        if isinstance(tanks, str):
+            tank_name: str = tanks
+            tanks = [fuel_type.tank_builder(tank_name)]
+            thr = fuel_type.thruster_builder(name, tanks)
+        # Multiple tanks specified.
+        elif isinstance(tanks, list):
+            # FIXME confirm implementation of Thruster.from_dict() for multiple tanks.
+            tanks: list[gp.FuelTank] = [fuel_type.tank_builder(tank_name) for tank_name in tanks]
+            mix_ratio: dict[str, int | float] = thr_dict['MixRatio']
+            mix_ratio: dict[gp.FuelTank, int | float] = {
+                tank: mix_ratio[tank.GetName()] for tank in tanks
+            }
+            thr = fuel_type.thruster_builder(name, tanks, mix_ratio)
         else:
-            raise SyntaxError(f'Invalid fuel_type found in Thruster.from_dict: {fuel_type}.'
-                              f"\nMust be FuelType.chemical or FuelType.electric.")
+            raise AttributeError('tanks must be a str or list of strings.')
 
         fields: list[str] = list(thr_dict.keys())
         fields.remove('Name')
