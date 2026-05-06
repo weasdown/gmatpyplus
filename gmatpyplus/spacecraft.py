@@ -601,6 +601,7 @@ class FuelTank(GmatObject, Generic[T]):
 
     def attach_to_sat(self, sat: Spacecraft):
         self.spacecraft = sat
+        assert self.spacecraft is not None
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
 
     def _DepleteFuel(self, delta_m: float) -> None:
