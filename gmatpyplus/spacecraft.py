@@ -509,7 +509,7 @@ class FuelTank(GmatObject, Generic[T]):
            FuelDensity                             Real   1260
            PressureModel                           List   PressureRegulated
         """
-        assert (tank_type == 'ChemicalTank') or (tank_type == 'ElectricTank')  # Confirm tank_type is valid.
+        assert tank_type in ['ChemicalTank', 'ElectricTank']  # Confirm tank_type is valid.
         super().__init__(tank_type, name)
         self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
