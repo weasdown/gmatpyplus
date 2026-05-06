@@ -860,23 +860,30 @@ class Thruster(GmatObject):
 
         self.spacecraft: gp.Spacecraft | None = None
 
-        self.tanks: list[ChemicalTank | ElectricTank] | None = tanks
-        self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
-        if isinstance(self.tanks, str | gp.FuelTank | gmat.FuelTank):
-            if mix_ratio is not None and self.mix_ratio != 1:
-                raise AttributeError(f'Invalid mix_ratio {self.mix_ratio} given for a single tank')
-            self.mix_ratio = [1]
-            self.SetField('MixRatio', self.mix_ratio)
-            if isinstance(self.tanks, str):
-                self.SetField('Tank', self.tanks)
-            elif isinstance(self.tanks, gp.FuelTank | gmat.Tank):
-                self.SetField('Tank', self.tanks.GetName())
-        elif isinstance(self.tanks, list):
-            if mix_ratio is None:
-                raise AttributeError('mix_ratio must be given if multiple tanks have been given')
-            else:
-                tank_names = [tank.GetName() for tank in self.tanks]
-                self.SetField('Tank', tank_names)
+        self.tanks: list[FuelTank] = []
+        self.mix_ratio: dict[FuelTank, int | float] = mix_ratio if mix_ratio is not None else {}
+        # True if tanks only specifies a single tank to connect to the thruster.
+        one_tank: bool = (isinstance(tanks, gp.FuelTank) or isinstance(tanks, gmat.FuelTank) or
+                          (isinstance(tanks, list) and len(tanks) == 1))
+        if one_tank:
+            tank = tanks[0] if isinstance(tanks, list) else tanks
+            self.tanks = [tank]
+            if mix_ratio is not None and mix_ratio != 1:
+                raise AttributeError(f'Invalid mix_ratio {mix_ratio} given for a single tank.')
+            all_from_one: int = 1
+            self.mix_ratio = {tank: all_from_one}
+            self.SetField('MixRatio', [all_from_one])
+            self.SetField('Tank', tank.GetName())
+        # Multiple tanks
+        else:
+            assert mix_ratio is not None, 'mix_ratio must be given if multiple tanks have been given.'
+            assert isinstance(tanks, list)
+            assert len(mix_ratio) == len(tanks)
+
+            self.tanks: list[FuelTank] = tanks
+            tank_names = [tank.GetName() for tank in self.tanks]
+            self.SetField('Tank', ', '.join(tank_names))
+            self.SetField('MixRatio', list(mix_ratio.values()))
 
         self._decrement_mass = self.decrement_mass
 
