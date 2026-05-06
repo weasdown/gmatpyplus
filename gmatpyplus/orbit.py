@@ -204,7 +204,7 @@ class ForceModel(GmatObject):
 
         self._polyhedral_bodies = polyhedral_bodies
 
-        self.point_mass_forces: list[ForceModel.PointMassForce] | None = None
+        self.point_mass_forces: list[ForceModel.PointMassForce] = []
         if point_masses is not None:
             self.point_mass_forces = _validate_point_masses()  # raises exception if point_masses invalid
             for force in self.point_mass_forces:
