@@ -591,9 +591,9 @@ class FuelTank(GmatObject, Generic[T]):
     @staticmethod
     def _from_dict(tank_type: type, tank_dict: dict[str, Union[str, int, float]]) -> T:
         if tank_type == gp.ChemicalTank:
-            tank = ChemicalTank(str(tank_dict['Name']))
+            tank: gp.ChemicalTank = gp.ChemicalTank(str(tank_dict['Name']))
         elif tank_type == gp.ElectricTank:
-            tank = ElectricTank(str(tank_dict['Name']))
+            tank: gp.ElectricTank = gp.ElectricTank(str(tank_dict['Name']))
         else:
             raise SyntaxError(f'Invalid thr_type found in Tank.from_dict: {tank_type}'
                               f"\nMust be 'Chemical' or 'Electric'")
