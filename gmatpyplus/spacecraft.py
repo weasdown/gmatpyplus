@@ -51,10 +51,8 @@ class Spacecraft(GmatObject):
             self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
             self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
-            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None\
-                else solar_power_system
-            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None\
-                else nuclear_power_system
+            self.solar_power_system: SolarPowerSystem | None = solar_power_system
+            self.nuclear_power_system: NuclearPowerSystem | None = nuclear_power_system
 
             self.imagers: list[Imager] = imagers if imagers is not None else []
 
@@ -205,25 +203,17 @@ class Spacecraft(GmatObject):
                                 f'{type(self.hardware.elec_thrusters).__name__}')
 
         # Setup power systems
-        self.solar_power_system: SolarPowerSystem | None = None
+        self.solar_power_system: SolarPowerSystem | None = self.hardware.solar_power_system
         if self.hardware.solar_power_system is not None:
-            if isinstance(self.hardware.solar_power_system, SolarPowerSystem):
-                self.solar_power_system = self.hardware.solar_power_system
-                self.solar_power_system.attach_to_sat(self)
-            else:
-                # self.hardware.solar_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.solar_power_system should be a SolarPowerSystem but was '
-                                f'{type(self.hardware.solar_power_system).__name__}')
+            assert isinstance(self.solar_power_system,
+                              SolarPowerSystem), f'self.hardware.solar_power_system must be a SolarPowerSystem but was a {type(self.hardware.solar_power_system).__name__}.'
+            self.solar_power_system.attach_to_sat(self)
 
-        self.nuclear_power_system: NuclearPowerSystem | None = None
-        if self.hardware.nuclear_power_system is not None:
-            if isinstance(self.hardware.nuclear_power_system, NuclearPowerSystem):
-                self.nuclear_power_system = self.hardware.nuclear_power_system
-                self.nuclear_power_system.attach_to_sat(self)
-            else:
-                # self.hardware.nuclear_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.nuclear_power_system should be a NuclearPowerSystem but was '
-                                f'{type(self.hardware.nuclear_power_system).__name__}')
+        self.nuclear_power_system: NuclearPowerSystem | None = self.hardware.nuclear_power_system
+        if self.nuclear_power_system is not None:
+            assert isinstance(self.nuclear_power_system,
+                              gp.NuclearPowerSystem), f'self.hardware.nuclear_power_system must be a NuclearPowerSystem but was a {type(self.hardware.nuclear_power_system).__name__}.'
+            self.nuclear_power_system.attach_to_sat(self)
 
         # Setup imagers
         self.imagers: list[Imager] = []
