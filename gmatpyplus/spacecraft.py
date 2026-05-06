@@ -335,7 +335,7 @@ class Spacecraft(GmatObject):
 
         self.solar_power_system = self.hardware.solar_power_system
         if self.solar_power_system is not None:
-            self.hardware.solar_power_system.attach_to_sat(self)
+            self.solar_power_system.attach_to_sat(self)
 
         return self.hardware
 
