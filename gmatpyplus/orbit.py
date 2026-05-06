@@ -648,7 +648,7 @@ class OrbitState:
         @classmethod
         def from_sat(cls, sc: gp.Spacecraft) -> OrbitState.CoordinateSystem:
             name = sc.gmat_obj.GetRefObjectName(gmat.COORDINATE_SYSTEM)
-            sc_cs_gmat_obj = sc.gmat_obj.GetRefObject(150, name)
+            sc_cs_gmat_obj = sc.gmat_obj.GetRefObject(gmat.COORDINATE_SYSTEM, name)
             origin = sc_cs_gmat_obj.GetField('Origin')
             axes = sc_cs_gmat_obj.GetField('Axes')
             coord_sys: OrbitState.CoordinateSystem = cls(name=name, origin=origin, axes=axes)
