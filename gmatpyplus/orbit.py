@@ -412,10 +412,10 @@ class ForceModel(GmatObject):
         def __init__(self, name: str = 'PMF', body: str = None):
             super().__init__('PointMassForce', name)
             if body:
-                self.primary_body = body
+                self.primary_body: str = body
             else:
-                self.primary_body = 'Earth'
-            self.SetField('BodyName', body)
+                self.primary_body: str = 'Earth'
+            self.SetField('BodyName', self.primary_body)
 
     class SolarRadiationPressure(PhysicalModel):
         def __init__(self, fm: ForceModel = None, name: str = 'SRP', model: str = 'Spherical', flux: float | int = 1367,
