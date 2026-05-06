@@ -103,7 +103,13 @@ class Spacecraft(GmatObject):
             solar_power_systems: dict = hw.get('SolarPowerSystem', {})
             sc_hardware.solar_power_system = gp.SolarPowerSystem.from_dict(solar_power_systems)
 
-            # TODO: parse nuclear_power_system, imager
+            # FIXME: parse nuclear_power_system, imager
+            if hw.get('NuclearPowerSystem') is not None:
+                raise NotImplementedError(
+                    'Adding a NuclearPowerSystem to SpacecraftHardware from a dictionary is not yet supported.')
+            if hw.get('Imagers') is not None:
+                raise NotImplementedError(
+                    'Adding Imagers to SpacecraftHardware from a dictionary is not yet supported.')
 
             return sc_hardware
 
