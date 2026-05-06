@@ -914,7 +914,8 @@ class Thruster(GmatObject):
         return thr
 
     def attach_to_sat(self, sat: Spacecraft):
-        self.spacecraft = sat
+        self.spacecraft: Spacecraft = sat
+        assert self.spacecraft is not None
         self.spacecraft.add_thrusters([self.gmat_obj])
 
     def attach_to_tanks(self, tanks: list[ChemicalTank | ElectricTank]):
