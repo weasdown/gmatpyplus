@@ -193,18 +193,6 @@ class GmatObject:
         set_successfully: bool = value_set == value
         return set_successfully
 
-    # def SetReference(self, ref_obj):
-    #     print(self)
-    #     self.Help()
-    #     try:
-    #         return gp.extract_gmat_obj(self).SetReference(gp.extract_gmat_obj(ref_obj))
-    #     except Exception as ex:
-    #         print('RuhRoh')
-    #         ref_arr = self.GetRefObjectNameArray(gp.extract_gmat_obj(ref_obj).GetType())
-    #         print(ref_arr)
-    #         raise
-    #         pass
-
     def SetReference(self, ref_obj):
         gp.extract_gmat_obj(self).SetReference(gp.extract_gmat_obj(ref_obj))
 
