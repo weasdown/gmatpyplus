@@ -97,7 +97,7 @@ class ForceModel(GmatObject):
                  error_control: list = None, user_defined: list[str] = None):
         super().__init__('ForceModel', name)
 
-        def validate_point_masses(pm) -> list[ForceModel.PointMassForce]:
+        def _validate_point_masses() -> list[ForceModel.PointMassForce]:
             celestial_bodies = CelestialBodies()
 
             # point_masses is a single string
@@ -206,7 +206,7 @@ class ForceModel(GmatObject):
 
         self.point_mass_forces: list[ForceModel.PointMassForce] | None = None
         if point_masses is not None:
-            self.point_mass_forces = validate_point_masses(point_masses)  # raises exception if point_masses invalid
+            self.point_mass_forces = _validate_point_masses()  # raises exception if point_masses invalid
             for force in self.point_mass_forces:
                 self.AddForce(force)
 
