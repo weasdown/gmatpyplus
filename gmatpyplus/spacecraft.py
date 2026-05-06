@@ -155,7 +155,7 @@ class Spacecraft(GmatObject):
         _allowed_fields.update(_gmat_allowed_fields,
                                ['Name', 'Orbit', 'Hardware'])
 
-        self.hardware: Spacecraft.SpacecraftHardware = self.SpacecraftHardware() if hardware is None else hardware
+        self.hardware: Spacecraft.SpacecraftHardware = hardware if hardware is not None else self.SpacecraftHardware()
 
         # TODO confirm fixed - FIXME - not being updated by from_dict()
         # Setup tanks
