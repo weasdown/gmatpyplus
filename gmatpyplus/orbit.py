@@ -537,13 +537,11 @@ class OrbitState:
                 self.Initialize()
 
         def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str = None,
-                     secondary: str = None, xaxis: str = None, yaxis: str = None, zaxis: str = None, epoch: str = None,
-                     alignment_vec_x: int = None, alignment_vec_y: int = None, alignment_vec_z: int = None,
-                     constraint_vec_x: int = None, constraint_vec_y: int = None, constraint_vec_z: int = None,
-                     constraint_ref_vec_x: int = None, constraint_ref_vec_y: int = None,
-                     constraint_ref_vec_z: int = None,
-                     constraint_coord_sys: str = None, ref_object: str = None
-                     ):
+                     secondary: str = None, x_axis: str = None, y_axis: str = None, z_axis: str = None,
+                     epoch: str = None, alignment_vec_x: int = None, alignment_vec_y: int = None,
+                     alignment_vec_z: int = None, constraint_vec_x: int = None, constraint_vec_y: int = None,
+                     constraint_vec_z: int = None, constraint_ref_vec_x: int = None, constraint_ref_vec_y: int = None,
+                     constraint_ref_vec_z: int = None, constraint_coord_sys: str = None, ref_object: str = None):
             # TODO: remove kwargs if possible, if not document as another 2do
             # TODO complete allowed values - see User Guide pages 335-339 (PDF pg 344-348)
             #  and src/base/coordsystem/CoordinateSystem.cpp/CreateLocalCoordinateSystem
@@ -611,9 +609,9 @@ class OrbitState:
                     if axes == 'ObjectReferenced':
                         self.primary = primary
                         self.secondary = secondary
-                        self.xaxis = xaxis
-                        self.yaxis = yaxis
-                        self.zaxis = zaxis
+                        self.x_axis = x_axis
+                        self.y_axis = y_axis
+                        self.z_axis = z_axis
 
                     elif (axes == 'TOE') or (axes == 'MOE'):
                         self.epoch = epoch
