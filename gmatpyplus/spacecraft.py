@@ -918,8 +918,8 @@ class Thruster(GmatObject):
         assert self.spacecraft is not None
         self.spacecraft.add_thrusters([self.gmat_obj])
 
-    def attach_to_tanks(self, tanks: list[ChemicalTank | ElectricTank]):
-        gp.extract_gmat_obj(self).SetField('Tank', tanks)
+    def attach_to_tanks(self, tanks: list[FuelTank]):
+        gp.extract_gmat_obj(self).SetField('Tank', [tank.GetName() for tank in tanks])
 
     @property
     def decrement_mass(self):
