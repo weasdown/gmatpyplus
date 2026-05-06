@@ -78,28 +78,28 @@ class Spacecraft(GmatObject):
             cp_tanks_objs = []
             for index, cp_tank in enumerate(cp_tanks_list):
                 cp_tanks_objs.append(ChemicalTank.from_dict(cp_tank))
-            sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else None
+            sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else []
 
             # parse ElectricTanks
             ep_tanks_list: list[dict] = hw.get('ElectricTanks', [{}])
             ep_tanks_objs = []
             for index, ep_tank in enumerate(ep_tanks_list):
                 ep_tanks_objs.append(ElectricTank.from_dict(ep_tank))
-            sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else None
+            sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else []
 
             # parse ChemicalThrusters
             cp_thrusters_list: list[dict] = hw.get('ChemicalThrusters', [{}])
             cp_thruster_objs = []
             for index, cp_thruster in enumerate(cp_thrusters_list):
                 cp_thruster_objs.append(ChemicalThruster.from_dict(cp_thruster))
-            sc_hardware.chem_thrusters = cp_thruster_objs if cp_thruster_objs != [None] else None
+            sc_hardware.chem_thrusters = cp_thruster_objs if cp_thruster_objs != [None] else []
 
             # parse ElectricThrusters
             ep_thrusters_list: list[dict] = hw.get('ElectricThrusters', [{}])
             ep_thruster_objs = []
             for index, ep_thruster in enumerate(ep_thrusters_list):
                 ep_thruster_objs.append(ElectricThruster.from_dict(ep_thruster))
-            sc_hardware.elec_thrusters = ep_thruster_objs if ep_thruster_objs != [None] else None
+            sc_hardware.elec_thrusters = ep_thruster_objs if ep_thruster_objs != [None] else []
 
             # parse solar power systems
             solar_power_systems: dict = hw.get('SolarPowerSystem', {})
