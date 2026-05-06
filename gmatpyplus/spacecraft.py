@@ -301,9 +301,6 @@ class Spacecraft(GmatObject):
         # Attach thrusters and tanks to the Spacecraft
         if self.hardware.chem_thrusters:
             for thruster in self.hardware.chem_thrusters:
-                # if not thruster:
-                #     raise RuntimeError(f"No chemical thrusters found, chemical thruster list is: "
-                #                        f"{self.chem_thrusters}\n{self.hardware.chem_thrusters}")
                 if thruster is not None:
                     thruster.attach_to_sat(self)
                     thruster.attach_to_tanks(thruster.tanks)
