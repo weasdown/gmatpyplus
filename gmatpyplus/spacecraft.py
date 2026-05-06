@@ -845,11 +845,14 @@ class ElectricTank(FuelTank):
 
 
 class Thruster(GmatObject):
-    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] |
-                                                         list[gmat.FuelTank],
-                 mix_ratio: int | float | list[int | float] = None):
+    def __init__(self, fuel_type: FuelType, name: str,
+                 tanks: gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
+                 mix_ratio: dict[gp.FuelTank, int | float] = None):
+        assert isinstance(tanks, (gp.FuelTank, gmat.FuelTank,
+                                  list)), 'tanks must be a gp.FuelTank, gmat.FuelTank, list[gp.FuelTank] or list[gmat.FuelTank].'
+
         self.fuel_type = fuel_type
-        self.thruster_type: str = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
+        self.thruster_type: str = f'{self.fuel_type.value}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
         super().__init__(self.thruster_type, name)
 
         self.spacecraft: gp.Spacecraft | None = None
@@ -883,13 +886,13 @@ class Thruster(GmatObject):
     def from_dict(fuel_type: str, thr_dict: dict[str, Union[str, int, float]]):
         name = thr_dict.get('Name')
         tanks = thr_dict.get('Tanks')
-        if fuel_type == 'Chemical':
+        if fuel_type == FuelType.chemical:
             thr = ChemicalThruster(name, tanks)
-        elif fuel_type == 'Electric':
-            thr = ElectricThruster(thr_dict['Name'], tanks)
+        elif fuel_type == FuelType.electric:
+            thr = ElectricThruster(name, tanks)
         else:
             raise SyntaxError(f'Invalid fuel_type found in Thruster.from_dict: {fuel_type}.'
-                              f"\nMust be 'Chemical' or 'Electric'")
+                              f"\nMust be FuelType.chemical or FuelType.electric.")
 
         fields: list[str] = list(thr_dict.keys())
         fields.remove('Name')
@@ -935,8 +938,11 @@ class Thruster(GmatObject):
 
 class ChemicalThruster(Thruster):
     def __init__(self, name: str, tanks: str | gp.ChemicalTank | gmat.ChemicalTank |
-                                         list[gp.ChemicalTank] | list[gmat.ChemicalTank]):
-        super().__init__('Chemical', name, tanks)
+                                         list[gp.ChemicalTank] | list[gmat.ChemicalTank],
+                 mix_ratio: dict[gp.ChemicalTank, int | float] = None):
+        if isinstance(tanks, str):
+            tanks: ChemicalTank = ChemicalTank(tanks)
+        super().__init__(FuelType.chemical, name, tanks, mix_ratio)
 
         self.Validate()
         self.Initialize()
@@ -944,7 +950,8 @@ class ChemicalThruster(Thruster):
     @classmethod
     def from_dict(cls, cp_thr_dict: dict) -> gp.ChemicalThruster | None:
         if cp_thr_dict != {}:
-            cp_thr: ChemicalThruster = Thruster.from_dict('Chemical', cp_thr_dict)
+            cp_thr: gp.Thruster = Thruster.from_dict(FuelType.chemical, cp_thr_dict)
+            assert isinstance(cp_thr, gp.ChemicalThruster)
             cp_thr.Validate()
             return cp_thr
         else:
@@ -953,14 +960,16 @@ class ChemicalThruster(Thruster):
 
 class ElectricThruster(Thruster):
     def __init__(self, name: str, tanks: str | gp.ElectricTank | gmat.ElectricTank |
-                                         list[gp.ElectricTank] | list[gmat.ElectricTank]):
-        super().__init__('Electric', name, tanks)
+                                         list[gp.ElectricTank] | list[gmat.ElectricTank],
+                 mix_ratio: dict[gp.ElectricTank, int | float] = None):
+        super().__init__(FuelType.electric, name, tanks, mix_ratio)
         self.Initialize()
 
     @classmethod
     def from_dict(cls, ep_thr_dict: dict) -> gp.ElectricThruster | None:
         if ep_thr_dict != {}:
-            ep_thr = Thruster.from_dict('Electric', ep_thr_dict)
+            ep_thr: gp.Thruster = Thruster.from_dict(FuelType.electric, ep_thr_dict)
+            assert isinstance(ep_thr, gp.ElectricThruster)
             ep_thr.Validate()
             return ep_thr
         else:
