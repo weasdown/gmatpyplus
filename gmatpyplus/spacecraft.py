@@ -264,7 +264,7 @@ class Spacecraft(GmatObject):
             hardware = {}
 
         hardware_obj = Spacecraft.SpacecraftHardware.from_dict(hardware)  # build wrapper Hardware object from specs
-        sc.hardware = sc.update_hardware(hardware_obj)  # apply the new Hardware object to the spacecraft
+        sc.hardware = sc._update_hardware(hardware_obj)  # apply the new Hardware object to the spacecraft
 
         # use any Orbit params specified in the specs dictionary
         try:
@@ -295,8 +295,8 @@ class Spacecraft(GmatObject):
         self.gmat_obj = gmat.GetRuntimeObject(self._name)
         self.was_propagated = True
 
-    def update_hardware(self, hardware: SpacecraftHardware):
-        self.hardware = hardware
+    def _update_hardware(self, hardware: SpacecraftHardware):
+        self.hardware: Spacecraft.SpacecraftHardware = hardware
 
         # Attach thrusters and tanks to the Spacecraft
         if self.hardware.chem_thrusters:
