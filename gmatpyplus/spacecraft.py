@@ -339,6 +339,7 @@ class Spacecraft(GmatObject):
     # TODO re-implement optional coord_sys argument that specifies a coord system that the state will be expressed in
     #  (e.g. MarsInertial for Tut04_Mars_B-Plane_Targeting.py)
     def GetState(self, state_type: str = 'Current') -> list[float]:
+        # TODO align with API User's Guide for best practice on how to get state.
         # Get latest data (e.g. from mission run)
         up_to_date_obj = self.GetObject()
 
