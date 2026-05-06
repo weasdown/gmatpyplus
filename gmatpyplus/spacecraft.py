@@ -357,7 +357,7 @@ class Spacecraft(GmatObject):
                                      f'{[state for state in allowed_state_types]}')
             up_to_date_obj.SetField('DisplayStateType', state_type)
 
-        state: list[float | None] = [None] * 6
+        state: list = [None] * 6
         for i in range(13, 19):
             state[i - 13] = float(up_to_date_obj.GetField(i))  # int field refs used to be state type agnostic
 
