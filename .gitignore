@@ -262,3 +262,14 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm+all
+
+### CUSTOM ###
+
+# GMAT path config file
+/gmat_path.txt
+
+# Hatch versioning file
+_version.py
+
+# Ignore build-archive that contains old compiled package files that are too large for GitHub.
+build-archive
