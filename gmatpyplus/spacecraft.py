@@ -466,6 +466,19 @@ class PressureModel(Enum):
     BlowDown = 'BlowDown'
 
 
+class FuelType(Enum):
+    chemical = 'Chemical'
+    electric = 'Electric'
+
+    @property
+    def tank(self) -> str:
+        return f'{self.value}Tank'
+
+    @property
+    def thruster(self) -> str:
+        return f'{self.value}Thruster'
+
+
 class FuelTank(GmatObject, Generic[T]):
     def __init__(self, tank_type: str, name: str, fuel_mass: float = 756, allow_negative_fuel_mass: bool = False,
                  fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
