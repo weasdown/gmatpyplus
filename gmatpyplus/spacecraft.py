@@ -70,12 +70,17 @@ class Spacecraft(GmatObject):
         def from_dict(cls, hw: dict) -> Spacecraft.SpacecraftHardware:
             sc_hardware = cls()
 
+            # All tanks specified in the hardware dict, either directly under the ChemicalTanks or ElectricTanks keys,
+            # or indirectly under ChemicalThrusters/ElectricThrusters.Tanks.
+            tank_names: list[str] = []
+
             # parse ChemicalTanks
             cp_tanks_list: list[dict] = hw.get('ChemicalTanks', [{}])
             cp_tanks_objs = []
             for index, cp_tank in enumerate(cp_tanks_list):
                 cp_tanks_objs.append(ChemicalTank.from_dict(cp_tank))
             sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else []
+            tank_names.extend([tank.GetName() for tank in cp_tanks_objs])
 
             # parse ElectricTanks
             ep_tanks_list: list[dict] = hw.get('ElectricTanks', [{}])
@@ -83,20 +88,69 @@ class Spacecraft(GmatObject):
             for index, ep_tank in enumerate(ep_tanks_list):
                 ep_tanks_objs.append(ElectricTank.from_dict(ep_tank))
             sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else []
+            tank_names.extend([tank.GetName() for tank in ep_tanks_objs])
 
-            # parse ChemicalThrusters
-            cp_thrusters_list: list[dict] = hw.get('ChemicalThrusters', [{}])
-            cp_thruster_objs = []
-            for index, cp_thruster in enumerate(cp_thrusters_list):
-                cp_thruster_objs.append(ChemicalThruster.from_dict(cp_thruster))
-            sc_hardware.chem_thrusters = cp_thruster_objs if cp_thruster_objs != [None] else []
+            # The names of any tanks that were specified as connected to a Thruster but were not listed in the
+            # spacecraft dict's Tanks field. These could be under the thruster dict's Tanks or MixRatio fields.
+            tanks_to_add: dict[FuelType, list[str]] = {FuelType.chemical: [], FuelType.electric: []}
 
-            # parse ElectricThrusters
-            ep_thrusters_list: list[dict] = hw.get('ElectricThrusters', [{}])
-            ep_thruster_objs = []
-            for index, ep_thruster in enumerate(ep_thrusters_list):
-                ep_thruster_objs.append(ElectricThruster.from_dict(ep_thruster))
-            sc_hardware.elec_thrusters = ep_thruster_objs if ep_thruster_objs != [None] else []
+            def parse_thrusters(fuel_type: FuelType) -> None:
+                thrusters_list: list[dict] = hw.get(f'{fuel_type.value}Thrusters', [{}])
+                thruster_objs: list[gp.Thruster] = []
+                for thruster_dict in thrusters_list:
+                    thruster: gp.Thruster = fuel_type.thruster_from_dict(thruster_dict)
+                    thruster_objs.append(thruster)
+
+                    # The names of any tanks that were specified as connected to *this* Thruster but were not listed in
+                    # the spacecraft dict's Tanks field. These could be under the thruster dict's Tanks or MixRatio
+                    # fields.
+                    all_extra_thruster_tanks: list[str] = []
+
+                    def warning_message(field: str, variable: list[str]) -> str:
+                        return (f'While adding {fuel_type.value}Thruster "{thruster.name}" to the spacecraft, one or '
+                                f"more extra tanks were found under the thruster dict's {field} field that had not been"
+                                f" specified in the spacecraft dict's Tanks field: {variable}. These tanks will be "
+                                f"built and added to the spacecraft.")
+
+                    # Tanks listed in the thruster's dict under the Tanks key.
+                    thruster_tank_names: list[str] = [tank.GetName() for tank in thruster.tanks]
+                    extra_tanks: list[str] = [tank for tank in thruster_tank_names if tank not in tank_names]
+                    if extra_tanks:
+                        all_extra_thruster_tanks.extend(extra_tanks)
+                        logging.warning(warning_message('Tanks', extra_tanks))
+
+                    # Tanks listed in the thruster's dict under the MixRatio key.
+                    mix_ratio_dict: dict | None = thruster_dict.get('MixRatio', None)
+                    mix_ratio_tanks: list[str] = [] if mix_ratio_dict is None else list(mix_ratio_dict.keys())
+                    extra_mix_ratio_tanks: list[str] = [tank for tank in mix_ratio_tanks if tank not in tank_names]
+                    if extra_mix_ratio_tanks:
+                        all_extra_thruster_tanks.extend(extra_mix_ratio_tanks)
+                        logging.warning(warning_message('MixRatio', extra_mix_ratio_tanks))
+
+                    tank_names.extend(all_extra_thruster_tanks)
+                    tanks_to_add[fuel_type] = list(set(tanks_to_add[fuel_type] + all_extra_thruster_tanks))
+
+                if fuel_type == FuelType.chemical:
+                    thruster_objs: list[gp.ChemicalThruster]
+                    sc_hardware.chem_thrusters = thruster_objs if thruster_objs != [None] else []
+                else:
+                    thruster_objs: list[gp.ElectricThruster]
+                    sc_hardware.elec_thrusters = thruster_objs if thruster_objs != [None] else []
+
+            parse_thrusters(FuelType.chemical)
+            parse_thrusters(FuelType.electric)
+
+            tank_names = list(set(tank_names))  # Remove duplicates.
+
+            if tanks_to_add:
+                logging.warning("Adding the following tanks to the spacecraft that were not listed in its dict's Tanks "
+                                "field: %s", tanks_to_add)
+                for fuel in tanks_to_add:
+                    if tanks_to_add[fuel]:
+                        if fuel == FuelType.chemical:
+                            sc_hardware.chem_tanks.extend([ChemicalTank(tank_name) for tank_name in tanks_to_add[fuel]])
+                        else:
+                            sc_hardware.elec_tanks.extend([ElectricTank(tank_name) for tank_name in tanks_to_add[fuel]])
 
             # parse solar power systems
             solar_power_systems: dict = hw.get('SolarPowerSystem', {})
