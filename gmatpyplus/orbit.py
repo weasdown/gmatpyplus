@@ -154,7 +154,7 @@ class ForceModel(GmatObject):
         self.gravity = gravity_field
 
         # TODO replace below with creation of GravityFields
-        #  PrimaryBodies is alias for GravityFields as per page 162 of GMAT Architectucral Specification
+        #  PrimaryBodies is alias for GravityFields as per page 162 of GMAT Architectural Specification
         # self.gravity = None
         # if primary_bodies is not None:
         #     if isinstance(primary_bodies, str):
