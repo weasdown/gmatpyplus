@@ -260,7 +260,7 @@ class Spacecraft(GmatObject):
             hardware = specs['Hardware']
             specs.pop('Hardware')
         except KeyError:
-            logging.info('No hardware parameters specified in Spacecraft dictionary - none will be built')
+            logging.warning('No hardware parameters specified in Spacecraft dictionary - none will be built')
             hardware = {}
 
         hardware_obj = Spacecraft.SpacecraftHardware.from_dict(hardware)  # build wrapper Hardware object from specs
