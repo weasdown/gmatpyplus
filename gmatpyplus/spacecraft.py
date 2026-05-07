@@ -861,7 +861,8 @@ class Thruster(GmatObject):
                  tanks: gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
                  mix_ratio: dict[gp.FuelTank, int | float] = None):
         assert isinstance(tanks, (gp.FuelTank, gmat.FuelTank,
-                                  list)), 'tanks must be a gp.FuelTank, gmat.FuelTank, list[gp.FuelTank] or list[gmat.FuelTank].'
+                                  list)), ('tanks must be a gp.FuelTank, gmat.FuelTank, list[gp.FuelTank] or '
+                                           'list[gmat.FuelTank].')
 
         self.fuel_type = fuel_type
         self.thruster_type: str = f'{self.fuel_type.value}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
