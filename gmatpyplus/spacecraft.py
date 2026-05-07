@@ -972,14 +972,14 @@ class ChemicalThruster(Thruster):
         self.Initialize()
 
     @classmethod
-    def from_dict(cls, cp_thr_dict: dict) -> gp.ChemicalThruster | None:
-        if cp_thr_dict != {}:
-            cp_thr: gp.Thruster = Thruster.from_dict(FuelType.chemical, cp_thr_dict)
-            assert isinstance(cp_thr, gp.ChemicalThruster)
-            cp_thr.Validate()
-            return cp_thr
-        else:
-            return None
+    def from_dict(cls, cp_thr_dict: dict) -> gp.ChemicalThruster:
+        if cp_thr_dict == {}:
+            raise AttributeError('ChemicalThruster.from_dict() was passed an empty dict.')
+
+        cp_thr: gp.Thruster = Thruster.from_dict(FuelType.chemical, cp_thr_dict)
+        assert isinstance(cp_thr, gp.ChemicalThruster)
+        cp_thr.Validate()
+        return cp_thr
 
 
 class ElectricThruster(Thruster):
@@ -990,14 +990,14 @@ class ElectricThruster(Thruster):
         self.Initialize()
 
     @classmethod
-    def from_dict(cls, ep_thr_dict: dict) -> gp.ElectricThruster | None:
-        if ep_thr_dict != {}:
-            ep_thr: gp.Thruster = Thruster.from_dict(FuelType.electric, ep_thr_dict)
-            assert isinstance(ep_thr, gp.ElectricThruster)
-            ep_thr.Validate()
-            return ep_thr
-        else:
-            return None
+    def from_dict(cls, ep_thr_dict: dict) -> gp.ElectricThruster:
+        if ep_thr_dict == {}:
+            raise AttributeError('ElectricThruster.from_dict() was passed an empty dict.')
+
+        ep_thr: gp.Thruster = Thruster.from_dict(FuelType.electric, ep_thr_dict)
+        assert isinstance(ep_thr, gp.ElectricThruster)
+        ep_thr.Validate()
+        return ep_thr
 
     # @property
     # def mix_ratio(self):
