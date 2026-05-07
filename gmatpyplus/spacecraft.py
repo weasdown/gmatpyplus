@@ -877,7 +877,7 @@ class Thruster(GmatObject):
                           (isinstance(tanks, list) and len(tanks) == 1))
         if one_tank:
             tank = tanks[0] if isinstance(tanks, list) else tanks
-            self.tanks = [tank]
+            self.tanks: list[gp.FuelTank] = [tank]
             if mix_ratio is not None and mix_ratio != 1:
                 raise AttributeError(f'Invalid mix_ratio {mix_ratio} given for a single tank.')
             all_from_one: int = 1
