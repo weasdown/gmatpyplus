@@ -929,6 +929,15 @@ class Thruster(GmatObject):
         # True if tanks only specifies a single tank to connect to the thruster.
         one_tank: bool = (isinstance(tanks, gp.FuelTank) or isinstance(tanks, gmat.FuelTank) or
                           (isinstance(tanks, list) and len(tanks) == 1))
+
+        # # TODO make mix_ratio optional by following GMAT's internal philosophy (from User Guide pg. 335):
+        # # "if a MixRatio is not supplied, fuel is drawn from tanks in equal amounts, (the MixRatio is set to a vector
+        # # of ones the same length as the Tank list)".
+        if mix_ratio is not None:
+            assert len(mix_ratio) == len(tanks), (f'If a mix_ratio dict is provided, it must have the same length as '
+                                                  f'the tanks list, but tanks has length {len(tanks)} and mix_ratio has'
+                                                  f' length {len(mix_ratio)}.')
+
         if one_tank:
             tank = tanks[0] if isinstance(tanks, list) else tanks
             self.tanks: list[gp.FuelTank] = [tank]
