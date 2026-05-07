@@ -298,10 +298,10 @@ class ForceModel(GmatObject):
             allowed_models = self.allowed_values['models'][self.primary_body]
             if atmo_model not in allowed_models:
                 raise AttributeError(f'model parameter must be one of the following: {allowed_models}')
-            else:
-                self.atmosphere_model = AtmosphereModel(atmo_model=atmo_model)
-                self.SetReference(self.atmosphere_model)
-                self.SetField('AtmosphereModel', self.atmosphere_model.atmo_model)
+
+            self.atmosphere_model = AtmosphereModel(atmo_model=atmo_model)
+            self.SetReference(self.atmosphere_model)
+            self.SetField('AtmosphereModel', self.atmosphere_model.atmo_model)
 
             if self.atmosphere_model == 'MarsGRAM2005':
                 if density_model != 'Only used if atmo_model is MarsGRAM2005':
