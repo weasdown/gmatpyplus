@@ -463,6 +463,9 @@ class FuelType(Enum):
     chemical = 'Chemical'
     electric = 'Electric'
 
+    def __repr__(self) -> str:
+        return f'{type(self).__name__}.{self._name_}'
+
     @property
     def tank(self) -> str:
         return f'{self.value}Tank'
