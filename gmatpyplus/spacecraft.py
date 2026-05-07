@@ -904,7 +904,12 @@ class Thruster(GmatObject):
         elif isinstance(tanks, list):
             # FIXME confirm implementation of Thruster.from_dict() for multiple tanks.
             tanks: list[gp.FuelTank] = [fuel_type.tank_builder(tank_name) for tank_name in tanks]
-            mix_ratio: dict[str, int | float] = thr_dict['MixRatio']
+            try:
+                mix_ratio: dict[str, int | float] = thr_dict['MixRatio']
+            except KeyError:
+                raise AttributeError(
+                    f'As multiple tanks have been specified for thruster {name}, the thruster dictionary must contain a '
+                    f'"MixRatio" entry describing how the thruster draws fuel from the connected tanks.')
             mix_ratio: dict[gp.FuelTank, int | float] = {
                 tank: mix_ratio[tank.GetName()] for tank in tanks
             }
