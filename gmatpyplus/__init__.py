@@ -54,7 +54,7 @@ from .hardware import *
 from .interpreter import *
 from .parameter import *
 from .solver import *
-from .spacecraft.spacecraft import *
+from .spacecraft import *
 from .orbit import *
 from .utils import *
 
