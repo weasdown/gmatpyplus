@@ -1,5 +1,4 @@
 import os
-import types
 
 
 def _gmat_path() -> str:
@@ -55,7 +54,7 @@ from .hardware import *
 from .interpreter import *
 from .parameter import *
 from .solver import *
-from .spacecraft import *
+from .spacecraft.spacecraft import *
 from .orbit import *
 from .utils import *
 

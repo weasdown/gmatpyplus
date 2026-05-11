@@ -3,7 +3,7 @@ import unittest
 import gmatpyplus as gp
 import gmatpyplus.hardware as h
 from gmatpyplus.load_gmat import gmat
-from gmatpyplus.spacecraft import Spacecraft
+from gmatpyplus import Spacecraft
 
 
 class TestSpacecraft(unittest.TestCase):
