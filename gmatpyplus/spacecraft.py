@@ -142,7 +142,7 @@ class Spacecraft(GmatObject):
 
             tank_names = list(set(tank_names))  # Remove duplicates.
 
-            if tanks_to_add:
+            if tanks_to_add[FuelType.chemical] or tanks_to_add[FuelType.electric]:
                 logging.warning("Adding the following tanks to the spacecraft that were not listed in its dict's Tanks "
                                 "field: %s", tanks_to_add)
                 for fuel in tanks_to_add:
