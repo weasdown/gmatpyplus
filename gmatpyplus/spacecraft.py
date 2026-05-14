@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic
 import logging
 from enum import Enum
-from typing import Union
+from typing import TypeVar, Generic, Union, Callable
 
 import numpy as np
 
@@ -51,10 +50,8 @@ class Spacecraft(GmatObject):
             self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
             self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
-            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None\
-                else solar_power_system
-            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None\
-                else nuclear_power_system
+            self.solar_power_system: SolarPowerSystem | None = solar_power_system
+            self.nuclear_power_system: NuclearPowerSystem | None = nuclear_power_system
 
             self.imagers: list[Imager] = imagers if imagers is not None else []
 
@@ -73,39 +70,99 @@ class Spacecraft(GmatObject):
         def from_dict(cls, hw: dict) -> Spacecraft.SpacecraftHardware:
             sc_hardware = cls()
 
+            # All tanks specified in the hardware dict, either directly under the ChemicalTanks or ElectricTanks keys,
+            # or indirectly under ChemicalThrusters/ElectricThrusters.Tanks.
+            tank_names: list[str] = []
+
             # parse ChemicalTanks
             cp_tanks_list: list[dict] = hw.get('ChemicalTanks', [{}])
             cp_tanks_objs = []
             for index, cp_tank in enumerate(cp_tanks_list):
                 cp_tanks_objs.append(ChemicalTank.from_dict(cp_tank))
-            sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else None
+            sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else []
+            tank_names.extend([tank.GetName() for tank in cp_tanks_objs])
 
             # parse ElectricTanks
             ep_tanks_list: list[dict] = hw.get('ElectricTanks', [{}])
             ep_tanks_objs = []
             for index, ep_tank in enumerate(ep_tanks_list):
                 ep_tanks_objs.append(ElectricTank.from_dict(ep_tank))
-            sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else None
+            sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else []
+            tank_names.extend([tank.GetName() for tank in ep_tanks_objs])
 
-            # parse ChemicalThrusters
-            cp_thrusters_list: list[dict] = hw.get('ChemicalThrusters', [{}])
-            cp_thruster_objs = []
-            for index, cp_thruster in enumerate(cp_thrusters_list):
-                cp_thruster_objs.append(ChemicalThruster.from_dict(cp_thruster))
-            sc_hardware.chem_thrusters = cp_thruster_objs if cp_thruster_objs != [None] else None
+            # The names of any tanks that were specified as connected to a Thruster but were not listed in the
+            # spacecraft dict's Tanks field. These could be under the thruster dict's Tanks or MixRatio fields.
+            tanks_to_add: dict[FuelType, list[str]] = {FuelType.chemical: [], FuelType.electric: []}
 
-            # parse ElectricThrusters
-            ep_thrusters_list: list[dict] = hw.get('ElectricThrusters', [{}])
-            ep_thruster_objs = []
-            for index, ep_thruster in enumerate(ep_thrusters_list):
-                ep_thruster_objs.append(ElectricThruster.from_dict(ep_thruster))
-            sc_hardware.elec_thrusters = ep_thruster_objs if ep_thruster_objs != [None] else None
+            def parse_thrusters(fuel_type: FuelType) -> None:
+                thrusters_list: list[dict] = hw.get(f'{fuel_type.value}Thrusters', [{}])
+                thruster_objs: list[gp.Thruster] = []
+                for thruster_dict in thrusters_list:
+                    thruster: gp.Thruster = fuel_type.thruster_from_dict(thruster_dict)
+                    thruster_objs.append(thruster)
+
+                    # The names of any tanks that were specified as connected to *this* Thruster but were not listed in
+                    # the spacecraft dict's Tanks field. These could be under the thruster dict's Tanks or MixRatio
+                    # fields.
+                    all_extra_thruster_tanks: list[str] = []
+
+                    def warning_message(field: str, variable: list[str]) -> str:
+                        return (f'While adding {fuel_type.value}Thruster "{thruster.name}" to the spacecraft, one or '
+                                f"more extra tanks were found under the thruster dict's {field} field that had not been"
+                                f" specified in the spacecraft dict's Tanks field: {variable}. These tanks will be "
+                                f"built and added to the spacecraft.")
+
+                    # Tanks listed in the thruster's dict under the Tanks key.
+                    thruster_tank_names: list[str] = [tank.GetName() for tank in thruster.tanks]
+                    extra_tanks: list[str] = [tank for tank in thruster_tank_names if tank not in tank_names]
+                    if extra_tanks:
+                        all_extra_thruster_tanks.extend(extra_tanks)
+                        logging.warning(warning_message('Tanks', extra_tanks))
+
+                    # Tanks listed in the thruster's dict under the MixRatio key.
+                    mix_ratio_dict: dict | None = thruster_dict.get('MixRatio', None)
+                    mix_ratio_tanks: list[str] = [] if mix_ratio_dict is None else list(mix_ratio_dict.keys())
+                    extra_mix_ratio_tanks: list[str] = [tank for tank in mix_ratio_tanks if tank not in tank_names]
+                    if extra_mix_ratio_tanks:
+                        all_extra_thruster_tanks.extend(extra_mix_ratio_tanks)
+                        logging.warning(warning_message('MixRatio', extra_mix_ratio_tanks))
+
+                    tank_names.extend(all_extra_thruster_tanks)
+                    tanks_to_add[fuel_type] = list(set(tanks_to_add[fuel_type] + all_extra_thruster_tanks))
+
+                if fuel_type == FuelType.chemical:
+                    thruster_objs: list[gp.ChemicalThruster]
+                    sc_hardware.chem_thrusters = thruster_objs if thruster_objs != [None] else []
+                else:
+                    thruster_objs: list[gp.ElectricThruster]
+                    sc_hardware.elec_thrusters = thruster_objs if thruster_objs != [None] else []
+
+            parse_thrusters(FuelType.chemical)
+            parse_thrusters(FuelType.electric)
+
+            tank_names = list(set(tank_names))  # Remove duplicates.
+
+            if tanks_to_add[FuelType.chemical] or tanks_to_add[FuelType.electric]:
+                logging.warning("Adding the following tanks to the spacecraft that were not listed in its dict's Tanks "
+                                "field: %s", tanks_to_add)
+                for fuel in tanks_to_add:
+                    if tanks_to_add[fuel]:
+                        if fuel == FuelType.chemical:
+                            sc_hardware.chem_tanks.extend([ChemicalTank(tank_name) for tank_name in tanks_to_add[fuel]])
+                        else:
+                            sc_hardware.elec_tanks.extend([ElectricTank(tank_name) for tank_name in tanks_to_add[fuel]])
 
             # parse solar power systems
             solar_power_systems: dict = hw.get('SolarPowerSystem', {})
             sc_hardware.solar_power_system = gp.SolarPowerSystem.from_dict(solar_power_systems)
 
-            # TODO: parse nuclear_power_system, imager
+            # FIXME: parse nuclear_power_system, imager
+            if hw.get('NuclearPowerSystem') is not None:
+                raise NotImplementedError(
+                    'Adding a NuclearPowerSystem to SpacecraftHardware from a dictionary is not yet supported.')
+            if hw.get('Imagers') is not None:
+                raise NotImplementedError(
+                    'Adding Imagers to SpacecraftHardware from a dictionary is not yet supported.')
 
             return sc_hardware
 
@@ -155,7 +212,7 @@ class Spacecraft(GmatObject):
         _allowed_fields.update(_gmat_allowed_fields,
                                ['Name', 'Orbit', 'Hardware'])
 
-        self.hardware: Spacecraft.SpacecraftHardware = self.SpacecraftHardware() if hardware is None else hardware
+        self.hardware: Spacecraft.SpacecraftHardware = hardware if hardware is not None else self.SpacecraftHardware()
 
         # TODO confirm fixed - FIXME - not being updated by from_dict()
         # Setup tanks
@@ -205,25 +262,17 @@ class Spacecraft(GmatObject):
                                 f'{type(self.hardware.elec_thrusters).__name__}')
 
         # Setup power systems
-        self.solar_power_system: SolarPowerSystem | None = None
+        self.solar_power_system: SolarPowerSystem | None = self.hardware.solar_power_system
         if self.hardware.solar_power_system is not None:
-            if isinstance(self.hardware.solar_power_system, SolarPowerSystem):
-                self.solar_power_system = self.hardware.solar_power_system
-                self.solar_power_system.attach_to_sat(self)
-            else:
-                # self.hardware.solar_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.solar_power_system should be a SolarPowerSystem but was '
-                                f'{type(self.hardware.solar_power_system).__name__}')
+            assert isinstance(self.solar_power_system,
+                              SolarPowerSystem), f'self.hardware.solar_power_system must be a SolarPowerSystem but was a {type(self.hardware.solar_power_system).__name__}.'
+            self.solar_power_system.attach_to_sat(self)
 
-        self.nuclear_power_system: NuclearPowerSystem | None = None
-        if self.hardware.nuclear_power_system is not None:
-            if isinstance(self.hardware.nuclear_power_system, NuclearPowerSystem):
-                self.nuclear_power_system = self.hardware.nuclear_power_system
-                self.nuclear_power_system.attach_to_sat(self)
-            else:
-                # self.hardware.nuclear_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.nuclear_power_system should be a NuclearPowerSystem but was '
-                                f'{type(self.hardware.nuclear_power_system).__name__}')
+        self.nuclear_power_system: NuclearPowerSystem | None = self.hardware.nuclear_power_system
+        if self.nuclear_power_system is not None:
+            assert isinstance(self.nuclear_power_system,
+                              gp.NuclearPowerSystem), f'self.hardware.nuclear_power_system must be a NuclearPowerSystem but was a {type(self.hardware.nuclear_power_system).__name__}.'
+            self.nuclear_power_system.attach_to_sat(self)
 
         # Setup imagers
         self.imagers: list[Imager] = []
@@ -265,11 +314,11 @@ class Spacecraft(GmatObject):
             hardware = specs['Hardware']
             specs.pop('Hardware')
         except KeyError:
-            logging.info('No hardware parameters specified in Spacecraft dictionary - none will be built')
+            logging.warning('No hardware parameters specified in Spacecraft dictionary - none will be built')
             hardware = {}
 
         hardware_obj = Spacecraft.SpacecraftHardware.from_dict(hardware)  # build wrapper Hardware object from specs
-        sc.hardware = sc.update_hardware(hardware_obj)  # apply the new Hardware object to the spacecraft
+        sc.hardware = sc._update_hardware(hardware_obj)  # apply the new Hardware object to the spacecraft
 
         # use any Orbit params specified in the specs dictionary
         try:
@@ -300,20 +349,17 @@ class Spacecraft(GmatObject):
         self.gmat_obj = gmat.GetRuntimeObject(self._name)
         self.was_propagated = True
 
-    def update_hardware(self, hardware: SpacecraftHardware):
-        self.hardware = hardware
+    def _update_hardware(self, hardware: SpacecraftHardware):
+        self.hardware: Spacecraft.SpacecraftHardware = hardware
 
         # Attach thrusters and tanks to the Spacecraft
-        if self.hardware.chem_thrusters is not None:
+        if self.hardware.chem_thrusters:
             for thruster in self.hardware.chem_thrusters:
-                # if not thruster:
-                #     raise RuntimeError(f"No chemical thrusters found, chemical thruster list is: "
-                #                        f"{self.chem_thrusters}\n{self.hardware.chem_thrusters}")
                 if thruster is not None:
                     thruster.attach_to_sat(self)
                     thruster.attach_to_tanks(thruster.tanks)
 
-        if self.hardware.elec_thrusters is not None:
+        if self.hardware.elec_thrusters:
             for thruster in self.hardware.elec_thrusters:
                 # if not thruster:
                 #     raise RuntimeError(f"No electric thrusters found, electric thruster list is:
@@ -322,12 +368,12 @@ class Spacecraft(GmatObject):
                     thruster.attach_to_sat(self)
                     thruster.attach_to_tanks(thruster.tanks)
 
-        if self.hardware.chem_tanks is not None:
+        if self.hardware.chem_tanks:
             for tank in self.hardware.chem_tanks:
                 if tank is not None:
                     tank.attach_to_sat(self)
 
-        if self.hardware.elec_tanks is not None:
+        if self.hardware.elec_tanks:
             for tank in self.hardware.elec_tanks:
                 if tank is not None:
                     tank.attach_to_sat(self)
@@ -340,17 +386,14 @@ class Spacecraft(GmatObject):
 
         self.solar_power_system = self.hardware.solar_power_system
         if self.solar_power_system is not None:
-            self.hardware.solar_power_system.attach_to_sat(self)
+            self.solar_power_system.attach_to_sat(self)
 
         return self.hardware
-
-    def update_orbit(self, orbit: OrbitState):
-        self.orbit = orbit
-        pass
 
     # TODO re-implement optional coord_sys argument that specifies a coord system that the state will be expressed in
     #  (e.g. MarsInertial for Tut04_Mars_B-Plane_Targeting.py)
     def GetState(self, state_type: str = 'Current') -> list[float]:
+        # TODO align with API User's Guide for best practice on how to get state.
         # Get latest data (e.g. from mission run)
         up_to_date_obj = self.GetObject()
 
@@ -361,7 +404,7 @@ class Spacecraft(GmatObject):
                                      f'{[state for state in allowed_state_types]}')
             up_to_date_obj.SetField('DisplayStateType', state_type)
 
-        state: list[float | None] = [None] * 6
+        state: list = [None] * 6
         for i in range(13, 19):
             state[i - 13] = float(up_to_date_obj.GetField(i))  # int field refs used to be state type agnostic
 
@@ -470,6 +513,38 @@ class PressureModel(Enum):
     BlowDown = 'BlowDown'
 
 
+class FuelType(Enum):
+    chemical = 'Chemical'
+    electric = 'Electric'
+
+    def __repr__(self) -> str:
+        return f'{type(self).__name__}.{self._name_}'
+
+    @property
+    def tank(self) -> str:
+        return f'{self.value}Tank'
+
+    @property
+    def tank_builder(self) -> Callable:
+        return ChemicalTank if self == FuelType.chemical else ElectricTank
+
+    @property
+    def tank_from_dict(self) -> Callable:
+        return ChemicalTank.from_dict if self == FuelType.chemical else ElectricTank.from_dict
+
+    @property
+    def thruster(self) -> str:
+        return f'{self.value}Thruster'
+
+    @property
+    def thruster_builder(self) -> Callable:
+        return ChemicalThruster if self == FuelType.chemical else ElectricThruster
+
+    @property
+    def thruster_from_dict(self) -> Callable:
+        return ChemicalThruster.from_dict if self == FuelType.chemical else ElectricThruster.from_dict
+
+
 class FuelTank(GmatObject, Generic[T]):
     def __init__(self, tank_type: str, name: str, fuel_mass: float = 756, allow_negative_fuel_mass: bool = False,
                  fuel_centre_of_mass: np.ndarray = np.array([0, 0, 0]),
@@ -513,7 +588,7 @@ class FuelTank(GmatObject, Generic[T]):
            FuelDensity                             Real   1260
            PressureModel                           List   PressureRegulated
         """
-        assert (tank_type == 'ChemicalTank') or (tank_type == 'ElectricTank')  # Confirm tank_type is valid.
+        assert tank_type in ['ChemicalTank', 'ElectricTank']  # Confirm tank_type is valid.
         super().__init__(tank_type, name)
         self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
         self.name = name
@@ -582,9 +657,9 @@ class FuelTank(GmatObject, Generic[T]):
     @staticmethod
     def _from_dict(tank_type: type, tank_dict: dict[str, Union[str, int, float]]) -> T:
         if tank_type == gp.ChemicalTank:
-            tank = ChemicalTank(str(tank_dict['Name']))
+            tank: gp.ChemicalTank = gp.ChemicalTank(str(tank_dict['Name']))
         elif tank_type == gp.ElectricTank:
-            tank = ElectricTank(str(tank_dict['Name']))
+            tank: gp.ElectricTank = gp.ElectricTank(str(tank_dict['Name']))
         else:
             raise SyntaxError(f'Invalid thr_type found in Tank.from_dict: {tank_type}'
                               f"\nMust be 'Chemical' or 'Electric'")
@@ -605,6 +680,7 @@ class FuelTank(GmatObject, Generic[T]):
 
     def attach_to_sat(self, sat: Spacecraft):
         self.spacecraft = sat
+        assert self.spacecraft is not None
         self.spacecraft.add_tanks([gp.extract_gmat_obj(self)])
 
     def _DepleteFuel(self, delta_m: float) -> None:
@@ -835,32 +911,52 @@ class ElectricTank(FuelTank):
 
 
 class Thruster(GmatObject):
-    def __init__(self, fuel_type: str, name: str, tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] |
-                                                         list[gmat.FuelTank],
-                 mix_ratio: int | float | list[int | float] = None):
+    def __init__(self, fuel_type: FuelType, name: str,
+                 tanks: gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
+                 mix_ratio: dict[gp.FuelTank, int | float] = None):
+        assert isinstance(tanks, (gp.FuelTank, gmat.FuelTank,
+                                  list)), ('tanks must be a gp.FuelTank, gmat.FuelTank, list[gp.FuelTank] or '
+                                           'list[gmat.FuelTank].')
+
         self.fuel_type = fuel_type
-        self.thruster_type: str = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
+        self.thruster_type: str = f'{self.fuel_type.value}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
         super().__init__(self.thruster_type, name)
 
         self.spacecraft: gp.Spacecraft | None = None
 
-        self.tanks: list[ChemicalTank | ElectricTank] | None = tanks
-        self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
-        if isinstance(self.tanks, str | gp.FuelTank | gmat.FuelTank):
-            if mix_ratio is not None and self.mix_ratio != 1:
-                raise AttributeError(f'Invalid mix_ratio {self.mix_ratio} given for a single tank')
-            self.mix_ratio = [1]
-            self.SetField('MixRatio', self.mix_ratio)
-            if isinstance(self.tanks, str):
-                self.SetField('Tank', self.tanks)
-            elif isinstance(self.tanks, gp.FuelTank | gmat.Tank):
-                self.SetField('Tank', self.tanks.GetName())
-        elif isinstance(self.tanks, list):
-            if mix_ratio is None:
-                raise AttributeError('mix_ratio must be given if multiple tanks have been given')
-            else:
-                tank_names = [tank.GetName() for tank in self.tanks]
-                self.SetField('Tank', tank_names)
+        self.tanks: list[FuelTank] = []
+        self.mix_ratio: dict[FuelTank, int | float] = mix_ratio if mix_ratio is not None else {}
+        # True if tanks only specifies a single tank to connect to the thruster.
+        one_tank: bool = (isinstance(tanks, gp.FuelTank) or isinstance(tanks, gmat.FuelTank) or
+                          (isinstance(tanks, list) and len(tanks) == 1))
+
+        # # TODO make mix_ratio optional by following GMAT's internal philosophy (from User Guide pg. 335):
+        # # "if a MixRatio is not supplied, fuel is drawn from tanks in equal amounts, (the MixRatio is set to a vector
+        # # of ones the same length as the Tank list)".
+        if mix_ratio is not None:
+            assert len(mix_ratio) == len(tanks), (f'If a mix_ratio dict is provided, it must have the same length as '
+                                                  f'the tanks list, but tanks has length {len(tanks)} and mix_ratio has'
+                                                  f' length {len(mix_ratio)}.')
+
+        if one_tank:
+            tank = tanks[0] if isinstance(tanks, list) else tanks
+            self.tanks: list[gp.FuelTank] = [tank]
+            if mix_ratio is not None and mix_ratio != 1:
+                raise AttributeError(f'Invalid mix_ratio {mix_ratio} given for a single tank.')
+            all_from_one: int = 1
+            self.mix_ratio = {tank: all_from_one}
+            self.SetField('MixRatio', [all_from_one])
+            self.SetField('Tank', tank.GetName())
+        # Multiple tanks
+        else:
+            assert mix_ratio is not None, 'mix_ratio must be given if multiple tanks have been given.'
+            assert isinstance(tanks, list)
+            assert len(mix_ratio) == len(tanks)
+
+            self.tanks: list[FuelTank] = tanks
+            tank_names = [tank.GetName() for tank in self.tanks]
+            self.SetField('Tank', ', '.join(tank_names))
+            self.SetField('MixRatio', list(mix_ratio.values()))
 
         self._decrement_mass = self.decrement_mass
 
@@ -870,16 +966,31 @@ class Thruster(GmatObject):
         return f'A {self.thruster_type} with name {self.name}'
 
     @staticmethod
-    def from_dict(fuel_type: str, thr_dict: dict[str, Union[str, int, float]]):
-        name = thr_dict.get('Name')
-        tanks = thr_dict.get('Tanks')
-        if fuel_type == 'Chemical':
-            thr = ChemicalThruster(name, tanks)
-        elif fuel_type == 'Electric':
-            thr = ElectricThruster(thr_dict['Name'], tanks)
+    def from_dict(fuel_type: FuelType, thr_dict: dict) -> ChemicalThruster | ElectricThruster:
+        name: str = str(thr_dict['Name'])
+        tanks: str | list = thr_dict['Tanks']
+
+        # One tank specified.
+        if isinstance(tanks, str):
+            tank_name: str = tanks
+            tanks = [fuel_type.tank_builder(tank_name)]
+            thr = fuel_type.thruster_builder(name, tanks)
+        # Multiple tanks specified.
+        elif isinstance(tanks, list):
+            # FIXME confirm implementation of Thruster.from_dict() for multiple tanks.
+            tanks: list[gp.FuelTank] = [fuel_type.tank_builder(tank_name) for tank_name in tanks]
+            try:
+                mix_ratio: dict[str, int | float] = thr_dict['MixRatio']
+            except KeyError:
+                raise AttributeError(
+                    f'As multiple tanks have been specified for thruster {name}, the thruster dictionary must contain a '
+                    f'"MixRatio" entry describing how the thruster draws fuel from the connected tanks.')
+            mix_ratio: dict[gp.FuelTank, int | float] = {
+                tank: mix_ratio[tank.GetName()] for tank in tanks
+            }
+            thr = fuel_type.thruster_builder(name, tanks, mix_ratio)
         else:
-            raise SyntaxError(f'Invalid fuel_type found in Thruster.from_dict: {fuel_type}.'
-                              f"\nMust be 'Chemical' or 'Electric'")
+            raise AttributeError('tanks must be a str or list of strings.')
 
         fields: list[str] = list(thr_dict.keys())
         fields.remove('Name')
@@ -898,11 +1009,12 @@ class Thruster(GmatObject):
         return thr
 
     def attach_to_sat(self, sat: Spacecraft):
-        self.spacecraft = sat
+        self.spacecraft: Spacecraft = sat
+        assert self.spacecraft is not None
         self.spacecraft.add_thrusters([self.gmat_obj])
 
-    def attach_to_tanks(self, tanks: list[ChemicalTank | ElectricTank]):
-        gp.extract_gmat_obj(self).SetField('Tank', tanks)
+    def attach_to_tanks(self, tanks: list[FuelTank]):
+        gp.extract_gmat_obj(self).SetField('Tank', [tank.GetName() for tank in tanks])
 
     @property
     def decrement_mass(self):
@@ -925,36 +1037,42 @@ class Thruster(GmatObject):
 
 class ChemicalThruster(Thruster):
     def __init__(self, name: str, tanks: str | gp.ChemicalTank | gmat.ChemicalTank |
-                                         list[gp.ChemicalTank] | list[gmat.ChemicalTank]):
-        super().__init__('Chemical', name, tanks)
+                                         list[gp.ChemicalTank] | list[gmat.ChemicalTank],
+                 mix_ratio: dict[gp.ChemicalTank, int | float] = None):
+        if isinstance(tanks, str):
+            tanks: ChemicalTank = ChemicalTank(tanks)
+        super().__init__(FuelType.chemical, name, tanks, mix_ratio)
 
         self.Validate()
         self.Initialize()
 
     @classmethod
-    def from_dict(cls, cp_thr_dict: dict) -> gp.ChemicalThruster | None:
-        if cp_thr_dict != {}:
-            cp_thr: ChemicalThruster = Thruster.from_dict('Chemical', cp_thr_dict)
-            cp_thr.Validate()
-            return cp_thr
-        else:
-            return None
+    def from_dict(cls, cp_thr_dict: dict) -> gp.ChemicalThruster:
+        if cp_thr_dict == {}:
+            raise AttributeError('ChemicalThruster.from_dict() was passed an empty dict.')
+
+        cp_thr: gp.Thruster = Thruster.from_dict(FuelType.chemical, cp_thr_dict)
+        assert isinstance(cp_thr, gp.ChemicalThruster)
+        cp_thr.Validate()
+        return cp_thr
 
 
 class ElectricThruster(Thruster):
     def __init__(self, name: str, tanks: str | gp.ElectricTank | gmat.ElectricTank |
-                                         list[gp.ElectricTank] | list[gmat.ElectricTank]):
-        super().__init__('Electric', name, tanks)
+                                         list[gp.ElectricTank] | list[gmat.ElectricTank],
+                 mix_ratio: dict[gp.ElectricTank, int | float] = None):
+        super().__init__(FuelType.electric, name, tanks, mix_ratio)
         self.Initialize()
 
     @classmethod
-    def from_dict(cls, ep_thr_dict: dict) -> gp.ElectricThruster | None:
-        if ep_thr_dict != {}:
-            ep_thr = Thruster.from_dict('Electric', ep_thr_dict)
-            ep_thr.Validate()
-            return ep_thr
-        else:
-            return None
+    def from_dict(cls, ep_thr_dict: dict) -> gp.ElectricThruster:
+        if ep_thr_dict == {}:
+            raise AttributeError('ElectricThruster.from_dict() was passed an empty dict.')
+
+        ep_thr: gp.Thruster = Thruster.from_dict(FuelType.electric, ep_thr_dict)
+        assert isinstance(ep_thr, gp.ElectricThruster)
+        ep_thr.Validate()
+        return ep_thr
 
     # @property
     # def mix_ratio(self):

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+from gmatpyplus import gmat
 from gmatpyplus.basics import GmatObject
 from gmatpyplus.utils import *
 
@@ -97,7 +100,7 @@ class ForceModel(GmatObject):
                  error_control: list = None, user_defined: list[str] = None):
         super().__init__('ForceModel', name)
 
-        def validate_point_masses(pm) -> list[ForceModel.PointMassForce]:
+        def _validate_point_masses() -> list[ForceModel.PointMassForce]:
             celestial_bodies = CelestialBodies()
 
             # point_masses is a single string
@@ -151,7 +154,7 @@ class ForceModel(GmatObject):
         self.gravity = gravity_field
 
         # TODO replace below with creation of GravityFields
-        #  PrimaryBodies is alias for GravityFields as per page 162 of GMAT Architectucral Specification
+        #  PrimaryBodies is alias for GravityFields as per page 162 of GMAT Architectural Specification
         # self.gravity = None
         # if primary_bodies is not None:
         #     if isinstance(primary_bodies, str):
@@ -173,7 +176,7 @@ class ForceModel(GmatObject):
         #     self.Help()
 
         # TODO don't setup gravity field if none specified - breaks interplanetary where grav field irrelevant
-        self.primary_body: str = primary_body
+        self.primary_body: str | None = primary_body
         if self.primary_body is None:  # self.primary_body is None
             self.gravity = gravity_field
             if gravity_field is not None:
@@ -204,9 +207,9 @@ class ForceModel(GmatObject):
 
         self._polyhedral_bodies = polyhedral_bodies
 
-        self.point_mass_forces: list[ForceModel.PointMassForce] | None = None
+        self.point_mass_forces: list[ForceModel.PointMassForce] = []
         if point_masses is not None:
-            self.point_mass_forces = validate_point_masses(point_masses)  # raises exception if point_masses invalid
+            self.point_mass_forces = _validate_point_masses()  # raises exception if point_masses invalid
             for force in self.point_mass_forces:
                 self.AddForce(force)
 
@@ -274,12 +277,15 @@ class ForceModel(GmatObject):
                      cssi_space_weather_file: str = 'SpaceWeather-All-v1.2.txt',
                      schatten_file: str = 'SchattenPredict.txt', schatten_error_model: str = 'Nominal',
                      schatten_timing_model: str = 'NominalCycle',
-                     density_model='Only used if atmo_model is MarsGRAM2005', input_file=None):
+                     density_model='Only used if atmo_model is MarsGRAM2005', input_file: Path = None):
             # TODO remove unused args once moved to AtmosphereModel()
 
             super().__init__('DragForce', name)
 
             self.primary_body: str = fm.central_body if fm else 'Earth'
+
+            self.input_file: Path | None = input_file
+
             # TODO: move to AtmosphereModel as appropriate
             self.allowed_values = {'models': {'Earth': ['JacchiaRoberts', 'MSISE86', 'MSISE90', 'NRLMSISE00'],
                                               'Mars': 'MarsGRAM2005'},
@@ -292,10 +298,10 @@ class ForceModel(GmatObject):
             allowed_models = self.allowed_values['models'][self.primary_body]
             if atmo_model not in allowed_models:
                 raise AttributeError(f'model parameter must be one of the following: {allowed_models}')
-            else:
-                self.atmosphere_model = AtmosphereModel(atmo_model=atmo_model)
-                self.SetReference(self.atmosphere_model)
-                self.SetField('AtmosphereModel', self.atmosphere_model.atmo_model)
+
+            self.atmosphere_model = AtmosphereModel(atmo_model=atmo_model)
+            self.SetReference(self.atmosphere_model)
+            self.SetField('AtmosphereModel', self.atmosphere_model.atmo_model)
 
             if self.atmosphere_model == 'MarsGRAM2005':
                 if density_model != 'Only used if atmo_model is MarsGRAM2005':
@@ -307,8 +313,9 @@ class ForceModel(GmatObject):
                     self.density_model = 'Mean'  # default density model
                 self.SetField('DensityModel', self.density_model)
 
-                self.input_file = input_file
-                self.SetField('InputFile', self.input_file)
+                self.input_file: Path = input_file
+                assert self.input_file is not None
+                self.SetField('InputFile', str(self.input_file.resolve()))
             elif self.atmosphere_model:
                 self.density_model = None
                 self.input_file = None
@@ -412,10 +419,10 @@ class ForceModel(GmatObject):
         def __init__(self, name: str = 'PMF', body: str = None):
             super().__init__('PointMassForce', name)
             if body:
-                self.primary_body = body
+                self.primary_body: str = body
             else:
-                self.primary_body = 'Earth'
-            self.SetField('BodyName', body)
+                self.primary_body: str = 'Earth'
+            self.SetField('BodyName', self.primary_body)
 
     class SolarRadiationPressure(PhysicalModel):
         def __init__(self, fm: ForceModel = None, name: str = 'SRP', model: str = 'Spherical', flux: float | int = 1367,
@@ -537,13 +544,11 @@ class OrbitState:
                 self.Initialize()
 
         def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str = None,
-                     secondary: str = None, xaxis: str = None, yaxis: str = None, zaxis: str = None, epoch: str = None,
-                     alignment_vec_x: int = None, alignment_vec_y: int = None, alignment_vec_z: int = None,
-                     constraint_vec_x: int = None, constraint_vec_y: int = None, constraint_vec_z: int = None,
-                     constraint_ref_vec_x: int = None, constraint_ref_vec_y: int = None,
-                     constraint_ref_vec_z: int = None,
-                     constraint_coord_sys: str = None, ref_object: str = None
-                     ):
+                     secondary: str = None, x_axis: str = None, y_axis: str = None, z_axis: str = None,
+                     epoch: str = None, alignment_vec_x: int = None, alignment_vec_y: int = None,
+                     alignment_vec_z: int = None, constraint_vec_x: int = None, constraint_vec_y: int = None,
+                     constraint_vec_z: int = None, constraint_ref_vec_x: int = None, constraint_ref_vec_y: int = None,
+                     constraint_ref_vec_z: int = None, constraint_coord_sys: str = None, ref_object: str = None):
             # TODO: remove kwargs if possible, if not document as another 2do
             # TODO complete allowed values - see User Guide pages 335-339 (PDF pg 344-348)
             #  and src/base/coordsystem/CoordinateSystem.cpp/CreateLocalCoordinateSystem
@@ -590,14 +595,12 @@ class OrbitState:
                                    }
 
             # Parse origin argument
-            if origin not in self.allowed_values['Origin']:
-                raise AttributeError(f'Specified origin "{origin}" is not recognized. Please specify one of the '
-                                     f'following:\n\t{self.allowed_values["Origin"]}')
-            else:
-                self.origin = gmat.GetObject(origin)  # get current (default) origin
-                # attach new origin to CoordinateSystem
-                self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
-                self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
+            assert origin in self.allowed_values[
+                'Origin'], f'Specified origin "{origin}" is not recognized. Please specify one of the following:\n\t{self.allowed_values["Origin"]}'
+            self.origin: gmat.SpacePoint = gmat.GetObject(origin)  # get current (default) origin
+            # attach new origin to CoordinateSystem
+            self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
+            self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
 
             # Parse axes argument
             if axes not in self.allowed_values['Axes']:
@@ -611,9 +614,9 @@ class OrbitState:
                     if axes == 'ObjectReferenced':
                         self.primary = primary
                         self.secondary = secondary
-                        self.xaxis = xaxis
-                        self.yaxis = yaxis
-                        self.zaxis = zaxis
+                        self.x_axis = x_axis
+                        self.y_axis = y_axis
+                        self.z_axis = z_axis
 
                     elif (axes == 'TOE') or (axes == 'MOE'):
                         self.epoch = epoch
