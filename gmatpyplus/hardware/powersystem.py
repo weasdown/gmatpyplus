@@ -12,7 +12,7 @@ class PowerSystem(Hardware):
     pass
 
 
-class NuclearPowerSystem(gp.GmatObject):
+class NuclearPowerSystem(PowerSystem):
     def __init__(self, name: str):
         super().__init__('NuclearPowerSystem', name)
 
@@ -53,7 +53,7 @@ class NuclearPowerSystem(gp.GmatObject):
         return nps
 
 
-class SolarPowerSystem(gp.GmatObject):
+class SolarPowerSystem(PowerSystem):
     def __init__(self, name: str):
         super().__init__('SolarPowerSystem', name)
 
