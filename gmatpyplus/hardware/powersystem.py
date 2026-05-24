@@ -27,7 +27,7 @@ class NuclearPowerSystem(gp.GmatObject):
     def attach_to_sat(self, sat: gp.Spacecraft | gmat.Spacecraft) -> bool:
         self.spacecraft = sat
         if sat.GetField('PowerSystem') == '':
-            self.spacecraft.add_nps(self)
+            return self.spacecraft.add_nps(self)
         else:
             return False
 
@@ -68,10 +68,9 @@ class SolarPowerSystem(gp.GmatObject):
     def attach_to_sat(self, sat: gp.Spacecraft | gmat.Spacecraft):
         self.spacecraft = sat
         if sat.GetField('PowerSystem') == '':
-            self.spacecraft.add_sps(self)
+            return self.spacecraft.add_sps(self)
         else:
             return False
-        pass
 
     @staticmethod
     def from_dict(sps_dict: dict[str, Union[str, int, float]]):
