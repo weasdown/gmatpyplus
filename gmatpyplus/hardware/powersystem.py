@@ -74,10 +74,13 @@ class SolarPowerSystem(gp.GmatObject):
 
     @staticmethod
     def from_dict(sps_dict: dict[str, Union[str, int, float]]):
-        if sps_dict == {}:
-            return
+        specs = sps_dict.copy()  # take a copy of the dictionary to avoid editing the original
+        try:
+            name: str = str(specs.get('Name', 'DefaultSolarPowerSystem'))
+            specs.pop('Name')
+        except KeyError:
+            raise SyntaxError('SolarPowerSystem name required')
 
-        name: str = str(sps_dict.get('Name', 'DefaultSolarPowerSystem'))
         sps = SolarPowerSystem(name)
 
         fields: list[str] = list(sps_dict.keys())
