@@ -1,21 +1,11 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic
 import logging
-from enum import Enum
-from typing import Union
-
-import numpy as np
 
 import gmatpyplus as gp
-from gmatpyplus import gmat
-from gmatpyplus.basics import GmatObject
-from gmatpyplus.hardware import Imager, HardwareException, NuclearPowerSystem, SolarPowerSystem
-from gmatpyplus.orbit import OrbitState
-from gmatpyplus.utils import (gmat_str_to_py_str, gmat_field_string_to_list,
-                              list_to_gmat_field_string, rvector6_to_list)
-
-T = TypeVar('T')
+from basics import GmatObject
+from gmatpyplus import utils as u
+from orbit import OrbitState
 
 
 class Spacecraft(GmatObject):
@@ -51,12 +41,12 @@ class Spacecraft(GmatObject):
             self.chem_thrusters: list[gp.ChemicalThruster] = chem_thrusters if chem_thrusters is not None else []
             self.elec_thrusters: list[gp.ElectricThruster] = elec_thrusters if elec_thrusters is not None else []
 
-            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None\
+            self.solar_power_system: gp.SolarPowerSystem | None = None if solar_power_system is None \
                 else solar_power_system
-            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None\
+            self.nuclear_power_system: gp.NuclearPowerSystem | None = None if nuclear_power_system is None \
                 else nuclear_power_system
 
-            self.imagers: list[Imager] = imagers if imagers is not None else []
+            self.imagers: list[gp.Imager] = imagers if imagers is not None else []
 
         def __repr__(self):
             return (f'{type(self).__name__} object with the following parameters:'
@@ -77,28 +67,28 @@ class Spacecraft(GmatObject):
             cp_tanks_list: list[dict] = hw.get('ChemicalTanks', [{}])
             cp_tanks_objs = []
             for index, cp_tank in enumerate(cp_tanks_list):
-                cp_tanks_objs.append(ChemicalTank.from_dict(cp_tank))
+                cp_tanks_objs.append(gp.ChemicalTank.from_dict(cp_tank))
             sc_hardware.chem_tanks = cp_tanks_objs if cp_tanks_objs != [None] else None
 
             # parse ElectricTanks
             ep_tanks_list: list[dict] = hw.get('ElectricTanks', [{}])
             ep_tanks_objs = []
             for index, ep_tank in enumerate(ep_tanks_list):
-                ep_tanks_objs.append(ElectricTank.from_dict(ep_tank))
+                ep_tanks_objs.append(gp.ElectricTank.from_dict(ep_tank))
             sc_hardware.elec_tanks = ep_tanks_objs if ep_tanks_objs != [None] else None
 
             # parse ChemicalThrusters
             cp_thrusters_list: list[dict] = hw.get('ChemicalThrusters', [{}])
             cp_thruster_objs = []
             for index, cp_thruster in enumerate(cp_thrusters_list):
-                cp_thruster_objs.append(ChemicalThruster.from_dict(cp_thruster))
+                cp_thruster_objs.append(gp.ChemicalThruster.from_dict(cp_thruster))
             sc_hardware.chem_thrusters = cp_thruster_objs if cp_thruster_objs != [None] else None
 
             # parse ElectricThrusters
             ep_thrusters_list: list[dict] = hw.get('ElectricThrusters', [{}])
             ep_thruster_objs = []
             for index, ep_thruster in enumerate(ep_thrusters_list):
-                ep_thruster_objs.append(ElectricThruster.from_dict(ep_thruster))
+                ep_thruster_objs.append(gp.ElectricThruster.from_dict(ep_thruster))
             sc_hardware.elec_thrusters = ep_thruster_objs if ep_thruster_objs != [None] else None
 
             # parse solar power systems
@@ -159,7 +149,7 @@ class Spacecraft(GmatObject):
 
         # TODO confirm fixed - FIXME - not being updated by from_dict()
         # Setup tanks
-        self.chem_tanks: list[ChemicalTank] = []
+        self.chem_tanks: list[gp.ChemicalTank] = []
         if self.hardware.chem_tanks:
             if isinstance(self.hardware.chem_tanks, list):
                 for tank in self.hardware.chem_tanks:
@@ -167,10 +157,10 @@ class Spacecraft(GmatObject):
                     tank.attach_to_sat(self)
             else:
                 # self.hardware.chem_tanks is of an inappropriate type.
-                raise TypeError(f'self.hardware.chem_tanks should be a list[ChemicalTank] but was '
+                raise TypeError(f'self.hardware.chem_tanks should be a list[gp.ChemicalTank] but was '
                                 f'{type(self.hardware.chem_tanks).__name__}')
 
-        self.elec_tanks: list[ElectricTank] = []
+        self.elec_tanks: list[gp.ElectricTank] = []
         if self.hardware.elec_tanks:
             if isinstance(self.hardware.elec_tanks, list):
                 for tank in self.hardware.elec_tanks:
@@ -178,11 +168,11 @@ class Spacecraft(GmatObject):
                     tank.attach_to_sat(self)
             else:
                 # self.hardware.elec_tanks is of an inappropriate type.
-                raise TypeError(f'self.hardware.elec_tanks should be a list[ElectricTank] but was '
+                raise TypeError(f'self.hardware.elec_tanks should be a list[gp.ElectricTank] but was '
                                 f'{type(self.hardware.elec_tanks).__name__}')
 
         # Setup thrusters
-        self.chem_thrusters: list[ChemicalThruster] = []
+        self.chem_thrusters: list[gp.ChemicalThruster] = []
         if self.hardware.chem_thrusters:
             if isinstance(self.hardware.chem_thrusters, list):
                 for thruster in self.hardware.chem_thrusters:
@@ -193,7 +183,7 @@ class Spacecraft(GmatObject):
                 raise TypeError(f'self.hardware.chem_thrusters should be a list[ChemicalThruster] but was '
                                 f'{type(self.hardware.chem_thrusters).__name__}')
 
-        self.elec_thrusters: list[ElectricThruster] = []
+        self.elec_thrusters: list[gp.ElectricThruster] = []
         if self.hardware.elec_thrusters:
             if isinstance(self.hardware.elec_thrusters, list):
                 for thruster in self.hardware.elec_thrusters:
@@ -205,28 +195,28 @@ class Spacecraft(GmatObject):
                                 f'{type(self.hardware.elec_thrusters).__name__}')
 
         # Setup power systems
-        self.solar_power_system: SolarPowerSystem | None = None
+        self.solar_power_system: gp.SolarPowerSystem | None = None
         if self.hardware.solar_power_system is not None:
-            if isinstance(self.hardware.solar_power_system, SolarPowerSystem):
+            if isinstance(self.hardware.solar_power_system, gp.SolarPowerSystem):
                 self.solar_power_system = self.hardware.solar_power_system
                 self.solar_power_system.attach_to_sat(self)
             else:
                 # self.hardware.solar_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.solar_power_system should be a SolarPowerSystem but was '
+                raise TypeError(f'self.hardware.solar_power_system should be a gp.SolarPowerSystem but was '
                                 f'{type(self.hardware.solar_power_system).__name__}')
 
-        self.nuclear_power_system: NuclearPowerSystem | None = None
+        self.nuclear_power_system: gp.NuclearPowerSystem | None = None
         if self.hardware.nuclear_power_system is not None:
-            if isinstance(self.hardware.nuclear_power_system, NuclearPowerSystem):
+            if isinstance(self.hardware.nuclear_power_system, gp.NuclearPowerSystem):
                 self.nuclear_power_system = self.hardware.nuclear_power_system
                 self.nuclear_power_system.attach_to_sat(self)
             else:
                 # self.hardware.nuclear_power_system is of an inappropriate type.
-                raise TypeError(f'self.hardware.nuclear_power_system should be a NuclearPowerSystem but was '
+                raise TypeError(f'self.hardware.nuclear_power_system should be a gp.NuclearPowerSystem but was '
                                 f'{type(self.hardware.nuclear_power_system).__name__}')
 
         # Setup imagers
-        self.imagers: list[Imager] = []
+        self.imagers: list[gp.Imager] = []
         if self.hardware.imagers is not None:
             if isinstance(self.hardware.imagers, list):
                 for imager in self.hardware.imagers:
@@ -234,7 +224,7 @@ class Spacecraft(GmatObject):
                     imager.attach_to_sat(self)
             else:
                 # self.hardware.imagers is of an inappropriate type.
-                raise TypeError(f'self.hardware.imagers should be a list[Imager] but was '
+                raise TypeError(f'self.hardware.imagers should be a list[gp.Imager] but was '
                                 f'{type(self.hardware.imagers).__name__}')
 
         self.orbit = None
@@ -287,7 +277,7 @@ class Spacecraft(GmatObject):
 
         # Apply remaining specs
         for spec in specs:
-            attr_name = gmat_str_to_py_str(spec, True)
+            attr_name = u.gmat_str_to_py_str(spec, True)
             setattr(sc, attr_name, specs[spec])
             sc.SetField(spec, specs[spec])
 
@@ -297,7 +287,7 @@ class Spacecraft(GmatObject):
         return sc
 
     def update_from_runtime_object(self):
-        self.gmat_obj = gmat.GetRuntimeObject(self._name)
+        self.gmat_obj = gp.gmat.GetRuntimeObject(self._name)
         self.was_propagated = True
 
     def update_hardware(self, hardware: SpacecraftHardware):
@@ -368,13 +358,13 @@ class Spacecraft(GmatObject):
         return state
 
     def GetKeplerianState(self):
-        return rvector6_to_list(self.gmat_obj.GetKeplerianState())
+        return u.rvector6_to_list(self.gmat_obj.GetKeplerianState())
 
     def GetCartesianState(self):
-        return rvector6_to_list(self.gmat_obj.GetCartesianState())
+        return u.rvector6_to_list(self.gmat_obj.GetCartesianState())
 
-    def GetCoordinateSystem(self) -> gp.OrbitState.CoordinateSystem:
-        return gp.OrbitState.CoordinateSystem.from_sat(self)
+    def GetCoordinateSystem(self) -> gp.spacecraft.OrbitState.CoordinateSystem:
+        return gp.spacecraft.OrbitState.CoordinateSystem.from_sat(self)
 
     @property
     def ChemicalThrusters(self):
@@ -404,12 +394,12 @@ class Spacecraft(GmatObject):
         :return:
         """
         current_tanks_value: str = self.GetField('Tanks')
-        current_tanks_list: list = gmat_field_string_to_list(current_tanks_value)
+        current_tanks_list: list = u.gmat_field_string_to_list(current_tanks_value)
 
         # Add tanks by getting name of each tank, adding it to a list, then attaching this list to end of existing one
         if isinstance(tanks, str):
             current_tanks_list = [tanks]
-            tank = gmat.GetObject(tanks)
+            tank = gp.gmat.GetObject(tanks)
             self.SetStringParameter(104, tank.GetName())  # 104 for sat's ADD_HARDWARE
             current_tanks_list.extend(tank.GetName())
         elif isinstance(tanks, gp.FuelTank):
@@ -421,18 +411,18 @@ class Spacecraft(GmatObject):
                 current_tanks_list.extend(tanks_to_set)
                 self.SetStringParameter(104, tank.GetName())  # 104 for sat's ADD_HARDWARE
 
-        value = list_to_gmat_field_string(current_tanks_list)
+        value = u.list_to_gmat_field_string(current_tanks_list)
         self.SetField('Tanks', value)
 
         return True
 
-    def add_thrusters(self, thrusters: list[ChemicalThruster | ElectricThruster] | str | gp.Thruster) -> bool:
+    def add_thrusters(self, thrusters: list[gp.ChemicalThruster | gp.ElectricThruster] | str | gp.Thruster) -> bool:
         current_thrusters_value: str = self.GetField('Thrusters')
-        current_thrusters_list: list = gmat_field_string_to_list(current_thrusters_value)
+        current_thrusters_list: list = u.gmat_field_string_to_list(current_thrusters_value)
 
         # Add tanks by getting name of each tank, adding it to a list, then attaching this list to end of existing one
         if isinstance(thrusters, str):
-            thruster: gmat.GmatBase = gmat.GetObject(thrusters)
+            thruster: gp.gmat.GmatBase = gp.gmat.GetObject(thrusters)
             self.SetStringParameter(104, thruster.GetName())  # 104 for sat's ADD_HARDWARE
         elif isinstance(thrusters, gp.Thruster):
             self.SetStringParameter(104, thrusters.GetName())  # 104 for sat's ADD_HARDWARE
@@ -442,7 +432,7 @@ class Spacecraft(GmatObject):
                 current_thrusters_list.extend(thrusters_to_set)
                 self.SetStringParameter(104, thruster.GetName())  # 104 for sat's ADD_HARDWARE
 
-        value = list_to_gmat_field_string(current_thrusters_list)
+        value = u.list_to_gmat_field_string(current_thrusters_list)
         self.SetField('Thrusters', value)
 
         return True

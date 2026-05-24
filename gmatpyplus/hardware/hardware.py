@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from math import pi, atan2, asin
 from typing import Union
 
 import numpy as np
 
 import gmatpyplus as gp
-from gmatpyplus import GmatObject
+from basics import GmatObject
 from gmatpyplus import gmat
 
 
@@ -132,9 +131,9 @@ class Imager(GmatObject):
         # TODO: pass self.rotation_matrix, self._boresight, self.second_vec to FieldOfView creation
         #  but also check against FieldOfView creation in src
         if fov is None:
-            self.fov: RectangularFOV = RectangularFOV(self)
-        elif isinstance(fov, (RectangularFOV, ConicalFOV, CustomFOV)):
-            self.fov: RectangularFOV | ConicalFOV | CustomFOV = fov
+            self.fov: gp.RectangularFOV = gp.RectangularFOV(self)
+        elif isinstance(fov, (gp.RectangularFOV, gp.ConicalFOV, gp.CustomFOV)):
+            self.fov: gp.RectangularFOV | gp.ConicalFOV | gp.CustomFOV = fov
             self.fov.attached_obj = self
         elif isinstance(fov, str):
             # fov str is presumed to be a path to an FoV file
