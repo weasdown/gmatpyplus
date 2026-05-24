@@ -6,6 +6,11 @@ import gmatpyplus as gp
 from gmatpyplus import gmat
 
 
+## TODO implement PowerSystem class
+class PowerSystem(gp.Hardware):
+    pass
+
+
 class NuclearPowerSystem(gp.GmatObject):
     def __init__(self, name: str):
         super().__init__('NuclearPowerSystem', name)
