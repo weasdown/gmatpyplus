@@ -49,6 +49,7 @@ from .api_funcs import *
 from .basics import *
 from .burn import *
 from .commands import *
+from .errors import *
 from .executive import *
 from .hardware import *
 from .interpreter import *
