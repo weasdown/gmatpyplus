@@ -23,6 +23,7 @@ class FieldOfView(GmatObject):
 
         self.attached_obj = attached_object  # e.g. an Imager or Antenna that uses this FieldOfView
 
+        ## TODO remove commented code
         # gmat.Construct returns a GmatBase for FOV, so get object in FOV type from Validator
         # self.gmat_obj = gp.Moderator().gmat_obj.FindObject(self.name)
         # self.gmat_obj = gp.Moderator().gmat_obj.CreateFieldOfView(self.fov_type, self.name)
