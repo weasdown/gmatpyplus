@@ -4,10 +4,11 @@ from typing import Union
 
 import gmatpyplus as gp
 from gmatpyplus import gmat
+from gmatpyplus.hardware import Hardware
 
 
 ## TODO implement PowerSystem class
-class PowerSystem(gp.Hardware):
+class PowerSystem(Hardware):
     pass
 
 
