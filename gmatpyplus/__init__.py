@@ -53,6 +53,7 @@ from .errors import *
 from .executive import *
 from .hardware import *
 from .interpreter import *
+from .navigation import *
 from .parameter import *
 from .solver import *
 from .spacecraft import *
