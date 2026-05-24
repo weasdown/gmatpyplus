@@ -554,6 +554,15 @@ class Propagate(GmatCommand):
         def SetName(self, name: str) -> bool:
             return extract_gmat_obj(self).SetName(name)
 
+        ## TODO refactor to use method from an ancestor class.
+        def SetIntegerParameter(self, param_name: str, value: int):
+            return extract_gmat_obj(self).SetIntegerParameter(param_name, int(value))
+
+        ## TODO refactor to use method from an ancestor class.
+        def SetRealParameter(self, param_name: str, value: float):
+            return extract_gmat_obj(self).SetStringParameter(param_name, value)
+
+        ## TODO refactor to use method from an ancestor class.
         def SetStringParameter(self, param_name: str, value: str):
             return extract_gmat_obj(self).SetStringParameter(param_name, str(value))
 
