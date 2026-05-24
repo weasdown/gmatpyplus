@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import Union
 
 import gmatpyplus as gp
-from basics import GmatObject
 from gmatpyplus import gmat
 from gmatpyplus import utils as u
+from gmatpyplus.hardware import Hardware
 
 
-class Thruster(GmatObject):
+class Thruster(Hardware):
     def __init__(self, fuel_type: str, name: str,
                  tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
                  mix_ratio: int | float | list[int | float] = None):
