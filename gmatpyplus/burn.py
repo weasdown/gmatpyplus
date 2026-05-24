@@ -57,7 +57,7 @@ class FiniteBurn(Burn):
         super().__init__('FiniteBurn', name)
 
         # Attach specified thruster(s) to FiniteBurn
-        self.thrusters: list[gp.Thruster] = [thrusters]
+        self.thrusters: list[gp.Thruster] = [thrusters] if isinstance(thrusters, gp.Thruster) else thrusters
         for thruster in self.thrusters:
             thruster_name = thruster.GetName()
             self.SetStringParameter('Thrusters', thruster_name)
