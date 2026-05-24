@@ -1,0 +1,186 @@
+# GMAT Class Hierarchy
+
+Below is the full hierarchy of classes found in the `gmat_py.py`, `navigation.py` and `station.py` files, in the order in which they appear.
+
+`GmatBase`
+- `SpacePoint`
+  - `BodyFixedPoint`
+    - `GroundstationInterface`
+      - `GroundStation` (in `station.py`)
+  - `CelestialBody`
+    - `Asteroid`
+    - `Comet`
+    - `Moon`
+    - `Planet`
+    - `SpecialCelestialPoint`
+    - `Star`
+  - `CalculatedPoint`
+    - `Barycenter`
+    - `LibrationPoint`
+  - `SpaceObject`
+    - `Spacecraft`
+- `Attitude`
+  - `Kinematic`
+    - `CSFixed`
+    - `NadirPointing`
+    - `PrecessingSpinner`
+    - `Spinner`
+  - `CCSDSAttitude`
+  - `SpiceAttitude`
+- `Burn`
+  - `FiniteBurn`
+  - `ImpulsiveBurn`
+- `PhysicalModel`
+  - `DragForce`
+  - `FiniteThrust`
+  - `GravityBase`
+    - `HarmonicField`
+      - `GravityField`
+  - `ODEModel`
+  - `PointMassForce`
+  - `RelativisticCorrection`
+  - `SolarRadiationPressure`
+- `MathNode`
+  - `MathFunction`
+    - `Abs`
+    - `Acos`
+    - `Acosh`
+    - `Add`
+    - `Asin`
+    - `Asinh`
+    - `Atan`
+    - `Atan2`
+    - `Cos`
+    - `Cosh`
+    - `DegToRad`
+    - `Determinant`
+    - `Divide`
+    - `FunctionRunner`
+    - `Inverse`
+    - `Log`
+    - `Multiply`
+    - `Negate`
+    - `Norm`
+    - `Power`
+    - `RagToDeg`
+    - `Sin`
+    - `Sinh`
+    - `Subtract`
+    - `Tan`
+    - `Tanh`
+    - `Transpose`
+  - `MathElement`
+- `CoordinateBase`
+  - `CoordinateSystem`
+  - `AxisSystem`
+    - `DynamicAxes`
+      - `BodyFixedAxes`
+      - `EquatorAxes`
+      - `ITRFAxes`
+      - `LocalAlignedConstrainedAxes`
+      - `MeanOfDateAxes`
+        - `MODEcAxes`
+        - `MODEqAxes`
+      - `TrueOfDateAxes`
+        - `TODEcAxes`
+        - `TODEqAxes`
+        - `TEMEAxes`
+      - `TopocentricAxes`
+      - `ObjectReferencedAxes`
+        - `BodySpinSunAxes`
+        - `GeocentricSolarEclipticAxes`
+    - `InertialAxes`
+      - `BodyInertialAxes`
+      - `ICRFAxes`
+      - `MJ2000EqAxes`
+      - `TOEEcAxes`
+      - `TOEEqAxes`
+- `AtmosphereModel`
+  - `ExponentialAtmosphere`
+  - `JacchiaRobertsAtmosphere`
+  - `Msise90Atmosphere`
+  - `SimpleExponentialAtmosphere`
+- `SolarSystem`
+- `GmatCommand`
+  - `BranchCommand`
+    - `ConditionalBranch`
+      - `If`
+      - `While`
+    - `SolverBranchCommand`
+      - `Optimize`
+      - `Target`
+    - `For`
+  - `ManageObject`
+    - `Create`
+  - `PropagationEnabledCommand`
+    - `Propagate`
+    - `RunSolver`
+  - `SolverSequenceCommand`
+    - `Achieve`
+    - `Minimize`
+    - `NonlinearConstraint`
+    - `Vary`
+  - `Assignment`
+  - `BeginFiniteBurn`
+  - `BeginFunction`
+  - `BeginMissionSequence`
+  - `BeginScript`
+  - `CallFunction`
+    - `CallBuiltinGmatFunction` 
+  - `FindEvents`
+  - `Else`
+  - `EndFiniteBurn`
+  - `EndFor`
+  - `EndFunction`
+  - `EndIf`
+  - `EndOptimize`
+  - `EndScript`
+  - `EndTarget`
+  - `EndWhile`
+  - `Maneuver`
+  - `NoOp`
+  - `Report`
+  - `SaveMission`
+  - `Stop`
+  - `Toggle`
+  - `UpdateDynamicData`
+  - `Write`
+- `Solver`
+  - `Optimizer`
+    - `ExternalOptimizer`
+    - `InternalOptimizer`
+  - `DifferentialCorrector`
+- `PropSetup`
+- `Propagator`
+  - `Integrator`
+    - `PredictorCorrector`
+      - `AdamsBashforthMoulton`
+    - `RungeKutta`
+      - `RungeKuttaNystrom`
+        - `DormandElMikkawyPrince68`
+      - `PrinceDormand45`
+      - `PrinceDormand78`
+      - `RungeKutta89`
+      - `RungeKuttaFehlberg56`
+- `Hardware`
+  - `Imager` 
+    - `Sensor` (in `navigation.py`)
+      - `RFHardware` (in `navigation.py`)
+        - `Receiver` (in `navigation.py`)
+        - `Transmitter` (in `navigation.py`)
+        - `Transponder` (in `navigation.py`)
+    - `Antenna` (in `navigation.py`)
+  - `FuelTank`
+    - `ChemicalTank`
+    - `ElectricTank`
+  - `PowerSystem`
+    - `NuclearPowerSystem`
+    - `SolarPowerSystem`
+  - `Thruster`
+    - `ChemicalThruster`
+    - `ElectricThruster`
+- `EventLocator`
+- `StopCondition`
+- `Subscriber`
+  - `EphemerisFile`
+  - `ReportFile`
