@@ -356,3 +356,12 @@ class Imager(GmatObject):
         self.rotation_matrix = np.array([x, y, z])
 
         self.Initialize()
+
+
+class Antenna(Imager):
+    def __init__(self, name: str, boresight: np.ndarray | list = np.array([1, 0, 0])):
+        super().__init__('Antenna', name)
+
+        self._boresight = np.array(boresight) if not isinstance(boresight, np.ndarray) else boresight
+
+        raise NotImplementedError
