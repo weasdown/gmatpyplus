@@ -6,6 +6,53 @@ import numpy as np
 
 import gmatpyplus as gp
 from basics import GmatObject
+from gmatpyplus import gmat
+
+
+class Color(bytearray):
+    def __init__(self, name: str = 'DefaultColor', red: int = 0, green: int = 0, blue: int = 0, alpha: int = 1):
+        super().__init__()
+        self.name = name
+        self.gmat_obj = gmat.RgbColor()
+
+        # Initialize RGB color to black
+        self.red: int = red if red is not None else self.gmat_obj.Red()
+
+        self.green: int = green if green is not None else self.gmat_obj.Green()
+        self.blue: int = blue if blue is not None else self.gmat_obj.Blue()
+        self.alpha: int = alpha if alpha is not None else self.gmat_obj.Alpha()  # opaque
+        self.rgb_color = bytearray([self.red, self.green, self.blue, self.alpha])
+
+        # Apply the custom color values to the gmat_obj
+        self.gmat_obj.Set(self.red, self.green, self.blue, self.alpha)
+
+    def GetIntColor(self):
+        # TODO write method
+        raise NotImplementedError
+        # return self.colortype.int_color
+
+    def ToIntColor(self, color_str: str) -> int:
+        return gp.extract_gmat_obj(self).ToIntColor(color_str)
+
+    def ToRgbString(self, color_uint: int) -> str:
+        return gp.extract_gmat_obj(self).ToRgbString(color_uint)
+
+    def ToRgbList(self, color_uint: int) -> list[int]:
+        rgb_str: str = gp.extract_gmat_obj(self).ToRgbString(color_uint)
+        rgb_list: list = [int(ele) for ele in rgb_str[1:-1].split(' ')]
+        return rgb_list
+
+    def Red(self) -> int:
+        return self.gmat_obj.Red()
+
+    def Green(self) -> int:
+        return self.gmat_obj.Green()
+
+    def Blue(self) -> int:
+        return self.gmat_obj.Blue()
+
+    def Alpha(self) -> int:
+        return self.gmat_obj.Alpha()
 
 
 class FieldOfView(GmatObject):
