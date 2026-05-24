@@ -34,7 +34,7 @@ class NuclearPowerSystem(gp.GmatObject):
     @staticmethod
     def from_dict(nps_dict: dict[str, Union[str, int, float]]):
         try:
-            name = nps_dict['Name']
+            name: str = str(nps_dict['Name'])
         except KeyError:  # no name found - use default
             name = 'DefaultNuclearPowerSystem'
         nps = NuclearPowerSystem(name)
@@ -78,7 +78,7 @@ class SolarPowerSystem(gp.GmatObject):
         if sps_dict == {}:
             return
 
-        name = sps_dict.get('Name', 'DefaultSolarPowerSystem')
+        name: str = str(sps_dict.get('Name', 'DefaultSolarPowerSystem'))
         sps = SolarPowerSystem(name)
 
         fields: list[str] = list(sps_dict.keys())
