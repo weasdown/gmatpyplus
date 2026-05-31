@@ -51,6 +51,7 @@ from .burn import *
 from .command import *
 from .errors import *
 from .executive import *
+from .force_model import *
 from .hardware import *
 from .interpreter import *
 from .navigation import *
