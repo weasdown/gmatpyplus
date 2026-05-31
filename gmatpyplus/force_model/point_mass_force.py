@@ -6,10 +6,10 @@ class PointMassForce(PhysicalModel):
 
     # fields: ['Covariance', 'Epoch', 'ElapsedSeconds', 'BodyName', 'DerivativeID', 'GravConst', 'Radius',
     # 'EstimateMethod', 'PrimaryBody']
-    def __init__(self, name: str = 'PMF', body: str = None):
+    def __init__(self, name: str = 'PMF', body: str | None = None):
         super().__init__('PointMassForce', name)
         if body:
             self.primary_body = body
         else:
             self.primary_body = 'Earth'
-        self.SetField('BodyName', body)
+        self.SetField('BodyName', str(body))
