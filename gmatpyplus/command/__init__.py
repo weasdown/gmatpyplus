@@ -6,3 +6,4 @@ from .propagate import Propagate
 from .solver_branch_command import *
 from .solver_sequence_command import *
 from .target import Target
+from .vary import Vary
