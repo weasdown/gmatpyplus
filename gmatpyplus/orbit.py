@@ -6,12 +6,6 @@ from gmatpyplus.basics import GmatObject
 from gmatpyplus.utils import *
 
 
-class PhysicalModel(GmatObject):
-    def __init__(self, obj_type: str, name: str):
-        super().__init__(obj_type, name)
-        # self.Initialize()
-
-
 class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
     class Propagator(GmatObject):  # variable called gator in GMAT Python examples
         # Labelled in GMAT GUI as "Integrator"
