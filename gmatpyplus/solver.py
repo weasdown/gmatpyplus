@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
+from command.gmat_command import GmatCommand
 
 
 class Solver(gp.GmatObject):
@@ -14,10 +15,10 @@ class Solver(gp.GmatObject):
         return gp.extract_gmat_obj(self).GetStringArrayParameter(param_id)
 
     def SetBooleanParameter(self, param: str | int, value: bool) -> bool:
-        return gp.GmatCommand.SetBooleanParameter(gp.extract_gmat_obj(self), param, value)
+        return GmatCommand.SetBooleanParameter(gp.extract_gmat_obj(self), param, value)
 
     def SetIntegerParameter(self, param: str | int, value: int) -> bool:
-        return gp.GmatCommand.SetIntegerParameter(gp.extract_gmat_obj(self), param, value)
+        return GmatCommand.SetIntegerParameter(gp.extract_gmat_obj(self), param, value)
 
     def SetStringParameter(self, param: str | int, value: str) -> bool:
         if isinstance(param, str):
@@ -63,10 +64,10 @@ class DifferentialCorrector(Solver):
         # Variables are set later by Vary and Achieve commands
 
     def GetStringParameter(self, param: str | int) -> str:
-        return gp.GmatCommand.GetStringParameter(gp.extract_gmat_obj(self), param)
+        return GmatCommand.GetStringParameter(gp.extract_gmat_obj(self), param)
 
     def GetStringArrayParameter(self, param: str | int) -> tuple:
-        return gp.GmatCommand.GetStringArrayParameter(gp.extract_gmat_obj(self), param)
+        return GmatCommand.GetStringArrayParameter(gp.extract_gmat_obj(self), param)
 
     def Help(self):
         return self.gmat_obj.Help()
