@@ -74,7 +74,10 @@ class SolarPowerSystem(PowerSystem):
             return False
 
     @staticmethod
-    def from_dict(sps_dict: dict[str, Union[str, int, float]]):
+    def from_dict(sps_dict: dict[str, Union[str, int, float]]) -> SolarPowerSystem | None:
+        if not sps_dict:
+            return None
+
         specs = sps_dict.copy()  # take a copy of the dictionary to avoid editing the original
         try:
             name: str = str(specs.get('Name', 'DefaultSolarPowerSystem'))
