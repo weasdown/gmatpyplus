@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from gmatpyplus import gmat
 from basics import GmatObject
 from force_model.force_model import ForceModel
+from gmatpyplus import gmat
 from utils import *
 
 
@@ -146,9 +146,9 @@ class OrbitState:
                                            'ConstraintReferenceVectorY': 0,
                                            'ConstraintReferenceVectorZ': 1,
                                            'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
-                                           'ReferenceObject': (gp.CelestialBodies() + gp.SpacecraftObjs() +
-                                                               gp.LibrationPoints() + gp.Barycenter() +
-                                                               gp.GroundStations())
+                                           'ReferenceObject': (CelestialBodies() + SpacecraftObjs() +
+                                                               LibrationPoints() + Barycenter() +
+                                                               GroundStations())
                                        }
                                    },
                                    }
