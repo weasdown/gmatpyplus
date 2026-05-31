@@ -4,6 +4,7 @@ from math import pi
 
 from command.branch_command import BranchCommand
 from command.solver_branch_command import SolverBranchCommand
+from command.solver_sequence_command import SolverSequenceCommand
 from gmatpyplus import gmat
 from gmatpyplus.utils import *
 
@@ -681,11 +682,6 @@ class Propagate(GmatCommand):
 #             name = f'PropagateMulti{num_propagates + 1}'
 #
 #         super().__init__(name, prop, sat, stop_cond, synchronized)
-
-
-class SolverSequenceCommand(GmatCommand):
-    def __init__(self, command_type: str, name: str):
-        super().__init__(command_type, name)
 
 
 class Target(SolverBranchCommand):
