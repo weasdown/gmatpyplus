@@ -12,7 +12,7 @@ class ForceModel(GmatObject):
                  error_control: list = None, user_defined: list[str] = None):
         super().__init__('ForceModel', name)
 
-        def validate_point_masses(pm) -> list[ForceModel.PointMassForce]:
+        def validate_point_masses(pm) -> list[PointMassForce]:
             celestial_bodies = CelestialBodies()
 
             # point_masses is a single string
@@ -22,10 +22,10 @@ class ForceModel(GmatObject):
                     raise SyntaxError(f'Point mass for {self.central_body} cannot be used because '
                                       f'{self.central_body} is already set as the central body')
 
-                return [ForceModel.PointMassForce(body=point_masses)]
+                return [PointMassForce(body=point_masses)]
 
             # point_masses is a single PointMassForce
-            elif isinstance(point_masses, ForceModel.PointMassForce):
+            elif isinstance(point_masses, PointMassForce):
                 if self.gravity and (self.central_body in point_masses.primary_body):
                     raise SyntaxError(f'Point mass for {self.central_body} cannot be used because a GravityField '
                                       f'containing {self.central_body} is already set')
@@ -48,7 +48,7 @@ class ForceModel(GmatObject):
                 # point_masses is a valid list of celestial body name strings
                 pmf_list = []
                 for body in point_masses:
-                    pmf_list.append(ForceModel.PointMassForce(name=f'PointMassForce_{body}', body=body))
+                    pmf_list.append(PointMassForce(name=f'PointMassForce_{body}', body=body))
                 return pmf_list
 
             else:  # point_masses is not of a valid type
@@ -119,7 +119,7 @@ class ForceModel(GmatObject):
 
         self._polyhedral_bodies = polyhedral_bodies
 
-        self.point_mass_forces: list[ForceModel.PointMassForce] | None = None
+        self.point_mass_forces: list[PointMassForce] | None = None
         if point_masses is not None:
             self.point_mass_forces = validate_point_masses(point_masses)  # raises exception if point_masses invalid
             for force in self.point_mass_forces:
