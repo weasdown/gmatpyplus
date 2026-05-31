@@ -47,7 +47,7 @@ mcs = [
 gp.RunMission(mcs)  # Run the mission
 
 print(f'Sat state after running: {sat.GetState()}')
-print(f'Epoch after running: {sat.GetField("Epoch")}')
+print(f'Epoch after running: {sat.GetEpoch()}')
 
 script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/Tut02-SimpleOrbitTransfer.script')
 gmat.SaveScript(script_path)
