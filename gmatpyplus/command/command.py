@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from math import pi
 
+from command.branch_command import BranchCommand
 from gmatpyplus import gmat
 
 import gmatpyplus as gp
@@ -139,24 +141,6 @@ class GmatCommand:
             return self.gmat_obj.Validate()
         except Exception as ex:
             raise RuntimeError(f'{type(self).__name__} named "{self.name}" failed to Validate') from ex
-
-
-class BranchCommand(GmatCommand):
-    def __init__(self, command_type: str, name: str):
-        super().__init__(command_type, name)
-        self.command_sequence = []
-
-    def AddBranch(self, command: gp.GmatCommand | gmat.GmatCommand, which: int = 0):
-        """
-        No return value.
-        :param command:
-        :param which:
-        """
-        gp.extract_gmat_obj(self).AddBranch(gp.extract_gmat_obj(command), which)
-
-    def Append(self, command: gp.GmatCommand | gmat.GmatCommand) -> bool:
-        command_gmat_obj = gp.extract_gmat_obj(command)
-        return gp.extract_gmat_obj(self).Append(command_gmat_obj)
 
 
 class Achieve(GmatCommand):
