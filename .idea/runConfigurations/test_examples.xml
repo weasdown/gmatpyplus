@@ -10,6 +10,7 @@
     <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
+    <option name="DEBUG_JUST_MY_CODE" value="true" />
     <option name="RUN_TOOL" value="" />
     <option name="_new_pattern" value="&quot;&quot;" />
     <option name="_new_additionalArguments" value="&quot;&quot;" />
