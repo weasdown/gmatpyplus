@@ -457,16 +457,7 @@ class Propagate(GmatCommand):
                                    goal: str | int | float):
             self.SetStringParameter('EpochVar', epoch_var)
             self.SetStringParameter('StopVar', stop_var)
-
-            match goal:
-                case str():
-                    self.SetStringParameter('Goal', goal)
-                case int():
-                    self.SetIntegerParameter('Goal', goal)
-                case float():
-                    self.SetRealParameter('Goal', goal)
-                case _:
-                    raise TypeError(f'goal must be a str, int or float but was a {type(goal)}.')
+            self.SetStringParameter('Goal', str(goal))
 
             mod = gp.Moderator()
             validator = gp.Validator()
