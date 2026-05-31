@@ -1,4 +1,4 @@
-from physical_model import PhysicalModel
+from force_model.physical_model import PhysicalModel
 
 
 class PointMassForce(PhysicalModel):
