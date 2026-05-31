@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from force_model import ForceModel
 from gmatpyplus import gmat
-from gmatpyplus.basics import GmatObject
-from gmatpyplus.utils import *
+from basics import GmatObject
+from force_model.force_model import ForceModel
+from utils import *
 
 
 class PropSetup(GmatObject):  # variable called prop in GMAT Python examples

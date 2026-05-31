@@ -1,5 +1,4 @@
 from basics import GmatObject
-from force_model.harmonic import Harmonic
 from force_model.physical_model import PhysicalModel
 from force_model.point_mass_force import PointMassForce
 from utils import *
