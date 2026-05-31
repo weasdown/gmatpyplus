@@ -1,4 +1,5 @@
 from basics import GmatObject
+from force_model.harmonic import Harmonic
 from force_model.physical_model import PhysicalModel
 from force_model.point_mass_force import PointMassForce
 from utils import *
@@ -180,10 +181,6 @@ class ForceModel(GmatObject):
             self._body = body if body else self._force_model.central_body
             self._gravity = gravity if gravity else ForceModel.GravityField()
             self._drag = drag if drag else ForceModel.DragForce(self._force_model)
-
-    class Harmonic:
-        def __init__(self):
-            raise NotImplementedError
 
     class HarmonicGravity(Harmonic):
         def __init__(self):
