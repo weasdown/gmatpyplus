@@ -3,9 +3,8 @@ from __future__ import annotations
 from math import pi
 
 from command.branch_command import BranchCommand
+from command.solver_branch_command import SolverBranchCommand
 from gmatpyplus import gmat
-
-import gmatpyplus as gp
 from gmatpyplus.utils import *
 
 
@@ -682,11 +681,6 @@ class Propagate(GmatCommand):
 #             name = f'PropagateMulti{num_propagates + 1}'
 #
 #         super().__init__(name, prop, sat, stop_cond, synchronized)
-
-
-class SolverBranchCommand(BranchCommand):
-    def __init__(self, command_type: str, name: str):
-        super().__init__(command_type, name)
 
 
 class SolverSequenceCommand(GmatCommand):
