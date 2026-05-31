@@ -1,3 +1,4 @@
+from .begin_finite_burn import BeginFiniteBurn
 from .branch_command import *
 from .command import *
 from .end_target import *
