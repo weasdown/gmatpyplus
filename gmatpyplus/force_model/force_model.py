@@ -319,19 +319,6 @@ class ForceModel(GmatObject):
             super().__init__('ODEModel', name)
             raise NotImplementedError
 
-    class PointMassForce(PhysicalModel):
-        # An object representing the point mass force for a single celestial body
-
-        # fields: ['Covariance', 'Epoch', 'ElapsedSeconds', 'BodyName', 'DerivativeID', 'GravConst', 'Radius',
-        # 'EstimateMethod', 'PrimaryBody']
-        def __init__(self, name: str = 'PMF', body: str = None):
-            super().__init__('PointMassForce', name)
-            if body:
-                self.primary_body = body
-            else:
-                self.primary_body = 'Earth'
-            self.SetField('BodyName', body)
-
     class SolarRadiationPressure(PhysicalModel):
         def __init__(self, fm: ForceModel = None, name: str = 'SRP', model: str = 'Spherical', flux: float | int = 1367,
                      nominal_sun: float | int = 149597870.691):
