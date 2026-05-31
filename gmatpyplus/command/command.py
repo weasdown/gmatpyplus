@@ -576,7 +576,7 @@ class Propagate(GmatCommand):
             return extract_gmat_obj(self).SetStringParameter(param_name, str(value))
 
     def __init__(self, name: str, sat: gp.Spacecraft | gmat.Spacecraft, prop: gp.PropSetup | gmat.GmatBase,
-                 user_stop_cond: tuple | str = None):
+                 user_stop_cond: tuple | str):
         # TODO add None as default for sat, prop, stop_cond and handle appropriately in __init__()
         super().__init__('Propagate', name)
         self.Initialize()
