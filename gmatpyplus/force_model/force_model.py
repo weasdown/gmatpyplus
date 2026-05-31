@@ -181,11 +181,6 @@ class ForceModel(GmatObject):
             self._gravity = gravity if gravity else ForceModel.GravityField()
             self._drag = drag if drag else ForceModel.DragForce(self._force_model)
 
-    class FiniteThrust(PhysicalModel):
-        def __init__(self, name: str = 'FiniteThrust'):
-            super().__init__('FiniteThrust', name)
-            raise NotImplementedError
-
     class Harmonic:
         def __init__(self):
             raise NotImplementedError
