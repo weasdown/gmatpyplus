@@ -102,14 +102,15 @@ def extract_gmat_obj(obj):
     if isinstance(obj, gp.Parameter):
         return obj.gmat_base
 
-    if 'gmatpyplus' in obj_type:  # wrapper object
+    if 'gmat_py' in obj_type:  # native GMAT object
+        return obj
+    else:  # wrapper object
         if 'Parameter' in obj_type:
             return obj.gmat_base
         return obj.gmat_obj
-    elif 'gmat_py' in obj_type:  # native GMAT object
-        return obj
-    else:
-        raise TypeError(f'obj type not recognised in utils.extract_gmat_obj: {obj_type}')
+    ## TODO remove TypeError case once verified not needed.
+    # else:
+    #     raise TypeError(f'obj type not recognised in utils.extract_gmat_obj: {obj_type}')
 
 
 class GMATNameError(Exception):
