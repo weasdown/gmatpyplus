@@ -21,7 +21,7 @@ goi = gp.ImpulsiveBurn('GOI')
 dc1 = gp.DifferentialCorrector('DC1')
 
 print(f'Sat state before running: {sat.GetState()}')
-print(f"Epoch before running: {sat.GetField('Epoch')}")
+print(f"Epoch before running: {sat.GetEpoch()}")
 
 # Targeting sequence to adjust parameters of the two burns (TOI and GOI) to achieve desired final orbit
 tg1 = gp.Target('Hohmann Transfer', dc1, exit_mode='SaveAndContinue', command_sequence=[
