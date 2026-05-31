@@ -428,15 +428,15 @@ class Propagate(GmatCommand):
             self.goalless = None
 
             self.gmat_obj = gmat_obj
-            self.name = self.gmat_obj.GetName()
+            self.name: str = self.gmat_obj.GetName()
 
-            self.epoch_var = self.gmat_obj.GetStringParameter('EpochVar')
+            self.epoch_var: str = self.gmat_obj.GetStringParameter('EpochVar')
             self.epoch_param_type = None  # TODO get correct param type
 
-            self.stop_var = self.gmat_obj.GetStringParameter('StopVar')
+            self.stop_var: str = self.gmat_obj.GetStringParameter('StopVar')
             self.stop_param_type = None  # TODO get correct param type
 
-            self.goal = self.gmat_obj.GetStringParameter('Goal')
+            self.goal: str = self.gmat_obj.GetStringParameter('Goal')
             self.goalless = None  # TODO determine correct goalless value or remove attribute entirely if not needed
 
             (self.stop_param_type,
