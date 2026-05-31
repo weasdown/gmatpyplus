@@ -48,7 +48,7 @@ gmat: types.ModuleType = load_gmat.gmat
 from .api_funcs import *
 from .basics import *
 from .burn import *
-from .commands import *
+from .command import *
 from .errors import *
 from .executive import *
 from .hardware import *
