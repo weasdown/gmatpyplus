@@ -55,6 +55,7 @@ from .hardware import *
 from .interpreter import *
 from .navigation import *
 from .parameter import *
+from .solar_system import *
 from .solver import *
 from .spacecraft import *
 from .orbit import *
