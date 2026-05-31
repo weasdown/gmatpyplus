@@ -1,7 +1,7 @@
+from basics import GmatObject
 from force_model.physical_model import PhysicalModel
-from gmatpyplus.basics import GmatObject
-from gmatpyplus.utils import *
 from solar_system import AtmosphereModel
+from utils import *
 
 
 class ForceModel(GmatObject):
