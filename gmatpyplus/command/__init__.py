@@ -1,4 +1,5 @@
 from .begin_finite_burn import BeginFiniteBurn
+from .begin_mission_sequence import BeginMissionSequence
 from .branch_command import *
 from .command import *
 from .end_finite_burn import EndFiniteBurn

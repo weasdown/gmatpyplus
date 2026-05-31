@@ -124,17 +124,6 @@ class Achieve(GmatCommand):
     def SetRefObject(self, obj, type_int: int, obj_name: str = '') -> bool:
         return extract_gmat_obj(self).SetRefObject(extract_gmat_obj(obj), type_int, obj_name)
 
-
-class BeginMissionSequence(GmatCommand):
-    def __init__(self):
-        super().__init__('BeginMissionSequence', 'BeginMissionSequenceCommand')
-
-        self.SetSolarSystem()
-        self.SetObjectMap(gp.Moderator().GetConfiguredObjectMap())
-        self.SetGlobalObjectMap(gp.Sandbox().GetGlobalObjectMap())
-
-        self.Initialize()
-
 # class PropagateMulti(Propagate):
 #     # TODO: consider making this a nested/inner class of Propagate, so would call Propagate.Multi()
 #     """
