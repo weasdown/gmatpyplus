@@ -1,4 +1,4 @@
-from gmatpyplus.command import BranchCommand
+from command.branch_command import BranchCommand
 
 
 class SolverBranchCommand(BranchCommand):
