@@ -246,11 +246,6 @@ class ForceModel(GmatObject):
             self._force_model = fm
             self._body = body if body else self._force_model.central_body
             self._gravity = gravity if gravity else ForceModel.GravityField()
-
-    class HarmonicField(PhysicalModel):
-        def __init__(self):
-            super().__init__('HarmonicField', 'HarmonicField')
-            raise NotImplementedError
             self._drag = drag if drag else DragForce(self._force_model)
 
     class GravityField(PhysicalModel):
