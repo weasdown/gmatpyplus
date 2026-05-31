@@ -1,7 +1,7 @@
 import gmatpyplus as gp
 from basics import GmatObject
 from force_model import ForceModel
-from propagator import Propagator
+from propagator.propagator import Propagator
 
 
 class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
