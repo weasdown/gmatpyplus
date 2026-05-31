@@ -599,7 +599,9 @@ class Propagate(GmatCommand):
             self.sat = sat
             self.SetRefObjectName(gmat.SPACECRAFT, self.sat.GetName())
 
+        # TODO confirm this still works if there are multiple stop conditions in the script.
         self.stop_cond = self.GetGmatObject(gmat.STOP_CONDITION)
+
         # apply any user-provided stop condition
         if user_stop_cond:
             self.user_stop_cond = user_stop_cond
