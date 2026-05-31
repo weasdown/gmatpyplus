@@ -1,4 +1,4 @@
-from force_model.force_model import PhysicalModel
+from force_model.physical_model import PhysicalModel
 
 
 class HarmonicField(PhysicalModel):
