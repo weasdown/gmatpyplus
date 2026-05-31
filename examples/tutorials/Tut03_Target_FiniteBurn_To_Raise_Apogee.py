@@ -27,7 +27,7 @@ thruster_to_fire.SetField('DecrementMass', True)  # reduce the mass of fuel in C
 thruster_to_fire.SetField('MixRatio', [1])  # all draining from one tank (ChemicalTank1, only one assigned to thruster)
 thruster_to_fire.SetField('C1', 1000)  # 1000 N thrust
 
-prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
+prop = gp.PropSetup('DefaultProp', gator=gp.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
 burn_dur = gp.Variable('BurnDuration')

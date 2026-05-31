@@ -3,33 +3,13 @@ from __future__ import annotations
 from basics import GmatObject
 from force_model.force_model import ForceModel
 from gmatpyplus import gmat
+from propagator import Propagator
 from utils import *
 
 
 class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
-    class Propagator(GmatObject):  # variable called gator in GMAT Python examples
-        # Labelled in GMAT GUI as "Integrator"
-        def __init__(self, integrator: str = 'PrinceDormand78', name: str = 'Prop', **kwargs):
-            # TODO: change **kwargs to proper parsing here (for usability)
-            # TODO: add parsing of rest of arguments (see defaults in User Guide)
-            integrator_allowed_types = ['RungeKutta89', 'PrinceDormand78', 'PrinceDormand45', 'RungeKutta68',
-                                        'RungeKutta56', 'AdamsBashforthMoulton', 'SPK', 'Code500', 'STK', 'CCSDS-OEM'
-                                                                                                          'PrinceDormand853',
-                                        'RungeKutta4', 'SPICESGP4']
-            if integrator in integrator_allowed_types:
-                self.integrator = integrator
-            else:
-                raise AttributeError(f'integrator must be one of the following: {integrator_allowed_types}')
 
-            if name == 'Prop':
-                name = f'{name}_{integrator}'
-
-            super().__init__(integrator, name)
-
-            gp.Initialize()
-            # self.Initialize()
-
-    def __init__(self, name: str, fm: ForceModel = None, gator: PropSetup.Propagator = None,
+    def __init__(self, name: str, fm: ForceModel = None, gator: Propagator = None,
                  initial_step_size: int = 60, accuracy: int | float = 1e-12, min_step: int = 0, max_step: int = 2700,
                  max_step_attempts: int = 50, stop_if_accuracy_violated: bool = True):
         # TODO add other args as per pg 449 (PDF pg 458) of User Guide
@@ -37,7 +17,7 @@ class PropSetup(GmatObject):  # variable called prop in GMAT Python examples
 
         # Create a ForceModel and Propagator
         self.force_model = fm if fm else ForceModel()
-        self.gator = gator if gator else PropSetup.Propagator()
+        self.gator = gator if gator else Propagator()
         self.SetReference(self.gator)
 
         if initial_step_size is not None:

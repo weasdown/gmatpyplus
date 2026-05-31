@@ -12,7 +12,7 @@ gmat.EchoLogFile(False)  # set to True to view log output in console (e.g. live 
 
 sat = gp.Spacecraft('DefaultSC')
 
-prop = gp.PropSetup('NonDefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
+prop = gp.PropSetup('NonDefaultProp', gator=gp.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
 toi = gp.ImpulsiveBurn('TOI')

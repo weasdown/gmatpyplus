@@ -25,7 +25,7 @@ sat_params = {
 }
 sat = gp.Spacecraft.from_dict(sat_params)
 
-prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
+prop = gp.PropSetup('DefaultProp', gator=gp.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
 fb1 = gp.FiniteBurn('FiniteBurn1', sat.elec_thrusters[0])
