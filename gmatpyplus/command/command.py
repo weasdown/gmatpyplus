@@ -469,21 +469,21 @@ class Propagate(GmatCommand):
                     raise TypeError(f'goal must be a str, int or float but was a {type(goal)}.')
 
             mod = gp.Moderator()
-            vdator = gp.Validator()
-            vdator.SetSolarSystem(gmat.GetSolarSystem())
-            vdator.SetObjectMap(mod.GetConfiguredObjectMap())
+            validator = gp.Validator()
+            validator.SetSolarSystem(gmat.GetSolarSystem())
+            validator.SetObjectMap(mod.GetConfiguredObjectMap())
 
             sat_name = self.sat.GetName()
 
             # if an epoch parameter does not already exist, make one
             if not mod.GetParameter(epoch_var):
-                vdator.CreateParameter(epoch_param_type, epoch_var)  # create a Parameter for epoch_var
+                validator.CreateParameter(epoch_param_type, epoch_var)  # create a Parameter for epoch_var
                 param = gp.Validator().FindObject(epoch_var)
                 param.SetRefObjectName(gmat.SPACECRAFT, sat_name)  # attach Spacecraft to Parameter
 
             # if a stop parameter does not already exist, make one
             if not mod.GetParameter(stop_var):
-                vdator.CreateParameter(stop_param_type, stop_var)  # create a Parameter for stop_var
+                validator.CreateParameter(stop_param_type, stop_var)  # create a Parameter for stop_var
                 param = gp.Validator().FindObject(stop_var)
                 param.SetRefObjectName(gmat.SPACECRAFT, sat_name)  # attach Spacecraft to Parameter
 
