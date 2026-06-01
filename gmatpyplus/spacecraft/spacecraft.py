@@ -363,8 +363,8 @@ class Spacecraft(GmatObject):
     def GetCartesianState(self):
         return u.rvector6_to_list(self.gmat_obj.GetCartesianState())
 
-    def GetCoordinateSystem(self) -> gp.spacecraft.CoordinateSystem:
-        return gp.spacecraft.CoordinateSystem.from_sat(self)
+    def GetCoordinateSystem(self) -> gp.CoordinateSystem:
+        return gp.CoordinateSystem.from_sat(self)
 
     @property
     def ChemicalThrusters(self):
