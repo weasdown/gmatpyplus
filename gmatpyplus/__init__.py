@@ -61,7 +61,7 @@ from .propagator import *
 from .solar_system import *
 from .solver import *
 from .spacecraft import *
-from .orbit import *
+from .orbit_state import *
 from .utils import *
 
 _library_dir = os.path.dirname(os.path.realpath(__file__))

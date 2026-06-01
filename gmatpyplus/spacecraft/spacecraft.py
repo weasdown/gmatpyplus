@@ -5,7 +5,7 @@ import logging
 import gmatpyplus as gp
 from basics import GmatObject
 from gmatpyplus import utils as u
-from orbit import OrbitState
+from orbit_state import OrbitState
 
 
 class Spacecraft(GmatObject):
