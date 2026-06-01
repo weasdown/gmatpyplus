@@ -113,11 +113,6 @@ def extract_gmat_obj(obj):
     #     raise TypeError(f'obj type not recognised in utils.extract_gmat_obj: {obj_type}')
 
 
-class GMATNameError(Exception):
-    def __init__(self, attempted_name):
-        raise RuntimeError(f'No object currently exists in GMAT with the name "{attempted_name}"') from None
-
-
 def fields_for_gmat_base_gmat_command():
     gmat_base_obj = type(gmat.Construct('Propagator')).__bases__[0]
     gmat_base_subs = get_subs_of_gmat_class(gmat_base_obj)
