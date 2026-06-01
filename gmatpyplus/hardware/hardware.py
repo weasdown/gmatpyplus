@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import gmatpyplus as gp
+from basics import GmatObject
 
 
 ## TODO implement Hardware class
-class Hardware(gp.GmatObject):
+class Hardware(GmatObject):
     pass

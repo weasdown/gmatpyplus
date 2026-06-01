@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from gmatpyplus import gmat
-import gmatpyplus as gp
-
 import os.path
+
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 
 ## TODO remove commented code

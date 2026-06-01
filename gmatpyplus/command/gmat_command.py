@@ -1,6 +1,6 @@
 import gmatpyplus as gp
 from gmatpyplus import gmat
-from gmatpyplus.utils import extract_gmat_obj
+from utils import extract_gmat_obj
 
 
 class GmatCommand:

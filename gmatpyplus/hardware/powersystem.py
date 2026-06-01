@@ -4,7 +4,7 @@ from typing import Union
 
 import gmatpyplus as gp
 from gmatpyplus import gmat
-from gmatpyplus.hardware import Hardware
+from hardware import Hardware
 
 
 ## TODO implement PowerSystem class

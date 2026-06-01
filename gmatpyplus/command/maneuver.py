@@ -1,5 +1,4 @@
 import gmatpyplus as gp
-
 from command.gmat_command import GmatCommand
 
 

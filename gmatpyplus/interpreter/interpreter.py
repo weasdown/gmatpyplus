@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-
 from gmatpyplus import gmat
 
 

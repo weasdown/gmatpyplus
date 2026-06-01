@@ -1,7 +1,7 @@
 import gmatpyplus as gp
 from command.gmat_command import GmatCommand
 from gmatpyplus import gmat
-from gmatpyplus.utils import extract_gmat_obj
+from utils import extract_gmat_obj
 
 
 class Propagate(GmatCommand):

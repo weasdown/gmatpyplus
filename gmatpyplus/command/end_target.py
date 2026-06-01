@@ -1,6 +1,6 @@
 import gmatpyplus as gp
+from command.branch_command import BranchCommand
 from gmatpyplus import gmat
-from gmatpyplus.command.branch_command import BranchCommand
 
 
 class EndTarget(BranchCommand):
