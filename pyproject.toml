@@ -56,8 +56,12 @@ Issues = "https://github.com/weasdown/gmatpyplus/issues/"
 [tool.hatch.build.targets.sdist]
 exclude = [
     "/.github",
-    "/docs",
-    "/plugins"
+    "/.venv*",
+    "/build",
+    "/build-archive",
+    "/dist",
+    "/plugins",
+    "/source",
 ]
 
 [tool.hatch.build.targets.wheel]
