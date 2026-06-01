@@ -147,7 +147,7 @@ class StopCondition:
 
         if num_stop_var_elements == 2:
             sat_name, parameter = stop_var.split('.')
-            if sat_name != self.sat.name:
+            if sat_name != self.sat.GetName():
                 raise self._name_mismatch_error(stop_cond, sat_name)
             stop_var = '.'.join([sat_name, parameter])
 
