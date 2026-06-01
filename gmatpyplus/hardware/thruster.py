@@ -12,7 +12,7 @@ from gmatpyplus.hardware import Hardware
 class Thruster(Hardware):
     def __init__(self, fuel_type: str, name: str,
                  tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
-                 mix_ratio: int | float | list[int | float] = None):
+                 mix_ratio: int | float | list[int | float] = 1):
         self.fuel_type = fuel_type
         self.thruster_type: str = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
         super().__init__(self.thruster_type, name)
