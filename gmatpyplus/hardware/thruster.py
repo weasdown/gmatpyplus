@@ -37,9 +37,11 @@ class Thruster(Hardware):
                 tank_names = [tank.GetName() for tank in self.tanks]
                 self.SetField('Tank', tank_names)
 
-        self._decrement_mass = self.decrement_mass
         ## TODO tidy up new attributes and set values appropriately
         self._axes: str = self.axes
+        self._coordinate_system: CoordinateSystem | None = None
+
+        self._decrement_mass: bool = self.decrement_mass
 
         self.Initialize()
 
