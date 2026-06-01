@@ -5,6 +5,7 @@ from typing import Union
 import gmatpyplus as gp
 from gmatpyplus import gmat
 from gmatpyplus import utils as u
+from gmatpyplus.coord_system import CoordinateSystem
 from gmatpyplus.hardware import Hardware
 
 
@@ -37,6 +38,8 @@ class Thruster(Hardware):
                 self.SetField('Tank', tank_names)
 
         self._decrement_mass = self.decrement_mass
+        ## TODO tidy up new attributes and set values appropriately
+        self._axes: str = self.axes
 
         self.Initialize()
 
@@ -77,6 +80,26 @@ class Thruster(Hardware):
 
     def attach_to_tanks(self, tanks: list[gp.ChemicalTank | gp.ElectricTank]):
         u.extract_gmat_obj(self).SetField('Tank', tanks)
+
+    @property
+    def axes(self) -> str:
+        return self.GetField('Axes')
+
+    @axes.setter
+    def axes(self, axes: str) -> None:
+        allowed_values: list[str] = ['VNB', 'LVLH', 'MJ2000Eq', 'SpacecraftBody']
+        if axes not in allowed_values:
+            raise AttributeError(f'axes was "{axes}" but must be one of the following: {allowed_values}')
+        try:
+            self.SetField('Axes', axes)
+        except Exception as e:
+            exception_type_name: str = str(type(e))
+            if 'gmatpy' in exception_type_name and 'APIException' in exception_type_name:
+                e: gmat.APIException
+                message = e.GetFullMessage()
+                raise u.APIException(message) from None
+            else:
+                raise
 
     @property
     def decrement_mass(self):
