@@ -124,4 +124,4 @@ print('Run complete!')
 
 sat = gmat.GetRuntimeObject(sat_ref_name)  # update Spacecraft object now it's been propagated
 print(f'\nState after running mission: {GetState(sat)}')
-print(f'Epoch after running mission: {sat.GetEpoch()}\n')
+print(f'Epoch after running mission: {sat.GetField("Epoch")}\n')
