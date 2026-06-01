@@ -7,6 +7,8 @@ from gmatpyplus import gmat
 
 
 class GmatObject:
+    """gmatpyplus equivalent of GMAT's ``GmatBase`` class."""
+
     # TODO: addition of self.gmat_runtime to sat means need to check any functions that call gmat_obj (particularly
     #  properties/setters) to see if they should use gmat_runtime instead
     def __init__(self, obj_type: str, name: str):
