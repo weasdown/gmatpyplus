@@ -1,5 +1,5 @@
 import gmatpyplus as gp
-from command.gmat_command import GmatCommand
+from gmatpyplus.command.gmat_command import GmatCommand
 
 
 class Maneuver(GmatCommand):

@@ -1,5 +1,5 @@
 import gmatpyplus as gp
-from foundation import GmatObject
+from gmatpyplus.foundation import GmatObject
 
 
 class Propagator(GmatObject):  # variable called gator in GMAT Python examples

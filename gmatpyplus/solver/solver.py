@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-from command.gmat_command import GmatCommand
-from foundation import GmatObject
+from gmatpyplus.command.gmat_command import GmatCommand
+from gmatpyplus.foundation import GmatObject
 
 
 class Solver(GmatObject):

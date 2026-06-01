@@ -1,5 +1,5 @@
 import gmatpyplus as gp
-from command.solver_branch_command import SolverBranchCommand
+from gmatpyplus.command.solver_branch_command import SolverBranchCommand
 from gmatpyplus import gmat
 
 

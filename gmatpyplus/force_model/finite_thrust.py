@@ -1,4 +1,4 @@
-from force_model.physical_model import PhysicalModel
+from gmatpyplus.force_model.physical_model import PhysicalModel
 
 
 class FiniteThrust(PhysicalModel):

@@ -1,8 +1,8 @@
-from coord_system.axes import Axes
-from foundation import GmatObject
 from gmatpyplus import gmat
-from spacecraft import Spacecraft
-from utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, SpacecraftObjs
+from gmatpyplus.coord_system.axes import Axes
+from gmatpyplus.foundation import GmatObject
+from gmatpyplus.spacecraft import Spacecraft
+from gmatpyplus.utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, SpacecraftObjs
 
 
 # TODO add CoordinateBase class in a separate file and make it CoordinateSystem's parent type (see CoordinateBase.cpp in GMAT source code).

@@ -1,7 +1,7 @@
 from math import pi
 
 import gmatpyplus as gp
-from command.solver_sequence_command import SolverSequenceCommand
+from gmatpyplus.command.solver_sequence_command import SolverSequenceCommand
 from gmatpyplus import gmat
 
 

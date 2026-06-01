@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-from foundation import GmatObject
 from gmatpyplus import gmat
+from gmatpyplus.foundation import GmatObject
 
 
 def RunMission(mcs: list[gp.GmatCommand]) -> int:

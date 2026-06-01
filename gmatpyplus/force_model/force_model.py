@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-from force_model.physical_model import PhysicalModel
-from force_model.point_mass_force import PointMassForce
-from foundation import GmatObject
-from solar_system import AtmosphereModel
-from utils import CelestialBodies
+from gmatpyplus.force_model.physical_model import PhysicalModel
+from gmatpyplus.force_model.point_mass_force import PointMassForce
+from gmatpyplus.foundation import GmatObject
+from gmatpyplus.solar_system import AtmosphereModel
+from gmatpyplus.utils import CelestialBodies
 
 
 class DragForce(PhysicalModel):

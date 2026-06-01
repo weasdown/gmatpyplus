@@ -5,8 +5,8 @@ from math import pi, atan2, asin
 import numpy as np
 
 import gmatpyplus as gp
-from foundation import GmatObject
 from gmatpyplus import gmat
+from gmatpyplus.foundation import GmatObject
 
 
 class Color(bytearray):

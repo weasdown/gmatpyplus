@@ -1,6 +1,6 @@
 import gmatpyplus as gp
-from command.gmat_command import GmatCommand
 from gmatpyplus import gmat
+from gmatpyplus.command.gmat_command import GmatCommand
 
 
 class EndFiniteBurn(GmatCommand):

@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 
 import gmatpyplus as gp
-from load_gmat import gmat
+from gmatpyplus import gmat
 
 # # Uncomment to enable logging
 # log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut03-Log.txt')

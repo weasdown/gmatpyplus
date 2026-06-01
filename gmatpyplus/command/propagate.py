@@ -1,8 +1,8 @@
 import gmatpyplus as gp
-from command.gmat_command import GmatCommand
 from gmatpyplus import gmat
-from stop_condition import StopCondition
-from utils import extract_gmat_obj
+from gmatpyplus.command.gmat_command import GmatCommand
+from gmatpyplus.stop_condition import StopCondition
+from gmatpyplus.utils import extract_gmat_obj
 
 
 class Propagate(GmatCommand):

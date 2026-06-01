@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-from utils import CoordSystems, gmat_str_to_py_str, py_str_to_gmat_str
+from gmatpyplus.utils import CoordSystems, gmat_str_to_py_str, py_str_to_gmat_str
 
 
 class OrbitState:

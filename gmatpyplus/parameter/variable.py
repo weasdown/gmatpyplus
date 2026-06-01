@@ -1,4 +1,4 @@
-from parameter.parameter import Parameter
+from gmatpyplus.parameter.parameter import Parameter
 
 
 class Variable(Parameter):

@@ -3,8 +3,8 @@ from __future__ import annotations
 import os.path
 
 import gmatpyplus as gp
-from foundation import GmatObject
 from gmatpyplus import gmat
+from gmatpyplus.foundation import GmatObject
 
 
 ## TODO remove commented code

@@ -1,4 +1,4 @@
-from command.gmat_command import GmatCommand
+from gmatpyplus.command.gmat_command import GmatCommand
 
 
 class SolverSequenceCommand(GmatCommand):

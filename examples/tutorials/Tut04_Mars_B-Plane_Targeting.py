@@ -3,9 +3,11 @@
 # Written by William Easdown Babb
 
 from __future__ import annotations
-from load_gmat import gmat
-import gmatpyplus as gp
+
 import os
+
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut04-Log.txt')
 gmat.UseLogFile(log_path)

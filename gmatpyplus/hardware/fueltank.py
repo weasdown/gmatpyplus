@@ -6,7 +6,7 @@ from typing import Generic, TypeVar, Union
 import numpy as np
 
 import gmatpyplus as gp
-from foundation import GmatObject
+from gmatpyplus.foundation import GmatObject
 
 T = TypeVar('T')
 

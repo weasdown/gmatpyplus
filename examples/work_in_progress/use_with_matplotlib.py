@@ -6,7 +6,6 @@ from __future__ import annotations
 import os
 
 import gmatpyplus as gp
-from load_gmat import gmat
 
 gp.gmat.Clear()
 

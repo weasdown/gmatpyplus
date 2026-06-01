@@ -1,6 +1,6 @@
 import gmatpyplus as gp
 from gmatpyplus import gmat
-from utils import extract_gmat_obj
+from gmatpyplus.utils import extract_gmat_obj
 
 
 class StopCondition:

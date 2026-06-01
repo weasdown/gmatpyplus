@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 
 import gmatpyplus as gp
-from foundation import GmatObject
 from gmatpyplus import utils as u
-from orbit_state import OrbitState
+from gmatpyplus.foundation import GmatObject
+from gmatpyplus.orbit_state import OrbitState
 
 
 class Spacecraft(GmatObject):
