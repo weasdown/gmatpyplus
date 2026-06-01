@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import gmatpyplus as gp
 from basics import GmatObject
-from utils import *
+from gmatpyplus import gmat
+from utils import Barycenter, CelestialBodies, CoordSystems, gmat_str_to_py_str, GroundStations, LibrationPoints, \
+    SpacecraftObjs, py_str_to_gmat_str
 
 
 class OrbitState:
