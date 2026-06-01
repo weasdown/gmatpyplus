@@ -83,6 +83,6 @@ else:
 
 sat = gmat.GetRuntimeObject(sat.GetName())
 print(f'Sat state after running: {GetState(sat)}')
-print(f'Sat epoch after running: {sat.GetEpoch()}')
+print(f'Sat epoch after running: {sat.GetField("Epoch")}')
 
 gmat.SaveScript(script_path)
