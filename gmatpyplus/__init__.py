@@ -1,5 +1,4 @@
 import os
-import types
 
 
 def _gmat_path() -> str:
@@ -46,17 +45,36 @@ from .load_gmat import *
 # GMAT's built-in library that interfaces to GMAT's source code.
 gmat: types.ModuleType = load_gmat.gmat
 
+from .api import *
 from .api_funcs import *
-from .basics import *
+from .asset import *
+from .attitude import *
 from .burn import *
-from .commands import *
+from .command import *
+from .configs import *
+from .coord_system import *
+from .errors import *
+from .event import *
 from .executive import *
+from .force_model import *
+from .foundation import *
+from .function import *
+from .gmat_math import *
 from .hardware import *
+from .interface import *
 from .interpreter import *
+from .navigation import *
+from .orbit_state import *
+from .output import *
 from .parameter import *
+from .plugin import *
+from .propagator import *
+from .solar_system import *
 from .solver import *
 from .spacecraft import *
-from .orbit import *
+from .spice import *
+from .stop_condition import *
+from .subscriber import *
 from .utils import *
 
 _library_dir = os.path.dirname(os.path.realpath(__file__))

@@ -12,8 +12,11 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/build-archive" />
+      <excludeFolder url="file://$MODULE_DIR$/plugins" />
+      <excludeFolder url="file://$MODULE_DIR$/source/_static" />
+      <excludeFolder url="file://$MODULE_DIR$/source/_templates" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.14.3 (gmatpyplus)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.14.4 (gmatpyplus)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

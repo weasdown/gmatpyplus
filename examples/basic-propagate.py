@@ -17,6 +17,7 @@ def GetState(sc: gmat.Spacecraft) -> list[float]:
     state: list[None | float] = [None] * 6
     for i in range(13, 19):
         state[i - 13] = float(sc.GetField(i))
+    state: list[float]
     return state
 
 
@@ -82,6 +83,6 @@ else:
 
 sat = gmat.GetRuntimeObject(sat.GetName())
 print(f'Sat state after running: {GetState(sat)}')
-print(f'Sat epoch after running: {sat.GetField("Epoch")}')
+print(f'Sat epoch after running: {sat.GetEpoch()}')
 
 gmat.SaveScript(script_path)

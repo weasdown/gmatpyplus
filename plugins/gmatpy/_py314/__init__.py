@@ -10,4 +10,4 @@ sys.path.append(filePath)
 
 from .gmat_py import *
 from .station_py import *
-# from .navigation_py import *
+from .navigation_py import *

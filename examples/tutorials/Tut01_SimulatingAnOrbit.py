@@ -36,7 +36,7 @@ sat = gp.Spacecraft.from_dict(sat_params)
 fm = gp.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gp.ForceModel.DragForce(),
                    srp=True, gravity_field=gp.ForceModel.GravityField(degree=10, order=10))
 prop = gp.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
-                    gator=gp.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
+                    gator=gp.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
 
 print(f'\nSat state before running: {sat.GetState()}')
 print(f"Epoch before running: {sat.GetEpoch()}")
