@@ -1,4 +1,5 @@
 from basics import GmatObject
+from coord_system.axes import Axes
 from gmatpyplus import gmat
 from spacecraft import Spacecraft
 from utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, SpacecraftObjs
@@ -6,13 +7,6 @@ from utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, 
 
 class CoordinateSystem(GmatObject):
     # TODO convert __init__ params to args with default values
-
-    # TODO complete - will be able to create each type of Axes, for use in CoordinateSystem
-    class Axes(GmatObject):
-        def __init__(self, axes_type: str, name: str):
-            super().__init__(axes_type, name)
-            self.Initialize()
-
     def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str = None,
                  secondary: str = None, xaxis: str = None, yaxis: str = None, zaxis: str = None, epoch: str = None,
                  alignment_vec_x: int = None, alignment_vec_y: int = None, alignment_vec_z: int = None,
@@ -108,7 +102,7 @@ class CoordinateSystem(GmatObject):
                     self.constraint_coord_sys = constraint_coord_sys
                     self.ref_object = ref_object
 
-        self.axes: CoordinateSystem.Axes = CoordinateSystem.Axes(axes, f'{origin}_{axes}')
+        self.axes: Axes = Axes(axes, f'{origin}_{axes}')
         self.SetRefObject(self.axes, gmat.AXIS_SYSTEM, self.axes.name)
 
         # gp.Initialize()

@@ -140,7 +140,7 @@ class ImpulsiveBurn(Burn):
                 if isinstance(coord_sys_new, gp.CoordinateSystem):
                     self.origin_body: gmat.Planet = coord_sys_new.origin  # obj for celestial body at coord sys origin
                     self.origin_name: str = self.origin_body.GetName()
-                    self.axes: gp.CoordinateSystem.Axes = coord_sys_new.axes
+                    self.axes: gp.Axes = coord_sys_new.axes
                     self.axes_name: str = self.axes.name
 
                 elif isinstance(coord_sys_new, gmat.CoordinateSystem):

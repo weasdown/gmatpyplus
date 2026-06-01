@@ -1,0 +1,8 @@
+from basics import GmatObject
+
+
+# TODO complete - will be able to create each type of Axes, for use in CoordinateSystem
+class Axes(GmatObject):
+    def __init__(self, axes_type: str, name: str):
+        super().__init__(axes_type, name)
+        self.Initialize()
