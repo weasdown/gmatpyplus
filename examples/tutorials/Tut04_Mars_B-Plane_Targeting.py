@@ -61,7 +61,7 @@ near_mars = gp.PropSetup('NearMars',
                          initial_step_size=600, accuracy=1e-12, min_step=0, max_step=86400, max_step_attempts=50)
 
 # Setup CoordinateSystems
-mars_inertial = gp.OrbitState.CoordinateSystem('MarsInertial', 'Mars', 'BodyInertial')
+mars_inertial = gp.CoordinateSystem('MarsInertial', 'Mars', 'BodyInertial')
 
 # Setup ImpulsiveBurns
 tcm = gp.ImpulsiveBurn('TCM', coord_sys={'CoordinateSystem': 'Local', 'Origin': 'Mars', 'Axes': 'VNB'},

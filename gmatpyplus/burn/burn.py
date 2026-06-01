@@ -92,7 +92,7 @@ class FiniteThrust(GmatObject):  # TODO tidy: consider making subclass of Finite
 
 
 class ImpulsiveBurn(Burn):
-    def __init__(self, name, coord_sys: gp.OrbitState.CoordinateSystem | dict | str = None,
+    def __init__(self, name, coord_sys: gp.CoordinateSystem | dict | str = None,
                  delta_v: list[int | float] = None,
                  decrement_mass: bool = False, tanks: gp.FuelTank | list[gp.FuelTank] | str = None,
                  isp: int | float = 300,
@@ -128,19 +128,19 @@ class ImpulsiveBurn(Burn):
                 self.SetStringParameter('Axes', dict_axes)
 
             elif isinstance(coord_sys,
-                            gp.OrbitState.CoordinateSystem | gmat.CoordinateSystem):  # coord_sys is a wrapper or GMAT CoordinateSystem object
+                            gp.CoordinateSystem | gmat.CoordinateSystem):  # coord_sys is a wrapper or GMAT CoordinateSystem object
                 coord_sys.Initialize()
 
                 # Below avoids false positive type hint warning in PyCharm 2025.2.
                 # noinspection PyTypeHints
-                coord_sys_new: gp.OrbitState.CoordinateSystem | gmat.CoordinateSystem = coord_sys
+                coord_sys_new: gp.CoordinateSystem | gmat.CoordinateSystem = coord_sys
                 self.coord_sys_name = coord_sys_new.GetName()
 
                 # Extract celestial body (e.g. Earth) and axes (e.g. MJ2000Eq) from CoordinateSystem
-                if isinstance(coord_sys_new, gp.OrbitState.CoordinateSystem):
+                if isinstance(coord_sys_new, gp.CoordinateSystem):
                     self.origin_body: gmat.Planet = coord_sys_new.origin  # obj for celestial body at coord sys origin
                     self.origin_name: str = self.origin_body.GetName()
-                    self.axes: gp.OrbitState.CoordinateSystem.Axes = coord_sys_new.axes
+                    self.axes: gp.CoordinateSystem.Axes = coord_sys_new.axes
                     self.axes_name: str = self.axes.name
 
                 elif isinstance(coord_sys_new, gmat.CoordinateSystem):

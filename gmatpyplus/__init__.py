@@ -49,6 +49,7 @@ from .api_funcs import *
 from .basics import *
 from .burn import *
 from .command import *
+from .coord_system import *
 from .errors import *
 from .executive import *
 from .force_model import *

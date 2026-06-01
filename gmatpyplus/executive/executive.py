@@ -327,5 +327,5 @@ class Sandbox:
     def GetGlobalObjectMap(self) -> gmat.ObjectMap:
         return self.gmat_obj.GetGlobalObjectMap()
 
-    def SetInternalCoordSystem(self, cs: gp.OrbitState.CoordinateSystem) -> bool:
+    def SetInternalCoordSystem(self, cs: gp.CoordinateSystem) -> bool:
         return self.gmat_obj.SetInternalCoordSystem(gp.extract_gmat_obj(cs))
