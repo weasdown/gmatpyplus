@@ -5,6 +5,7 @@ from spacecraft import Spacecraft
 from utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, SpacecraftObjs
 
 
+# TODO add CoordinateBase class in a separate file and make it CoordinateSystem's parent type (see CoordinateBase.cpp in GMAT source code).
 class CoordinateSystem(GmatObject):
     # TODO convert __init__ params to args with default values
     def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str = None,
