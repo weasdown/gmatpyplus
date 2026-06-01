@@ -20,51 +20,51 @@ class CoordinateSystem(GmatObject):
         # TODO complete allowed values - see User Guide pages 335-339 (PDF pg 344-348)
         #  and src/base/coordsystem/CoordinateSystem.cpp/CreateLocalCoordinateSystem
         super().__init__('CoordinateSystem', name)
-        self.allowed_values = {'Axes': ['MJ2000Eq', 'MJ2000Ec', 'ICRF',
-                                        'MODEq', 'MODEc', 'TODEq', 'TODEc', 'MOEEq', 'MOEEc', 'TOEEq', 'TOEEc',
-                                        'ObjectReferenced', 'Equator', 'BodyFixed', 'BodyInertial',
-                                        'GSE', 'GSM', 'Topocentric', 'BodySpinSun'],
-                               'CentralBody': CelestialBodies(),
-                               'Origin': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() + Barycenter()
-                                          + GroundStations()),
-                               'AxesTypeSpecific': {
-                                   'ObjectReferenced': {
-                                       'Primary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
-                                                   Barycenter() + GroundStations()),
-                                       'Secondary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
-                                                     Barycenter() + GroundStations()),
-                                       'XAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                       'YAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                       'ZAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                   },
-                                   'TOE': {
-                                       'Epoch': '21545'
-                                   },
-                                   'MOE': {
-                                       'Epoch': '21545'
-                                   },
-                                   'LocalAlignedConstrained': {
-                                       'AlignmentVectorX': 1,
-                                       'AlignmentVectorY': 0,
-                                       'AlignmentVectorZ': 0,
-                                       'ConstraintVectorX': 0,
-                                       'ConstraintVectorY': 0,
-                                       'ConstraintVectorZ': 1,
-                                       'ConstraintReferenceVectorX': 0,
-                                       'ConstraintReferenceVectorY': 0,
-                                       'ConstraintReferenceVectorZ': 1,
-                                       'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
-                                       'ReferenceObject': (CelestialBodies() + SpacecraftObjs() +
-                                                           LibrationPoints() + Barycenter() +
-                                                           GroundStations())
-                                   }
-                               },
-                               }
+        self._allowed_values = {'Axes': ['MJ2000Eq', 'MJ2000Ec', 'ICRF',
+                                         'MODEq', 'MODEc', 'TODEq', 'TODEc', 'MOEEq', 'MOEEc', 'TOEEq', 'TOEEc',
+                                         'ObjectReferenced', 'Equator', 'BodyFixed', 'BodyInertial',
+                                         'GSE', 'GSM', 'Topocentric', 'BodySpinSun'],
+                                'CentralBody': CelestialBodies(),
+                                'Origin': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() + Barycenter()
+                                           + GroundStations()),
+                                'AxesTypeSpecific': {
+                                    'ObjectReferenced': {
+                                        'Primary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
+                                                    Barycenter() + GroundStations()),
+                                        'Secondary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
+                                                      Barycenter() + GroundStations()),
+                                        'XAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                        'YAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                        'ZAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                    },
+                                    'TOE': {
+                                        'Epoch': '21545'
+                                    },
+                                    'MOE': {
+                                        'Epoch': '21545'
+                                    },
+                                    'LocalAlignedConstrained': {
+                                        'AlignmentVectorX': 1,
+                                        'AlignmentVectorY': 0,
+                                        'AlignmentVectorZ': 0,
+                                        'ConstraintVectorX': 0,
+                                        'ConstraintVectorY': 0,
+                                        'ConstraintVectorZ': 1,
+                                        'ConstraintReferenceVectorX': 0,
+                                        'ConstraintReferenceVectorY': 0,
+                                        'ConstraintReferenceVectorZ': 1,
+                                        'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
+                                        'ReferenceObject': (CelestialBodies() + SpacecraftObjs() +
+                                                            LibrationPoints() + Barycenter() +
+                                                            GroundStations())
+                                    }
+                                },
+                                }
 
         # Parse origin argument
-        if origin not in self.allowed_values['Origin']:
+        if origin not in self._allowed_values['Origin']:
             raise AttributeError(f'Specified origin "{origin}" is not recognized. Please specify one of the '
-                                 f'following:\n\t{self.allowed_values["Origin"]}')
+                                 f'following:\n\t{self._allowed_values["Origin"]}')
         else:
             self.origin = gmat.GetObject(origin)  # get current (default) origin
             # attach new origin to CoordinateSystem
@@ -72,12 +72,12 @@ class CoordinateSystem(GmatObject):
             self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
 
         # Parse axes argument
-        if axes not in self.allowed_values['Axes']:
+        if axes not in self._allowed_values['Axes']:
             raise AttributeError(f'Specified axes type "{axes}" is not recognized. Please specify one of the '
-                                 f'following:\n\t{self.allowed_values["Axes"]}')
+                                 f'following:\n\t{self._allowed_values["Axes"]}')
         else:
-            if axes in list(self.allowed_values['AxesTypeSpecific'].keys()):
-                axes_specific_values = self.allowed_values['AxesTypeSpecific'][axes]
+            if axes in list(self._allowed_values['AxesTypeSpecific'].keys()):
+                axes_specific_values = self._allowed_values['AxesTypeSpecific'][axes]
 
                 # TODO set params/ref objs for all axes types
                 if axes == 'ObjectReferenced':
