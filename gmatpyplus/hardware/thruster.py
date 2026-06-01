@@ -22,7 +22,7 @@ class Thruster(Hardware):
         self.tanks: list[gp.ChemicalTank | gp.ElectricTank] | None = tanks
         self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
         if isinstance(self.tanks, str | gp.FuelTank | gmat.FuelTank):
-            if mix_ratio is not None and self.mix_ratio != 1:
+            if mix_ratio is not None and self.mix_ratio != [1]:
                 raise AttributeError(f'Invalid mix_ratio {self.mix_ratio} given for a single tank')
             self.mix_ratio = [1]
             self.SetField('MixRatio', self.mix_ratio)
