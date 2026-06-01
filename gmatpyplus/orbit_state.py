@@ -137,8 +137,7 @@ class OrbitState:
 
         @property
         def name(self) -> str:
-            name = getattr(self, '_name', self.gmat_obj.GetName())
-            return name
+            return self._name if self._name else self.gmat_obj.GetName()
 
         @name.setter
         def name(self, name):
