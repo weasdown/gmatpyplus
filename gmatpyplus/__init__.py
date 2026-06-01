@@ -59,10 +59,10 @@ from .executive import *
 from .force_model import *
 from .foundation import *
 from .function import *
+from .gmat_math import *
 from .hardware import *
 from .interface import *
 from .interpreter import *
-from .math import *
 from .navigation import *
 from .orbit_state import *
 from .output import *
