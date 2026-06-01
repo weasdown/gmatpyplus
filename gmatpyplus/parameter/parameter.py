@@ -139,7 +139,6 @@ class Parameter:
                                f'see exception below:\n\t{ex}'
                                f'') from ex
 
-
 # TODO: make a class for each type of StopCondition, e.g. ElapsedSecs, Apoapsis etc, that generates a
 #  properly-formed StopCondition of that type. Will help with code completion.
 # class StopParameter(Parameter):
@@ -156,12 +155,3 @@ class Parameter:
 # class ElapsedDays(StopParameter):
 #     def __init__(self):
 #         super().__init__()
-
-class Variable(Parameter):
-    def __init__(self, name: str, value: int = None):
-        super().__init__('Variable', name)
-
-        self.value = value if value else 0
-        self.SetStringParameter('Expression', str(self.value))
-
-        self.Initialize()

@@ -105,7 +105,7 @@ def extract_gmat_obj(obj):
     if 'gmat_py' in obj_type:  # native GMAT object
         return obj
     else:  # wrapper object
-        if 'Parameter' in obj_type:
+        if ('Parameter' in obj_type) or ('Variable' in obj_type):
             return obj.gmat_base
         return obj.gmat_obj
     ## TODO remove TypeError case once verified not needed.
