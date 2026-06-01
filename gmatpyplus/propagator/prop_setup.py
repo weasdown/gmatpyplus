@@ -1,6 +1,6 @@
 import gmatpyplus as gp
-from basics import GmatObject
 from force_model import ForceModel
+from foundation import GmatObject
 from propagator.propagator import Propagator
 
 

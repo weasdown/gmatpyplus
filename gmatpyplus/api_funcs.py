@@ -3,6 +3,7 @@ from __future__ import annotations
 import os.path
 
 import gmatpyplus as gp
+from foundation import GmatObject
 from gmatpyplus import gmat
 
 
@@ -18,7 +19,7 @@ from gmatpyplus import gmat
 #             raise ex
 
 
-def GetObject(obj: gp.GmatObject | str) -> gmat.GmatBase:
+def GetObject(obj: GmatObject | str) -> gmat.GmatBase:
     # TODO determine return type. Same for gmat.GetObject and GetRuntimeObject?
     """
     Return the latest version of an object so its state info is up-to-date.

@@ -3,7 +3,7 @@ from typing import Union
 import numpy as np
 
 import gmatpyplus as gp
-from basics import GmatObject
+from foundation import GmatObject
 from gmatpyplus import gmat
 
 

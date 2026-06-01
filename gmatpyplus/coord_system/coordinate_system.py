@@ -1,5 +1,5 @@
-from basics import GmatObject
 from coord_system.axes import Axes
+from foundation import GmatObject
 from gmatpyplus import gmat
 from spacecraft import Spacecraft
 from utils import Barycenter, CelestialBodies, GroundStations, LibrationPoints, SpacecraftObjs

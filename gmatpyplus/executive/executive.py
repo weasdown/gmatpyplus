@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
+from foundation import GmatObject
 from gmatpyplus import gmat
 
 
@@ -251,7 +252,7 @@ class Moderator:
             for t in target_commands:
                 solver = t.solver
                 solver.was_propagated = True
-                solver.gmat_obj = gp.GmatObject.GetObject(solver)
+                solver.gmat_obj = GmatObject.GetObject(solver)
                 solver_status = solver.GetIntegerParameter('IntegerSolverStatus')
                 if solver_status != 0:  # solver failed
                     raise RuntimeError(f'{solver.gmat_obj.GetTypeName()} "{solver.GetName()}" failed to converge. '
@@ -315,7 +316,7 @@ class Sandbox:
     def __init__(self):
         self.gmat_obj = gmat.Moderator.Instance().GetSandbox()
 
-    def AddObject(self, obj: gp.GmatObject) -> bool:
+    def AddObject(self, obj: GmatObject) -> bool:
         return self.gmat_obj.AddObject(gp.extract_gmat_obj(obj))
 
     def AddSolarSystem(self, ss: gmat.SolarSystem) -> bool:

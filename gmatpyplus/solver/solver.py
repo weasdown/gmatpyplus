@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import gmatpyplus as gp
 from command.gmat_command import GmatCommand
+from foundation import GmatObject
 
 
-class Solver(gp.GmatObject):
+class Solver(GmatObject):
     def __init__(self, obj_type: str, name: str):
         super().__init__(obj_type, name)
 

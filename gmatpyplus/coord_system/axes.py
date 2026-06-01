@@ -1,4 +1,4 @@
-from basics import GmatObject
+from foundation import GmatObject
 
 
 # TODO align this class with the GMAT source code's AxisSystem class (including renaming here). This will then become the parent type of the InertialAxes and DynamicAxes types.

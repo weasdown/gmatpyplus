@@ -1,6 +1,6 @@
 import logging
 
-from basics import GmatObject
+from foundation import GmatObject
 
 
 class AtmosphereModel(GmatObject):

@@ -46,13 +46,13 @@ from .load_gmat import *
 gmat: types.ModuleType = load_gmat.gmat
 
 from .api_funcs import *
-from .basics import *
 from .burn import *
 from .command import *
 from .coord_system import *
 from .errors import *
 from .executive import *
 from .force_model import *
+from .foundation import *
 from .hardware import *
 from .interpreter import *
 from .navigation import *

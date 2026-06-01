@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import gmatpyplus as gp
-from basics import GmatObject
 from force_model.physical_model import PhysicalModel
 from force_model.point_mass_force import PointMassForce
+from foundation import GmatObject
 from solar_system import AtmosphereModel
 from utils import CelestialBodies
 

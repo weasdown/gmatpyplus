@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from basics import GmatObject
+from foundation import GmatObject
 
 
 ## TODO implement Hardware class

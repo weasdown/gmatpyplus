@@ -1,4 +1,4 @@
-from basics import GmatObject
+from foundation import GmatObject
 
 
 class PhysicalModel(GmatObject):
