@@ -4,6 +4,7 @@ import gmatpyplus as gp
 from gmatpyplus import gmat
 
 
+## TODO remove function once verified no longer needed.
 # def CreateParameter(param_type: str, name: str) -> Parameter:
 #     return Parameter(param_type, name)
 
