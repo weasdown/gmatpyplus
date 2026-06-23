@@ -10,9 +10,6 @@ class Hardware(GmatObject):
     def __init__(self, obj_type: str, name: str):
         super().__init__(obj_type, name)
 
-        self._location: np.ndarray = self.location
-        self._rotation_matrix: np.ndarray = self.rotation_matrix
-        
     # TODO: implement Hardware.GetDirection() method
     def GetDirection(self) -> np.ndarray:
         raise NotImplementedError('Method on Hardware is not yet implemented.')
@@ -38,7 +35,6 @@ class Hardware(GmatObject):
         location_vec = self.gmat_obj.GetLocation()  # gmat.Rvector3
         location: np.ndarray = np.array([location_vec.Get(0), location_vec.Get(1), location_vec.Get(2)],
                                         dtype=float)
-        self._location = location
         return location
 
     @property
@@ -49,5 +45,4 @@ class Hardware(GmatObject):
             [[internal[0, 0], internal[0, 1], internal[0, 2]],
              [internal[1, 0], internal[1, 1], internal[1, 2]],
              [internal[2, 0], internal[2, 1], internal[2, 2]]])
-        self._rotation_matrix = rotation_matrix
         return rotation_matrix
