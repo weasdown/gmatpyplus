@@ -16,9 +16,8 @@ class Hardware(GmatObject):
     def GetDirection(self) -> np.ndarray:
         raise NotImplementedError('Method on Hardware is not yet implemented.')
 
-    # TODO: implement Hardware.GetLocation() method
     def GetLocation(self) -> np.ndarray:
-        raise NotImplementedError('Method on Hardware is not yet implemented.')
+        return self.location
 
     # TODO: implement Hardware.GetRotationMatrix() method
     def GetRotationMatrix(self) -> np.ndarray:
@@ -35,5 +34,8 @@ class Hardware(GmatObject):
     @property
     def location(self) -> np.ndarray:
         """Location of center of the hardware element on the spacecraft, in meters."""
-        self._location = self.GetLocation()
-        return self._location
+        location_vec = self.gmat_obj.GetLocation()  # gmat.Rvector3
+        location: np.ndarray = np.array([location_vec.Get(0), location_vec.Get(1), location_vec.Get(2)],
+                                        dtype=float)
+        self._location = location
+        return location
