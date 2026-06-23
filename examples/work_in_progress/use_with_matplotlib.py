@@ -6,7 +6,6 @@ from __future__ import annotations
 import os
 
 import gmatpyplus as gp
-from load_gmat import gmat
 
 gp.gmat.Clear()
 
@@ -51,10 +50,10 @@ sat_params = {
 
 sat = gp.Spacecraft.from_dict(sat_params)
 
-fm = gp.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gp.ForceModel.DragForce(),
+fm = gp.ForceModel(name='LowEarthProp_ForceModel', point_masses=['Luna', 'Sun'], drag=gp.DragForce(),
                    srp=True, gravity_field=gp.ForceModel.GravityField(degree=10, order=10))
 prop = gp.PropSetup('LowEarthProp', fm=fm, accuracy=9.999999999999999e-12,
-                    gator=gp.PropSetup.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
+                    gator=gp.Propagator(name='LowEarthProp', integrator='RungeKutta89'))
 
 # toi = gp.ImpulsiveBurn('IB1', sat.GetCoordinateSystem(), [0.2, 0, 0])
 

@@ -212,8 +212,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.venv
+.env/
+.venv/
 env/
 venv/
 ENV/
@@ -271,5 +271,5 @@ pyrightconfig.json
 # Hatch versioning file
 _version.py
 
-# Ignore build-archive that contains old compiled package files that are too large for GitHub.
-build-archive
+# Ignore dist-archive that contains old compiled package files that are too large for GitHub.
+dist-archive

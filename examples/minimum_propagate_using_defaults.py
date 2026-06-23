@@ -34,7 +34,7 @@ sat.SetField('DisplayStateType', 'Keplerian')  # to make periapsis/apoapsis stop
 gmat.Initialize()  # needed for correct initial state
 
 print(f'\nState before running mission: {GetState(sat)}')
-print(f'Epoch before running mission: {sat.GetField("Epoch")}\n')
+print(f'Epoch before running mission: {sat.GetEpoch()}\n')
 
 # # Setup Validator for use during Propagate creation - if not set, exceptions thrown in log (set EchoLogFile(True))
 # vdator = gmat.Validator.Instance()

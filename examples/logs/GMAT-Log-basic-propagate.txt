@@ -1,6 +1,6 @@
-GMAT Build Date: Apr  9 2025 12:22:35
+GMAT Build Date: Apr 20 2026 13:00:44
 
-GMAT API Log: Created Wed Sep 10 14:17:50 2025
+GMAT API Log: Created Mon Jun  1 12:47:52 2026
 
 
 Logging to C:\Users\weasd\dev\non-OH\GMAT\gmatpyplus\examples\logs\GMAT-Log-basic-propagate.txt
@@ -8,22 +8,22 @@ Successfully set Planetary Source to use: DE405
 Successfully set Planetary Source to use: DE405
 Successfully set Planetary Source to use: DE405
 Successfully set Planetary Source to use: DE405
-Kernel C:/Users/weasd/Desktop/GMAT/gmat-win-R2025a/GMAT_R2025a/data/planetary_ephem/spk/DE405AllPlanets.bsp has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICEPlanetaryConstantsKernel.tpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\time\SPICELeapSecondKernel.tls has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICEEarthPredictedKernel.bpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICEEarthCurrentKernel.bpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\earth_latest_high_prec.bpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICELunaCurrentKernel.bpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICELunaFrameKernel.tf has been loaded.
+Kernel C:/Users/weasd/dev/non-OH/GMAT/GMAT-src_and_data-R2026a/GMAT-R2026a-Windows-x64/data/planetary_ephem/spk/DE405AllPlanets.bsp has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEPlanetaryConstantsKernel.tpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\time\SPICELeapSecondKernel.tls has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEEarthPredictedKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEEarthCurrentKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\earth_latest_high_prec.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICELunaCurrentKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICELunaFrameKernel.tf has been loaded.
 Running mission...
 Successfully set Planetary Source to use: DE405
 Successfully set Planetary Source to use: DE405
-Kernel C:/Users/weasd/Desktop/GMAT/gmat-win-R2025a/GMAT_R2025a/data/planetary_ephem/spk/DE405AllPlanets.bsp has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\planetary_coeff\SPICEPlanetaryConstantsKernel.tpc has been loaded.
-Kernel C:\Users\weasd\Desktop\GMAT\gmat-win-R2025a\GMAT_R2025a\data\time\SPICELeapSecondKernel.tls has been loaded.
+Kernel C:/Users/weasd/dev/non-OH/GMAT/GMAT-src_and_data-R2026a/GMAT-R2026a-Windows-x64/data/planetary_ephem/spk/DE405AllPlanets.bsp has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEPlanetaryConstantsKernel.tpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\time\SPICELeapSecondKernel.tls has been loaded.
 
 Mission run completed.
-===> Total Run Time: 0.179 seconds
+===> Total Run Time: 0.171 seconds
 
 ========================================

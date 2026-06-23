@@ -26,8 +26,10 @@ def GetState(spacecraft) -> list[float]:
 
 
 internal_coord_sys = mod.CreateCoordinateSystem('InternalEarthMJ2000Eq', True, True)  # create coord sys for use in sat
-sat = mod.CreateSpacecraft('Spacecraft', 'DefaultSC')  # create Spacecraft object
-# sat = gmat.Spacecraft('DefaultSC')  # create Spacecraft object
+sat_name: str = 'DefaultSC'
+# TODO why not gmat.Construct('Spacecraft', sat_name)?
+sat = mod.CreateSpacecraft('Spacecraft', sat_name)  # create Spacecraft object
+# sat = gmat.Spacecraft(sat_name)  # create Spacecraft object
 sat.SetInternalCoordSystem(internal_coord_sys)  # attach internal coordinate system to sat
 sat.SetRefObject(mod.GetCoordinateSystem('EarthMJ2000Eq'), gmat.COORDINATE_SYSTEM, 'EarthMJ2000Eq')  # attach CS to sat
 
@@ -65,14 +67,13 @@ if not mod.GetParameter(stop_var):
     param.SetRefObjectName(gmat.SPACECRAFT, sat.GetName())  # attach Spacecraft to Parameter
 
 # Set stop parameters
+time_to_propagate = 86400  # seconds
 stop_cond.SetStringParameter('EpochVar', epoch_var)  # A1ModJulian
 stop_cond.SetStringParameter('StopVar', stop_var)  # ElapsedSecs
-stop_cond.SetStringParameter('Goal', str(86400))  # 12000.0 seconds
+stop_cond.SetStringParameter('Goal', str(time_to_propagate))  # seconds
 
 # add the StopCondition to the ConfigManager, so it can later be used as a ref object by Propagate
 gmat.ConfigManager.Instance().AddObject(gmat.STOP_CONDITION, stop_cond)
-
-# gmat.Initialize()
 
 # Create and setup Propagate command
 # pgate = gmat.Propagate()
@@ -80,7 +81,7 @@ gmat.ConfigManager.Instance().AddObject(gmat.STOP_CONDITION, stop_cond)
 # default_pgate_name = 'Propagate'
 pgate_name = 'DefaultPropagateCommand'
 # pgate = mod.CreateDefaultCommand('Propagate')
-pgate = Propagate(pgate_name, prop, sat)
+pgate = Propagate(pgate_name, sat, prop, (stop_var, time_to_propagate))
 print(f'\nCM list before creating Propagate: {gmat.ConfigManager.Instance().GetListOfAllItems()}\n')
 # pgate = gmat.Propagate()
 # pgate = gp.GmatCommand.ClearDefaultObjects(pgate)
@@ -147,8 +148,7 @@ for command in mcs:
     print(command_list)
     # print(f'Command list: {[f"{command.GetTypeName()} named \"{command.GetName()}\"" for command in command_list]}\n')
     print('\nCommand list:')
-    print(''.join([f'Name: {command.GetName()}, type: {command.GetTypeName()}\n' for command in command_list]))
-
+    print(''.join([f'Name: "{command.GetName()}", type: "{command.GetTypeName()}"\n' for command in command_list]))
 
 # FIXME: failing to run mission: "Process finished with exit code -1073741819 (0xC0000005)"
 mod.RunMission()

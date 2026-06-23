@@ -3,9 +3,11 @@
 # Written by William Easdown Babb
 
 from __future__ import annotations
-from load_gmat import gmat
-import gmatpyplus as gp
+
 import os
+
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut04-Log.txt')
 gmat.UseLogFile(log_path)
@@ -40,7 +42,7 @@ near_earth_fm = gp.ForceModel('NearEarthFM', primary_body='Earth',
                               point_masses=['Luna', 'Sun'],
                               srp=True)
 near_earth = gp.PropSetup('NearEarth',
-                          gator=gp.PropSetup.Propagator('RungeKutta89'), fm=near_earth_fm,
+                          gator=gp.Propagator('RungeKutta89'), fm=near_earth_fm,
                           initial_step_size=600, accuracy=1e-13, min_step=0, max_step=600, max_step_attempts=50)
 
 deep_space_fm = gp.ForceModel('DeepSpaceFM', central_body='Sun', primary_body='Sun',
@@ -48,7 +50,7 @@ deep_space_fm = gp.ForceModel('DeepSpaceFM', central_body='Sun', primary_body='S
                                             'Neptune', 'Saturn', 'Sun', 'Uranus',
                                             'Venus'], srp=True)
 deep_space = gp.PropSetup('DeepSpace',
-                          gator=gp.PropSetup.Propagator('PrinceDormand78'), fm=deep_space_fm,
+                          gator=gp.Propagator('PrinceDormand78'), fm=deep_space_fm,
                           initial_step_size=600, accuracy=1e-12, min_step=0, max_step=864000, max_step_attempts=50)
 
 mars_gravity_file = f'{gmat.FileManager.Instance().GetRootPath()}data\\gravity\\mars\\Mars50c.cof'
@@ -57,11 +59,11 @@ near_mars_fm = gp.ForceModel('NearMarsFM', central_body='Mars', primary_body='Ma
                                                                       order=8, gravity_file=mars_gravity_file),
                              point_masses=['Sun'], srp=True)
 near_mars = gp.PropSetup('NearMars',
-                         gator=gp.PropSetup.Propagator('PrinceDormand78'), fm=near_mars_fm,
+                         gator=gp.Propagator('PrinceDormand78'), fm=near_mars_fm,
                          initial_step_size=600, accuracy=1e-12, min_step=0, max_step=86400, max_step_attempts=50)
 
 # Setup CoordinateSystems
-mars_inertial = gp.OrbitState.CoordinateSystem('MarsInertial', 'Mars', 'BodyInertial')
+mars_inertial = gp.CoordinateSystem('MarsInertial', 'Mars', 'BodyInertial')
 
 # Setup ImpulsiveBurns
 tcm = gp.ImpulsiveBurn('TCM', coord_sys={'CoordinateSystem': 'Local', 'Origin': 'Mars', 'Axes': 'VNB'},

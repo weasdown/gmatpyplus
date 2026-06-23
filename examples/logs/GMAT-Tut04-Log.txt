@@ -1,0 +1,16 @@
+GMAT Build Date: Apr 20 2026 13:00:44
+
+GMAT API Log: Created Mon Jun  1 12:47:46 2026
+
+
+Logging to C:\Users\weasd\dev\non-OH\GMAT\gmatpyplus\examples\logs\GMAT-Tut04-Log.txt
+Kernel C:/Users/weasd/dev/non-OH/GMAT/GMAT-src_and_data-R2026a/GMAT-R2026a-Windows-x64/data/planetary_ephem/spk/DE405AllPlanets.bsp has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEPlanetaryConstantsKernel.tpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\time\SPICELeapSecondKernel.tls has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEEarthPredictedKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICEEarthCurrentKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\earth_latest_high_prec.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICELunaCurrentKernel.bpc has been loaded.
+Kernel C:\Users\weasd\dev\non-OH\GMAT\GMAT-src_and_data-R2026a\GMAT-R2026a-Windows-x64\data\planetary_coeff\SPICELunaFrameKernel.tf has been loaded.
+*** Warning *** Semimajor axis (7191.938817629013) cannot be positive if eccentricity (1.202872548116186) is greater than 1.0. The sign of the semimajor axis has been changed. If changing orbit from hyperbolic to elliptic, set eccentricity first.
+

@@ -3,9 +3,11 @@
 # Written by William Easdown Babb
 
 from __future__ import annotations
-from load_gmat import gmat
-import gmatpyplus as gp
+
 import os
+
+import gmatpyplus as gp
+from gmatpyplus import gmat
 
 # # Uncomment to enable logging
 # log_path = os.path.normpath(f'{os.getcwd()}/examples/logs/GMAT-Tut03-Log.txt')
@@ -27,7 +29,7 @@ thruster_to_fire.SetField('DecrementMass', True)  # reduce the mass of fuel in C
 thruster_to_fire.SetField('MixRatio', [1])  # all draining from one tank (ChemicalTank1, only one assigned to thruster)
 thruster_to_fire.SetField('C1', 1000)  # 1000 N thrust
 
-prop = gp.PropSetup('DefaultProp', gator=gp.PropSetup.Propagator('RungeKutta89'),
+prop = gp.PropSetup('DefaultProp', gator=gp.Propagator('RungeKutta89'),
                     accuracy=9.999999999999999e-12)
 
 burn_dur = gp.Variable('BurnDuration')
@@ -57,7 +59,7 @@ mcs = [
 gp.RunMission(mcs)  # Run the mission
 
 print(f'Sat state after running: {sat.GetState()}')
-print(f'Epoch after running: {sat.GetField("Epoch")}')
+print(f'Epoch after running: {sat.GetEpoch()}')
 
 script_path = os.path.normpath(f'{os.getcwd()}/examples/scripts/Tut03_Target_FiniteBurn_To_Raise_Apogee.script')
 gmat.SaveScript(script_path)

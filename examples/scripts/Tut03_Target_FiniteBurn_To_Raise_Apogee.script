@@ -1,0 +1,213 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2026-06-01 12:47:45
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft DefaultSC;
+DefaultSC.DateFormat = TAIModJulian;
+DefaultSC.Epoch = '21545';
+DefaultSC.CoordinateSystem = EarthMJ2000Eq;
+DefaultSC.DisplayStateType = Cartesian;
+DefaultSC.X = 7100;
+DefaultSC.Y = 0;
+DefaultSC.Z = 1300;
+DefaultSC.VX = 0;
+DefaultSC.VY = 7.35;
+DefaultSC.VZ = 1;
+DefaultSC.DryMass = 850;
+DefaultSC.Cd = 2.2;
+DefaultSC.Cr = 1.8;
+DefaultSC.DragArea = 15;
+DefaultSC.SRPArea = 1;
+DefaultSC.SPADDragScaleFactor = 1;
+DefaultSC.SPADSRPScaleFactor = 1;
+DefaultSC.AtmosDensityScaleFactor = 1;
+DefaultSC.ExtendedMassPropertiesModel = 'None';
+DefaultSC.Tanks = {ChemicalTank1};
+DefaultSC.Thrusters = {ChemicalThruster1};
+DefaultSC.NAIFId = -10000001;
+DefaultSC.NAIFIdReferenceFrame = -9000001;
+DefaultSC.OrbitColor = Red;
+DefaultSC.TargetColor = Teal;
+DefaultSC.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+DefaultSC.CdSigma = 1e+70;
+DefaultSC.CrSigma = 1e+70;
+DefaultSC.Id = 'SatId';
+DefaultSC.Attitude = CoordinateSystemFixed;
+DefaultSC.SPADSRPInterpolationMethod = Bilinear;
+DefaultSC.SPADSRPScaleFactorSigma = 1e+70;
+DefaultSC.SPADDragInterpolationMethod = Bilinear;
+DefaultSC.SPADDragScaleFactorSigma = 1e+70;
+DefaultSC.AtmosDensityScaleFactorSigma = 1e+70;
+DefaultSC.AddHardware = {ChemicalThruster1, ChemicalTank1};
+DefaultSC.ModelFile = 'aura.3ds';
+DefaultSC.ModelOffsetX = 0;
+DefaultSC.ModelOffsetY = 0;
+DefaultSC.ModelOffsetZ = 0;
+DefaultSC.ModelRotationX = 0;
+DefaultSC.ModelRotationY = 0;
+DefaultSC.ModelRotationZ = 0;
+DefaultSC.ModelScale = 1;
+DefaultSC.AttitudeDisplayStateType = 'Quaternion';
+DefaultSC.AttitudeRateDisplayStateType = 'AngularVelocity';
+DefaultSC.AttitudeCoordinateSystem = EarthMJ2000Eq;
+DefaultSC.EulerAngleSequence = '321';
+
+%----------------------------------------
+%---------- Hardware Components
+%----------------------------------------
+
+Create ChemicalTank ChemicalTank1;
+ChemicalTank1.DirectionX = 0;
+ChemicalTank1.DirectionY = 0;
+ChemicalTank1.DirectionZ = 1;
+ChemicalTank1.SecondDirectionX = 0;
+ChemicalTank1.SecondDirectionY = -1;
+ChemicalTank1.SecondDirectionZ = 0;
+ChemicalTank1.HWOriginInBCSX = 0;
+ChemicalTank1.HWOriginInBCSY = 0;
+ChemicalTank1.HWOriginInBCSZ = 0;
+ChemicalTank1.AllowNegativeFuelMass = false;
+ChemicalTank1.FuelMass = 756;
+ChemicalTank1.FuelCenterOfMassX = 0;
+ChemicalTank1.FuelCenterOfMassY = 0;
+ChemicalTank1.FuelCenterOfMassZ = 0;
+ChemicalTank1.FuelMomentOfInertiaXX = 99;
+ChemicalTank1.FuelMomentOfInertiaXY = 0;
+ChemicalTank1.FuelMomentOfInertiaXZ = 0;
+ChemicalTank1.FuelMomentOfInertiaYY = 99;
+ChemicalTank1.FuelMomentOfInertiaYZ = 0;
+ChemicalTank1.FuelMomentOfInertiaZZ = 99;
+ChemicalTank1.Pressure = 1500;
+ChemicalTank1.Temperature = 20;
+ChemicalTank1.RefTemperature = 20;
+ChemicalTank1.Volume = 0.75;
+ChemicalTank1.FuelDensity = 1260;
+ChemicalTank1.PressureModel = PressureRegulated;
+
+Create ChemicalThruster ChemicalThruster1;
+ChemicalThruster1.HWOriginInBCSX = 0;
+ChemicalThruster1.HWOriginInBCSY = 0;
+ChemicalThruster1.HWOriginInBCSZ = 0;
+ChemicalThruster1.CoordinateSystem = Local;
+ChemicalThruster1.Origin = Earth;
+ChemicalThruster1.Axes = VNB;
+ChemicalThruster1.ThrustDirection1 = 1;
+ChemicalThruster1.ThrustDirection2 = 0;
+ChemicalThruster1.ThrustDirection3 = 0;
+ChemicalThruster1.DutyCycle = 1;
+ChemicalThruster1.ThrustScaleFactor = 1;
+ChemicalThruster1.DecrementMass = true;
+ChemicalThruster1.Tank = {ChemicalTank1};
+ChemicalThruster1.MixRatio = [ 1 ];
+ChemicalThruster1.GravitationalAccel = 9.81;
+ChemicalThruster1.C1 = 1000;
+ChemicalThruster1.C2 = 0;
+ChemicalThruster1.C3 = 0;
+ChemicalThruster1.C4 = 0;
+ChemicalThruster1.C5 = 0;
+ChemicalThruster1.C6 = 0;
+ChemicalThruster1.C7 = 0;
+ChemicalThruster1.C8 = 0;
+ChemicalThruster1.C9 = 0;
+ChemicalThruster1.C10 = 0;
+ChemicalThruster1.C11 = 0;
+ChemicalThruster1.C12 = 0;
+ChemicalThruster1.C13 = 0;
+ChemicalThruster1.C14 = 0;
+ChemicalThruster1.C15 = 0;
+ChemicalThruster1.C16 = 0;
+ChemicalThruster1.K1 = 300;
+ChemicalThruster1.K2 = 0;
+ChemicalThruster1.K3 = 0;
+ChemicalThruster1.K4 = 0;
+ChemicalThruster1.K5 = 0;
+ChemicalThruster1.K6 = 0;
+ChemicalThruster1.K7 = 0;
+ChemicalThruster1.K8 = 0;
+ChemicalThruster1.K9 = 0;
+ChemicalThruster1.K10 = 0;
+ChemicalThruster1.K11 = 0;
+ChemicalThruster1.K12 = 0;
+ChemicalThruster1.K13 = 0;
+ChemicalThruster1.K14 = 0;
+ChemicalThruster1.K15 = 0;
+ChemicalThruster1.K16 = 0;
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel DefaultProp_ForceModel;
+DefaultProp_ForceModel.CentralBody = Earth;
+DefaultProp_ForceModel.PrimaryBodies = {Earth};
+DefaultProp_ForceModel.Drag = None;
+DefaultProp_ForceModel.SRP = Off;
+DefaultProp_ForceModel.RelativisticCorrection = Off;
+DefaultProp_ForceModel.ErrorControl = RSSStep;
+DefaultProp_ForceModel.GravityField.Earth.Degree = 4;
+DefaultProp_ForceModel.GravityField.Earth.Order = 4;
+DefaultProp_ForceModel.GravityField.Earth.StmLimit = 100;
+DefaultProp_ForceModel.GravityField.Earth.PotentialFile = 'JGM2.cof';
+DefaultProp_ForceModel.GravityField.Earth.TideModel = 'None';
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator DefaultProp;
+DefaultProp.FM = DefaultProp_ForceModel;
+DefaultProp.Type = RungeKutta89;
+DefaultProp.InitialStepSize = 60;
+DefaultProp.Accuracy = 9.999999999999999e-12;
+DefaultProp.MinStep = 0;
+DefaultProp.MaxStep = 2700;
+DefaultProp.MaxStepAttempts = 50;
+DefaultProp.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Burns
+%----------------------------------------
+
+Create FiniteBurn FiniteBurn1;
+FiniteBurn1.Thrusters = {ChemicalThruster1};
+FiniteBurn1.ThrottleLogicAlgorithm = 'MaxNumberOfThrusters';
+
+%----------------------------------------
+%---------- Solvers
+%----------------------------------------
+
+Create DifferentialCorrector DC1;
+DC1.ShowProgress = true;
+DC1.ReportStyle = Normal;
+DC1.ReportFile = 'DifferentialCorrectorDC1.data';
+DC1.MaximumIterations = 25;
+DC1.Goals = {'DefaultSC.Earth.RMAG'};
+DC1.DerivativeMethod = ForwardDifference;
+DC1.Algorithm = NewtonRaphson;
+
+%----------------------------------------
+%---------- Arrays, Variables, Strings
+%----------------------------------------
+Create Variable BurnDuration;
+BurnDuration = 0;
+
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate 'Prop To Periapsis' DefaultProp(DefaultSC) {DefaultSC.Earth.Periapsis};
+Target 'Raise Apoapsis' DC1 {SolveMode = Solve, ExitMode = SaveAndContinue, ShowProgressWindow = false};
+   Vary 'Vary Burn Duration' DC1(BurnDuration = 200, {Perturbation = 0.0001, Lower = 0.0, Upper = 10000, MaxStep = 100, AdditiveScaleFactor = 0.0, MultiplicativeScaleFactor = 1.0});
+   BeginFiniteBurn 'Turn Thruster On' FiniteBurn1(DefaultSC);
+   Propagate 'Prop BurnDuration' DefaultProp(DefaultSC) {DefaultSC.ElapsedSecs = BurnDuration};
+   EndFiniteBurn 'Turn Thruster Off' FiniteBurn1(DefaultSC);
+   Propagate 'Prop To Apoapsis' DefaultProp(DefaultSC) {DefaultSC.Earth.Apoapsis};
+   Achieve 'Achieve Apoapsis Radius = 12000' DC1(DefaultSC.Earth.RMAG = 12000, {Tolerance = 0.1});
+EndTarget 'EndTarget_Raise Apoapsis';  % For targeter DC1
