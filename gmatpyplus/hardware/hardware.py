@@ -30,9 +30,9 @@ class Hardware(GmatObject):
     def GetSecondDirection(self) -> np.ndarray:
         return self.second_direction
 
-    # TODO: implement Hardware.HasFOV() method
+    # noinspection PyMethodMayBeStatic
     def HasFOV(self) -> bool:
-        raise NotImplementedError('Hardware.HasFOV() method is not yet implemented.')
+        return False
 
     @property
     def location(self) -> np.ndarray:
