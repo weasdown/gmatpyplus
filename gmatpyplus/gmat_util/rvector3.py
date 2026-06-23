@@ -1,17 +1,43 @@
 from math import sqrt
 
+from gmatpyplus import gmat
+
 
 class Rvector3:
     def __init__(self, e1: float | None = None, e2: float | None = None, e3: float | None = None):
         """Provides linear algebra operations for 3-element float vectors."""
-        self._e1: float = e1 if e1 is not None else 0
-        self._e2: float = e2 if e2 is not None else 0
-        self._e3: float = e3 if e3 is not None else 0
+        self.gmat_obj: gmat.Rvector3 = gmat.Rvector3()
 
-        self._values: list[float] = [self._e1, self._e2, self._e3]
+        for index, element in enumerate([e1, e2, e3]):
+            if element is not None:
+                self.gmat_obj[index] = element
 
     def __repr__(self):
         return str(self._values)
+
+    @property
+    def _e1(self) -> float:
+        return self.gmat_obj[0]
+
+    @_e1.setter
+    def _e1(self, e1: float) -> None:
+        self.gmat_obj[0] = e1
+
+    @property
+    def _e2(self) -> float:
+        return self.gmat_obj[1]
+
+    @_e2.setter
+    def _e2(self, e1: float) -> None:
+        self.gmat_obj[1] = e1
+
+    @property
+    def _e3(self) -> float:
+        return self.gmat_obj[2]
+
+    @_e3.setter
+    def _e3(self, e1: float) -> None:
+        self.gmat_obj[2] = e1
 
     def Get(self, index: int) -> float:
         return self._values[index]
@@ -23,3 +49,7 @@ class Rvector3:
         self._e1 = e1
         self._e2 = e2
         self._e3 = e3
+
+    @property
+    def _values(self) -> list[float]:
+        return [self._e1, self._e2, self._e3]
