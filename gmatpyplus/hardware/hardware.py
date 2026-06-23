@@ -11,7 +11,8 @@ class Hardware(GmatObject):
         super().__init__(obj_type, name)
 
         self._location: np.ndarray = self.location
-
+        self._rotation_matrix: np.ndarray = self.rotation_matrix
+        
     # TODO: implement Hardware.GetDirection() method
     def GetDirection(self) -> np.ndarray:
         raise NotImplementedError('Method on Hardware is not yet implemented.')
@@ -39,3 +40,14 @@ class Hardware(GmatObject):
                                         dtype=float)
         self._location = location
         return location
+
+    @property
+    def rotation_matrix(self) -> np.ndarray:
+        """Rotation from body to hardware frame."""
+        internal = self.gmat_obj.GetRotationMatrix()  # gmat.Rvector3
+        rotation_matrix: np.ndarray = np.array(
+            [[internal[0, 0], internal[0, 1], internal[0, 2]],
+             [internal[1, 0], internal[1, 1], internal[1, 2]],
+             [internal[2, 0], internal[2, 1], internal[2, 2]]])
+        self._rotation_matrix = rotation_matrix
+        return rotation_matrix
