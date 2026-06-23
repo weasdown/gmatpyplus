@@ -28,9 +28,8 @@ class Hardware(GmatObject):
     def GetRotationMatrix(self) -> np.ndarray:
         raise NotImplementedError('Method on Hardware is not yet implemented.')
 
-    # TODO: implement Hardware.GetSecondDirection() method
     def GetSecondDirection(self) -> np.ndarray:
-        raise NotImplementedError('Method on Hardware is not yet implemented.')
+        return self.second_direction
 
     # TODO: implement Hardware.HasFOV() method
     def HasFOV(self) -> bool:
@@ -53,3 +52,11 @@ class Hardware(GmatObject):
              [internal[1, 0], internal[1, 1], internal[1, 2]],
              [internal[2, 0], internal[2, 1], internal[2, 2]]])
         return rotation_matrix
+
+    @property
+    def second_direction(self) -> np.ndarray:
+        """Secondary direction, to complete the orientation."""
+        internal = self.gmat_obj.GetSecondDirection()  # gmat.Rvector3
+        second_direction: np.ndarray = np.array([internal.Get(0), internal.Get(1), internal.Get(2)],
+                                                dtype=float)
+        return second_direction
