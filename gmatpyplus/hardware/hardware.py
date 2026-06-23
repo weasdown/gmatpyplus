@@ -24,9 +24,8 @@ class Hardware(GmatObject):
     def GetLocation(self) -> np.ndarray:
         return self.location
 
-    # TODO: implement Hardware.GetRotationMatrix() method
     def GetRotationMatrix(self) -> np.ndarray:
-        raise NotImplementedError('Method on Hardware is not yet implemented.')
+        return self.rotation_matrix
 
     def GetSecondDirection(self) -> np.ndarray:
         return self.second_direction
