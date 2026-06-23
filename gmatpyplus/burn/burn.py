@@ -185,7 +185,7 @@ class ImpulsiveBurn(Burn):
             elif isinstance(tanks, list):
                 self.tanks: list[str] = [tank.GetName() for tank in tanks]
             elif isinstance(tanks, str):
-                self.tanks: gmat.Tank = gp.GetObject(tanks).GetName()
+                self.tanks: gmat.FuelTank = gp.GetObject(tanks).GetName()
         else:
             self.tanks = None
         if self.tanks is not None:

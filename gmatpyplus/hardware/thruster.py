@@ -27,7 +27,7 @@ class Thruster(Hardware):
             self.SetField('MixRatio', self.mix_ratio)
             if isinstance(self.tanks, str):
                 self.SetField('Tank', self.tanks)
-            elif isinstance(self.tanks, gp.FuelTank | gmat.Tank):
+            elif isinstance(self.tanks, gp.FuelTank | gmat.FuelTank):
                 self.SetField('Tank', self.tanks.GetName())
         elif isinstance(self.tanks, list):
             if mix_ratio is None:
