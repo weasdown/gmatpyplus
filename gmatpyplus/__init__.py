@@ -60,6 +60,7 @@ from .force_model import *
 from .foundation import *
 from .function import *
 from .gmat_math import *
+from .gmat_util import *
 from .hardware import *
 from .interface import *
 from .interpreter import *
