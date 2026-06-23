@@ -5,7 +5,6 @@ import numpy as np
 from gmatpyplus.foundation import GmatObject
 
 
-## TODO implement Hardware class
 class Hardware(GmatObject):
     def __init__(self, obj_type: str, name: str):
         super().__init__(obj_type, name)
