@@ -10,9 +10,16 @@ class Hardware(GmatObject):
     def __init__(self, obj_type: str, name: str):
         super().__init__(obj_type, name)
 
-    # TODO: implement Hardware.GetDirection() method
+    @property
+    def direction(self) -> np.ndarray:
+        """Principle direction for hardware element on the spacecraft."""
+        internal = self.gmat_obj.GetDirection()  # gmat.Rvector3
+        direction: np.ndarray = np.array([internal.Get(0), internal.Get(1), internal.Get(2)],
+                                         dtype=float)
+        return direction
+
     def GetDirection(self) -> np.ndarray:
-        raise NotImplementedError('Method on Hardware is not yet implemented.')
+        return self.direction
 
     def GetLocation(self) -> np.ndarray:
         return self.location
