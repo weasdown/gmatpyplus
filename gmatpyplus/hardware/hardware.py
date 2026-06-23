@@ -7,6 +7,15 @@ from gmatpyplus.foundation import GmatObject
 
 class Hardware(GmatObject):
     def __init__(self, obj_type: str, name: str):
+        """
+        Base class used for spacecraft hardware.
+
+        This class is the base class for spacecraft fuel tanks, thrusters, and other hardware elements that can be added to a spacecraft in GMAT.  It contains data structures that locate the center of the element in the spacecraft's body coordinate system (BCS) and that orient the elements in the same system.
+
+        This class has been modified (May 2019) to allow modeling fields of view. FOV modeling includes determining whether a unit vector is in the FOV, and returning the field of view mask for graphics display.
+
+        Notes: The current builds of GMAT do not model torques or moments of inertia, so the parameter access for those pieces is commented out.
+        """
         super().__init__(obj_type, name)
 
     @property
