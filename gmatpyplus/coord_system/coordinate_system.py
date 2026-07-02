@@ -115,6 +115,10 @@ class CoordinateSystem(GmatObject):
         return f'A CoordinateSystem with origin {self.origin} and axes {self.axes}'
 
     @classmethod
+    def from_gmat_obj(cls, obj: gmat.GmatBase):
+        return cls(obj.GetName(), obj.GetStringParameter('Origin'), obj.GetStringParameter('Axes'))
+
+    @classmethod
     def from_sat(cls, sc: Spacecraft) -> CoordinateSystem:
         name = sc.gmat_obj.GetRefObjectName(gmat.COORDINATE_SYSTEM)
         sc_cs_gmat_obj = sc.gmat_obj.GetRefObject(gmat.COORDINATE_SYSTEM, name)
