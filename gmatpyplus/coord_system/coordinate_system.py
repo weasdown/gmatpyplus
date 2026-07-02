@@ -1,3 +1,4 @@
+import gmatpyplus as gp
 from gmatpyplus import gmat
 from gmatpyplus.coord_system.axes import Axes
 from gmatpyplus.foundation import GmatObject
@@ -65,7 +66,9 @@ class CoordinateSystem(GmatObject):
         if origin not in self._allowed_values['Origin']:
             raise AttributeError(f'Specified origin "{origin}" is not recognized. Please specify one of the '
                                  f'following:\n\t{self._allowed_values["Origin"]}')
-        self.origin = gmat.GetObject(origin)  # get current (default) origin
+
+        # get current (default) origin
+        self.origin: gmat.SpacePoint = gp.GetObject(origin)  # : gmat.Planet | TBC (? gmat.SpacePoint)
         # attach new origin to CoordinateSystem
         self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
         self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
