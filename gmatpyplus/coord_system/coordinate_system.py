@@ -1,3 +1,4 @@
+import gmatpyplus as gp
 from gmatpyplus import gmat
 from gmatpyplus.coord_system.axes import Axes
 from gmatpyplus.foundation import GmatObject
@@ -8,76 +9,77 @@ from gmatpyplus.utils import Barycenter, CelestialBodies, GroundStations, Librat
 # TODO add CoordinateBase class in a separate file and make it CoordinateSystem's parent type (see CoordinateBase.cpp in GMAT source code).
 class CoordinateSystem(GmatObject):
     # TODO convert __init__ params to args with default values
-    def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str = None,
-                 secondary: str = None, xaxis: str = None, yaxis: str = None, zaxis: str = None, epoch: str = None,
-                 alignment_vec_x: int = None, alignment_vec_y: int = None, alignment_vec_z: int = None,
-                 constraint_vec_x: int = None, constraint_vec_y: int = None, constraint_vec_z: int = None,
-                 constraint_ref_vec_x: int = None, constraint_ref_vec_y: int = None,
-                 constraint_ref_vec_z: int = None,
-                 constraint_coord_sys: str = None, ref_object: str = None
-                 ):
+    def __init__(self, name: str, origin: str = 'Earth', axes: str = 'MJ2000Eq', primary: str | None = None,
+                 secondary: str | None = None, xaxis: str | None = None, yaxis: str | None = None,
+                 zaxis: str | None = None, epoch: str | None = None, alignment_vec_x: int | None = None,
+                 alignment_vec_y: int | None = None, alignment_vec_z: int | None = None,
+                 constraint_vec_x: int | None = None, constraint_vec_y: int | None = None,
+                 constraint_vec_z: int | None = None, constraint_ref_vec_x: int | None = None,
+                 constraint_ref_vec_y: int | None = None, constraint_ref_vec_z: int | None = None,
+                 constraint_coord_sys: str | None = None, ref_object: str | None = None) -> None:
         # TODO: remove kwargs if possible, if not document as another 2do
         # TODO complete allowed values - see User Guide pages 335-339 (PDF pg 344-348)
         #  and src/base/coordsystem/CoordinateSystem.cpp/CreateLocalCoordinateSystem
         super().__init__('CoordinateSystem', name)
-        self.allowed_values = {'Axes': ['MJ2000Eq', 'MJ2000Ec', 'ICRF',
-                                        'MODEq', 'MODEc', 'TODEq', 'TODEc', 'MOEEq', 'MOEEc', 'TOEEq', 'TOEEc',
-                                        'ObjectReferenced', 'Equator', 'BodyFixed', 'BodyInertial',
-                                        'GSE', 'GSM', 'Topocentric', 'BodySpinSun'],
-                               'CentralBody': CelestialBodies(),
-                               'Origin': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() + Barycenter()
-                                          + GroundStations()),
-                               'AxesTypeSpecific': {
-                                   'ObjectReferenced': {
-                                       'Primary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
-                                                   Barycenter() + GroundStations()),
-                                       'Secondary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
-                                                     Barycenter() + GroundStations()),
-                                       'XAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                       'YAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                       'ZAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
-                                   },
-                                   'TOE': {
-                                       'Epoch': '21545'
-                                   },
-                                   'MOE': {
-                                       'Epoch': '21545'
-                                   },
-                                   'LocalAlignedConstrained': {
-                                       'AlignmentVectorX': 1,
-                                       'AlignmentVectorY': 0,
-                                       'AlignmentVectorZ': 0,
-                                       'ConstraintVectorX': 0,
-                                       'ConstraintVectorY': 0,
-                                       'ConstraintVectorZ': 1,
-                                       'ConstraintReferenceVectorX': 0,
-                                       'ConstraintReferenceVectorY': 0,
-                                       'ConstraintReferenceVectorZ': 1,
-                                       'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
-                                       'ReferenceObject': (CelestialBodies() + SpacecraftObjs() +
-                                                           LibrationPoints() + Barycenter() +
-                                                           GroundStations())
-                                   }
-                               },
-                               }
+        self._allowed_values = {'Axes': ['MJ2000Eq', 'MJ2000Ec', 'ICRF',
+                                         'MODEq', 'MODEc', 'TODEq', 'TODEc', 'MOEEq', 'MOEEc', 'TOEEq', 'TOEEc',
+                                         'ObjectReferenced', 'Equator', 'BodyFixed', 'BodyInertial',
+                                         'GSE', 'GSM', 'Topocentric', 'BodySpinSun'],
+                                'CentralBody': CelestialBodies(),
+                                'Origin': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() + Barycenter()
+                                           + GroundStations()),
+                                'AxesTypeSpecific': {
+                                    'ObjectReferenced': {
+                                        'Primary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
+                                                    Barycenter() + GroundStations()),
+                                        'Secondary': (CelestialBodies() + SpacecraftObjs() + LibrationPoints() +
+                                                      Barycenter() + GroundStations()),
+                                        'XAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                        'YAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                        'ZAxis': ['R', 'V', 'N', '-R', '-V', '-N', None],
+                                    },
+                                    'TOE': {
+                                        'Epoch': '21545'
+                                    },
+                                    'MOE': {
+                                        'Epoch': '21545'
+                                    },
+                                    'LocalAlignedConstrained': {
+                                        'AlignmentVectorX': 1,
+                                        'AlignmentVectorY': 0,
+                                        'AlignmentVectorZ': 0,
+                                        'ConstraintVectorX': 0,
+                                        'ConstraintVectorY': 0,
+                                        'ConstraintVectorZ': 1,
+                                        'ConstraintReferenceVectorX': 0,
+                                        'ConstraintReferenceVectorY': 0,
+                                        'ConstraintReferenceVectorZ': 1,
+                                        'ConstraintCoordinateSystem': 'EarthMJ2000Eq',
+                                        'ReferenceObject': (CelestialBodies() + SpacecraftObjs() +
+                                                            LibrationPoints() + Barycenter() +
+                                                            GroundStations())
+                                    }
+                                },
+                                }
 
         # Parse origin argument
-        if origin not in self.allowed_values['Origin']:
+        if origin not in self._allowed_values['Origin']:
             raise AttributeError(f'Specified origin "{origin}" is not recognized. Please specify one of the '
-                                 f'following:\n\t{self.allowed_values["Origin"]}')
-        else:
-            self.origin = gmat.GetObject(origin)  # get current (default) origin
-            # attach new origin to CoordinateSystem
-            self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
-            self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
+                                 f'following:\n\t{self._allowed_values["Origin"]}')
+
+        # get current (default) origin
+        self.origin: gmat.SpacePoint = gp.GetObject(origin)  # : gmat.Planet | TBC (? gmat.SpacePoint)
+        # attach new origin to CoordinateSystem
+        self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
+        self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
 
         # Parse axes argument
-        if axes not in self.allowed_values['Axes']:
+        if axes not in self._allowed_values['Axes']:
             raise AttributeError(f'Specified axes type "{axes}" is not recognized. Please specify one of the '
-                                 f'following:\n\t{self.allowed_values["Axes"]}')
+                                 f'following:\n\t{self._allowed_values["Axes"]}')
         else:
-            if axes in list(self.allowed_values['AxesTypeSpecific'].keys()):
-                axes_specific_values = self.allowed_values['AxesTypeSpecific'][axes]
+            if axes in list(self._allowed_values['AxesTypeSpecific'].keys()):
+                axes_specific_values = self._allowed_values['AxesTypeSpecific'][axes]
 
                 # TODO set params/ref objs for all axes types
                 if axes == 'ObjectReferenced':
@@ -112,10 +114,9 @@ class CoordinateSystem(GmatObject):
     def __repr__(self):
         return f'A CoordinateSystem with origin {self.origin} and axes {self.axes}'
 
-    @staticmethod
-    def Construct(name: str, central_body: str, axes: str):
-        print('In static Construct')
-        return gmat.Construct('CoordinateSystem', name, central_body, axes)
+    @classmethod
+    def from_gmat_obj(cls, obj: gmat.GmatBase):
+        return cls(obj.GetName(), obj.GetStringParameter('Origin'), obj.GetStringParameter('Axes'))
 
     @classmethod
     def from_sat(cls, sc: Spacecraft) -> CoordinateSystem:
@@ -134,6 +135,3 @@ class CoordinateSystem(GmatObject):
     def name(self, name):
         self._name = name
         self.gmat_obj.SetName(name)
-
-    def Help(self):
-        return GmatObject.Help(self.gmat_obj)

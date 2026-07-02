@@ -5,13 +5,14 @@ from typing import Union
 import gmatpyplus as gp
 from gmatpyplus import gmat
 from gmatpyplus import utils as u
+from gmatpyplus.coord_system import CoordinateSystem
 from gmatpyplus.hardware import Hardware
 
 
 class Thruster(Hardware):
     def __init__(self, fuel_type: str, name: str,
                  tanks: str | gp.FuelTank | gmat.FuelTank | list[gp.FuelTank] | list[gmat.FuelTank],
-                 mix_ratio: int | float | list[int | float] = None):
+                 mix_ratio: int | float | list[int | float] = 1):
         self.fuel_type = fuel_type
         self.thruster_type: str = f'{self.fuel_type}Thruster'  # 'ChemicalThruster' or 'ElectricThruster'
         super().__init__(self.thruster_type, name)
@@ -21,7 +22,7 @@ class Thruster(Hardware):
         self.tanks: list[gp.ChemicalTank | gp.ElectricTank] | None = tanks
         self.mix_ratio: list[int | float] = [mix_ratio] if isinstance(mix_ratio, (int, float)) else mix_ratio
         if isinstance(self.tanks, str | gp.FuelTank | gmat.FuelTank):
-            if mix_ratio is not None and self.mix_ratio != 1:
+            if mix_ratio is not None and self.mix_ratio != [1]:
                 raise AttributeError(f'Invalid mix_ratio {self.mix_ratio} given for a single tank')
             self.mix_ratio = [1]
             self.SetField('MixRatio', self.mix_ratio)
@@ -36,7 +37,11 @@ class Thruster(Hardware):
                 tank_names = [tank.GetName() for tank in self.tanks]
                 self.SetField('Tank', tank_names)
 
-        self._decrement_mass = self.decrement_mass
+        ## TODO tidy up new attributes and set values appropriately
+        self._axes: str = self.axes
+        self._coordinate_system: CoordinateSystem | None = None
+
+        self._decrement_mass: bool = self.decrement_mass
 
         self.Initialize()
 
@@ -77,6 +82,26 @@ class Thruster(Hardware):
 
     def attach_to_tanks(self, tanks: list[gp.ChemicalTank | gp.ElectricTank]):
         u.extract_gmat_obj(self).SetField('Tank', tanks)
+
+    @property
+    def axes(self) -> str:
+        return self.GetField('Axes')
+
+    @axes.setter
+    def axes(self, axes: str) -> None:
+        allowed_values: list[str] = ['VNB', 'LVLH', 'MJ2000Eq', 'SpacecraftBody']
+        if axes not in allowed_values:
+            raise AttributeError(f'axes was "{axes}" but must be one of the following: {allowed_values}')
+        try:
+            self.SetField('Axes', axes)
+        except Exception as e:
+            exception_type_name: str = str(type(e))
+            if 'gmatpy' in exception_type_name and 'APIException' in exception_type_name:
+                e: gmat.APIException
+                message = e.GetFullMessage()
+                raise u.APIException(message) from None
+            else:
+                raise
 
     @property
     def decrement_mass(self):

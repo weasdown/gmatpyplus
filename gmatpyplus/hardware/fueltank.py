@@ -21,39 +21,6 @@ class FuelTank(GmatObject, Generic[T]):
         Superclass of ``ChemicalTank`` and ``ElectricTank``.
 
         """
-        """
-        Attributes for Chemical Tank:
-
-                   Field                                   Type   Value
-           --------------------------------------------------------
-
-           DirectionX                              Real   0
-           DirectionY                              Real   0
-           DirectionZ                              Real   1
-           SecondDirectionX                        Real   0
-           SecondDirectionY                        Real   -1
-           SecondDirectionZ                        Real   0
-           HWOriginInBCSX                          Real   0
-           HWOriginInBCSY                          Real   0
-           HWOriginInBCSZ                          Real   0
-           AllowNegativeFuelMass                Boolean   false
-           FuelMass                                Real   756
-           FuelCenterOfMassX                       Real   0
-           FuelCenterOfMassY                       Real   0
-           FuelCenterOfMassZ                       Real   0
-           FuelMomentOfInertiaXX                   Real   99
-           FuelMomentOfInertiaXY                   Real   0
-           FuelMomentOfInertiaXZ                   Real   0
-           FuelMomentOfInertiaYY                   Real   99
-           FuelMomentOfInertiaYZ                   Real   0
-           FuelMomentOfInertiaZZ                   Real   99
-           Pressure                                Real   1500
-           Temperature                             Real   20
-           RefTemperature                          Real   20
-           Volume                                  Real   0.75
-           FuelDensity                             Real   1260
-           PressureModel                           List   PressureRegulated
-        """
         assert (tank_type == 'ChemicalTank') or (tank_type == 'ElectricTank')  # Confirm tank_type is valid.
         super().__init__(tank_type, name)
         self._tank_type: str = tank_type  # 'ChemicalTank' or 'ElectricTank'
@@ -292,7 +259,42 @@ class ChemicalTank(FuelTank):
                  fuel_moment_of_inertia: np.ndarray = np.array([99, 0, 0, 99, 0, 99]),
                  direction: np.ndarray = np.array([0, 0, 1]), second_direction: np.ndarray = np.array([0, -1, 0]),
                  hw_origin_in_bcs: np.ndarray = np.array([0, 0, 0])):
-        """A ``FuelTank`` that stores fuel used by one or more ``ChemicalThruster``s."""
+        """
+        A ``FuelTank`` that stores fuel used by one or more ``ChemicalThruster``s.
+
+        Attributes for ``ChemicalTank`` and their default value:
+
+                   Field                                   Type   Value
+           --------------------------------------------------------
+
+           DirectionX                              Real   0
+           DirectionY                              Real   0
+           DirectionZ                              Real   1
+           SecondDirectionX                        Real   0
+           SecondDirectionY                        Real   -1
+           SecondDirectionZ                        Real   0
+           HWOriginInBCSX                          Real   0
+           HWOriginInBCSY                          Real   0
+           HWOriginInBCSZ                          Real   0
+           AllowNegativeFuelMass                Boolean   false
+           FuelMass                                Real   756
+           FuelCenterOfMassX                       Real   0
+           FuelCenterOfMassY                       Real   0
+           FuelCenterOfMassZ                       Real   0
+           FuelMomentOfInertiaXX                   Real   99
+           FuelMomentOfInertiaXY                   Real   0
+           FuelMomentOfInertiaXZ                   Real   0
+           FuelMomentOfInertiaYY                   Real   99
+           FuelMomentOfInertiaYZ                   Real   0
+           FuelMomentOfInertiaZZ                   Real   99
+           Pressure                                Real   1500
+           Temperature                             Real   20
+           RefTemperature                          Real   20
+           Volume                                  Real   0.75
+           FuelDensity                             Real   1260
+           PressureModel                           List   PressureRegulated
+        """
+
         super().__init__('ChemicalTank', name, fuel_mass, allow_negative_fuel_mass, fuel_centre_of_mass,
                          fuel_moment_of_inertia, direction, second_direction, hw_origin_in_bcs)
 

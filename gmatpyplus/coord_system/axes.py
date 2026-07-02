@@ -7,3 +7,6 @@ class Axes(GmatObject):
     def __init__(self, axes_type: str, name: str):
         super().__init__(axes_type, name)
         self.Initialize()
+
+    def __repr__(self) -> str:
+        return f'"{self.name}"'
