@@ -112,11 +112,6 @@ class CoordinateSystem(GmatObject):
     def __repr__(self):
         return f'A CoordinateSystem with origin {self.origin} and axes {self.axes}'
 
-    @staticmethod
-    def Construct(name: str, central_body: str, axes: str):
-        print('In static Construct')
-        return gmat.Construct('CoordinateSystem', name, central_body, axes)
-
     @classmethod
     def from_sat(cls, sc: Spacecraft) -> CoordinateSystem:
         name = sc.gmat_obj.GetRefObjectName(gmat.COORDINATE_SYSTEM)
