@@ -65,11 +65,10 @@ class CoordinateSystem(GmatObject):
         if origin not in self._allowed_values['Origin']:
             raise AttributeError(f'Specified origin "{origin}" is not recognized. Please specify one of the '
                                  f'following:\n\t{self._allowed_values["Origin"]}')
-        else:
-            self.origin = gmat.GetObject(origin)  # get current (default) origin
-            # attach new origin to CoordinateSystem
-            self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
-            self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
+        self.origin = gmat.GetObject(origin)  # get current (default) origin
+        # attach new origin to CoordinateSystem
+        self.SetStringParameter(1, self.origin.GetName())  # 1 for ORIGIN_NAME, 2 for J2000_BODY_NAME
+        self.SetRefObject(self.origin, gmat.SPACE_POINT, self.origin.GetName())
 
         # Parse axes argument
         if axes not in self._allowed_values['Axes']:
