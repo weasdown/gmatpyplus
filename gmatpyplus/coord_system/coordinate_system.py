@@ -134,6 +134,3 @@ class CoordinateSystem(GmatObject):
     def name(self, name):
         self._name = name
         self.gmat_obj.SetName(name)
-
-    def Help(self):
-        return GmatObject.Help(self.gmat_obj)
